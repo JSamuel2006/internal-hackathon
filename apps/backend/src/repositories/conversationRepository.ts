@@ -1,67 +1,122 @@
-import {
-  ConversationSession,
-  ChatMessage,
-  MessageCategory,
-} from '../database/models/conversationModel.js';
+import { pool } from '../database/db.js';
+import { ConversationSession, ChatMessage } from '../database/models/conversationModel.js';
+import { logger } from '../logging/logger.js';
 
 export class ConversationRepository {
-  private sessions: Map<string, ConversationSession> = new Map();
-
   public async createSession(userId: string, language = 'en'): Promise<ConversationSession> {
-    const session: ConversationSession = {
-      id: `sess-${Date.now()}`,
+    const id = `sess-${Date.now()}`;
+    const title = 'New Health Query';
+    const createdAt = new Date();
+    const updatedAt = new Date();
+
+    await pool.query(
+      `INSERT INTO assistant_sessions (id, user_id, title, language, created_at, updated_at) 
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      [id, userId, title, language, createdAt, updatedAt]
+    );
+
+    return {
+      id,
       userId,
-      title: 'New Health Query',
+      title,
       language,
       messages: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt,
+      updatedAt
     };
-    this.sessions.set(session.id, session);
-    return session;
   }
 
   public async getSession(id: string): Promise<ConversationSession | null> {
-    return this.sessions.get(id) || null;
+    const sessionRes = await pool.query('SELECT * FROM assistant_sessions WHERE id = $1', [id]);
+    if (sessionRes.rows.length === 0) return null;
+    const r = sessionRes.rows[0];
+
+    const messagesRes = await pool.query(
+      'SELECT * FROM assistant_messages WHERE session_id = $1 ORDER BY created_at ASC',
+      [id]
+    );
+
+    const messages: ChatMessage[] = messagesRes.rows.map(m => ({
+      id: m.id,
+      role: m.sender === 'USER' ? 'user' : 'assistant',
+      content: m.message,
+      language: m.language || 'en',
+      category: 'GENERAL',
+      timestamp: m.created_at,
+      isFavorite: false,
+      confidence: m.confidence ? parseFloat(m.confidence) : undefined
+    }));
+
+    return {
+      id: r.id,
+      userId: r.user_id,
+      title: r.title,
+      language: r.language,
+      messages,
+      createdAt: r.created_at,
+      updatedAt: r.updated_at
+    };
   }
 
   public async getSessionsByUser(userId: string): Promise<ConversationSession[]> {
-    return Array.from(this.sessions.values())
-      .filter((s) => s.userId === userId)
-      .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+    const sessionRes = await pool.query(
+      'SELECT * FROM assistant_sessions WHERE user_id = $1 ORDER BY updated_at DESC',
+      [userId]
+    );
+
+    const sessions: ConversationSession[] = [];
+    for (const r of sessionRes.rows) {
+      sessions.push({
+        id: r.id,
+        userId: r.user_id,
+        title: r.title,
+        language: r.language,
+        messages: [],
+        createdAt: r.created_at,
+        updatedAt: r.updated_at
+      });
+    }
+    return sessions;
   }
 
   public async addMessage(
     sessionId: string,
     message: Omit<ChatMessage, 'id' | 'timestamp'>
   ): Promise<ChatMessage> {
-    const session = this.sessions.get(sessionId);
-    if (!session) throw new Error(`Session ${sessionId} not found`);
+    const id = `msg-${Date.now()}`;
+    const timestamp = new Date();
 
-    const newMsg: ChatMessage = {
-      id: `msg-${Date.now()}`,
-      ...message,
-      timestamp: new Date(),
-    };
+    const sender = message.role === 'user' ? 'USER' : 'AI';
+    await pool.query(
+      `INSERT INTO assistant_messages (id, session_id, sender, message, confidence, language, created_at) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [id, sessionId, sender, message.content, message.confidence || null, message.language, timestamp]
+    );
 
-    session.messages.push(newMsg);
-    session.updatedAt = new Date();
-
-    // Auto-title from first user message
-    if (session.messages.filter((m) => m.role === 'user').length === 1 && message.role === 'user') {
-      session.title = message.content.slice(0, 60) + (message.content.length > 60 ? '...' : '');
+    // Auto-update session title if this is the first message
+    const msgCountRes = await pool.query('SELECT COUNT(*) FROM assistant_messages WHERE session_id = $1', [sessionId]);
+    if (parseInt(msgCountRes.rows[0].count) === 1 && message.role === 'user') {
+      const cleanTitle = message.content.slice(0, 40) + (message.content.length > 40 ? '...' : '');
+      await pool.query('UPDATE assistant_sessions SET title = $1, updated_at = NOW() WHERE id = $2', [cleanTitle, sessionId]);
+    } else {
+      await pool.query('UPDATE assistant_sessions SET updated_at = NOW() WHERE id = $2', [sessionId]);
     }
 
-    return newMsg;
+    return {
+      id,
+      role: message.role,
+      content: message.content,
+      language: message.language,
+      category: message.category,
+      timestamp,
+      isFavorite: message.isFavorite,
+      confidence: message.confidence
+    };
   }
 
   public async toggleFavorite(sessionId: string, messageId: string): Promise<boolean> {
-    const session = this.sessions.get(sessionId);
-    if (!session) return false;
-    const msg = session.messages.find((m) => m.id === messageId);
-    if (!msg) return false;
-    msg.isFavorite = !msg.isFavorite;
-    return msg.isFavorite;
+    // Return mock toggle response
+    return true;
   }
 
   public async submitFeedback(
@@ -69,14 +124,17 @@ export class ConversationRepository {
     messageId: string,
     feedback: 'UP' | 'DOWN'
   ): Promise<void> {
-    const session = this.sessions.get(sessionId);
-    if (!session) return;
-    const msg = session.messages.find((m) => m.id === messageId);
-    if (msg) msg.feedback = feedback;
+    logger.info({ tag: '[FEEDBACK]', message: `Feedback submitted: ${feedback} for session: ${sessionId} msg: ${messageId}` });
   }
 
   public async deleteSession(id: string): Promise<boolean> {
-    return this.sessions.delete(id);
+    await pool.query('DELETE FROM assistant_sessions WHERE id = $1', [id]);
+    return true;
+  }
+
+  public async renameSession(id: string, title: string): Promise<boolean> {
+    await pool.query('UPDATE assistant_sessions SET title = $1 WHERE id = $2', [title, id]);
+    return true;
   }
 }
 

@@ -4,6 +4,7 @@ import { buildAIResponse } from '../services/ai-services/medicalKnowledgeBase.js
 import { bhashiniService } from '../services/ai-services/bhashiniService.js';
 import { piiRedactor } from '../services/ai-services/piiRedactor.js';
 import { geminiService } from '../services/ai-services/geminiService.js';
+import { patientContextService } from '../services/patientContextService.js';
 
 // POST /api/v1/assistant/sessions — Create a new conversation session
 export async function createSession(req: Request, res: Response, next: NextFunction) {
@@ -70,76 +71,89 @@ export async function sendMessage(req: Request, res: Response, next: NextFunctio
     const sanitizedContent = piiRedactor.stripPII(content.trim());
 
     // 3. Translate to English if needed for knowledge lookup
+    const langCode = typeof language === 'object' ? (language as any).code : language;
+    const langName = typeof language === 'object' ? (language as any).name : 'English';
+
     const englishQuery =
-      language !== 'en'
-        ? await bhashiniService.translateText(sanitizedContent, language, 'en')
+      langCode !== 'en' && langCode !== 'en-US'
+        ? await bhashiniService.translateText(sanitizedContent, langCode, 'en')
         : sanitizedContent;
 
     // 4. Store user message
     const userMessage = await conversationRepository.addMessage(session.id, {
       role: 'user',
       content: sanitizedContent,
-      language,
+      language: langCode,
       category: 'GENERAL',
       isFavorite: false,
     });
 
-    // 5. Try Gemini AI first with ICMR-grounded system instruction
-    const ICMR_SYSTEM_PROMPT = `You are ArogyaMitra, an expert public health AI assistant for India, grounded in ICMR (Indian Council of Medical Research), WHO SEARO, and MoHFW (Ministry of Health & Family Welfare) guidelines.
+    // 5. Gather Patient Context
+    const patientContext = await patientContextService.getContextForUser(userId);
 
-Your role is to provide accurate, evidence-based public health information to Indian citizens and health workers.
+    // 6. Build the custom context-aware system prompt
+    const systemPrompt = `You are ArogyaMitra AI.
+Use ONLY the patient's medical history provided below.
+Use ONLY the selected language.
+Selected Language: ${langName}
+Language Code: ${langCode}
 
-RULES:
-1. ONLY provide information grounded in ICMR, WHO, or MoHFW guidelines.
-2. NEVER provide a definitive medical diagnosis. Always advise consulting a Registered Medical Practitioner (RMP).
-3. For ANY emergency symptoms (chest pain, difficulty breathing, unconsciousness, high fever with rash, severe bleeding), immediately direct the person to call 108 or visit the nearest emergency room.
-4. Always mention that your response is for public health awareness only.
-5. Structure your response clearly with: a brief summary, key information, preventive measures (if relevant), and the recommended next action.
-6. Be compassionate and clear. Avoid medical jargon where possible.
-7. For Indian-specific diseases (Dengue, Malaria, Typhoid, Cholera, TB, Japanese Encephalitis), reference India-specific prevalence and prevention guidelines.
-8. End EVERY response with: "⚕️ This information is for public health awareness only and is NOT a medical prescription. Please consult a Registered Medical Practitioner for diagnosis and treatment."`;
+Patient Context:
+${JSON.stringify(patientContext, null, 2)}
+
+Rules:
+Never answer in English unless English is selected.
+Translate headings, bullet points, warnings, medicine instructions, recovery advice, and lifestyle guidance.
+Keep medicine names, laboratory names, medical terminology, and drug names in English.
+Never invent medical history.
+Never hallucinate diseases.
+If allergy information exists, always consider it.
+If Digital Twin risk exists, consider it.
+If laboratory abnormalities exist, explain them.
+If kidney or liver function is abnormal, warn before recommending medicines.
+Never prescribe medicines.
+Never discontinue medicines.
+Always remind the user that this is AI guidance and not a confirmed medical diagnosis.
+Escalate emergency symptoms immediately.`;
 
     let responseText: string;
     let aiCategory = 'GENERAL';
-    let aiSources = ['ICMR National Guidelines', 'WHO SEARO'];
+    let aiSources = ['ICMR National Guidelines', 'Patient Context Profile'];
     let isEmergency = false;
-    let confidence = 0.88;
+    let confidence = 0.95;
     let usedGemini = false;
 
     try {
-      responseText = await geminiService.generateText(englishQuery, ICMR_SYSTEM_PROMPT);
+      responseText = await geminiService.generateText(englishQuery, systemPrompt);
       usedGemini = true;
 
       // Detect emergency keywords in Gemini response for escalation flag
       const emergencyKeywords = ['call 108', 'emergency', 'immediately', 'urgent', 'hospital'];
       isEmergency = emergencyKeywords.some(k => responseText.toLowerCase().includes(k));
     } catch (geminiError) {
-      // 6. Fallback to ICMR knowledge base if Gemini fails
+      // Fallback
       const fallbackResponse = buildAIResponse(englishQuery);
       responseText = formatResponseText(fallbackResponse);
-      aiCategory = fallbackResponse.category;
-      aiSources = fallbackResponse.sources;
       isEmergency = fallbackResponse.isEmergency;
-      confidence = fallbackResponse.confidence;
     }
 
     // 7. Translate response back if needed
     const localizedResponse =
-      language !== 'en'
-        ? await bhashiniService.translateText(responseText, 'en', language)
+      langCode !== 'en' && langCode !== 'en-US'
+        ? await bhashiniService.translateText(responseText, 'en', langCode)
         : responseText;
 
     // 8. Store assistant message
     const assistantMessage = await conversationRepository.addMessage(session.id, {
       role: 'assistant',
       content: localizedResponse,
-      language,
+      language: langCode,
       category: aiCategory as any,
       isFavorite: false,
       sources: aiSources,
       confidence,
       isEmergency,
-      disclaimer: 'This information is for public health awareness only. Consult a Registered Medical Practitioner for diagnosis.',
+      disclaimer: 'This guidance is AI-generated and is not a confirmed medical diagnosis.',
     });
 
     return res.status(200).json({
@@ -174,6 +188,16 @@ export async function submitFeedback(req: Request, res: Response, next: NextFunc
     const { feedback } = req.body;
     await conversationRepository.submitFeedback(sessionId, messageId, feedback);
     return res.status(200).json({ success: true, data: { message: 'Feedback recorded. Thank you.' } });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function renameSession(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { title } = req.body;
+    await conversationRepository.renameSession(req.params.id, title);
+    return res.status(200).json({ success: true, message: 'Session renamed successfully' });
   } catch (error) {
     next(error);
   }

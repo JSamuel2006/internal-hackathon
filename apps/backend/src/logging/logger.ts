@@ -14,7 +14,27 @@ export const logger = winston.createLogger({
       format: winston.format.combine(
         winston.format.colorize(),
         winston.format.printf(
-          (info) => `${info.timestamp} [${info.level}]: ${info.message}`
+          (info) => {
+            let log = `${info.timestamp} [${info.level}]: ${info.message}`;
+            if (info.error) {
+              log += `\nError: ${info.error}`;
+            }
+            if (info.stack) {
+              log += `\nStack: ${info.stack}`;
+            }
+            // If there's any other metadata, log it in development
+            const metadata = { ...info } as any;
+            delete metadata.timestamp;
+            delete metadata.level;
+            delete metadata.message;
+            delete metadata.service;
+            delete metadata.error;
+            delete metadata.stack;
+            if (Object.keys(metadata).length > 0) {
+              log += `\nMetadata: ${JSON.stringify(metadata)}`;
+            }
+            return log;
+          }
         )
       ),
     }),

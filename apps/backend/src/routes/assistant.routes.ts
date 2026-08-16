@@ -7,6 +7,7 @@ import {
   sendMessage,
   toggleFavorite,
   submitFeedback,
+  renameSession
 } from '../controllers/aiAssistantController.js';
 
 const router = Router();
@@ -16,6 +17,7 @@ router.post('/sessions', createSession);
 router.get('/sessions', getSessions);
 router.get('/sessions/:id', getSession);
 router.delete('/sessions/:id', deleteSession);
+router.post('/sessions/:id/rename', renameSession);
 
 // Messaging
 router.post('/sessions/:sessionId/messages', sendMessage);

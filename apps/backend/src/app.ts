@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import router from './routes/index.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { loggingMiddleware } from './middleware/loggingMiddleware.js';
+import { env } from './configuration/environment.js';
 
 export function createApp(): Express {
   const app = express();
@@ -11,7 +12,18 @@ export function createApp(): Express {
   // Security & Core Middlewares
   app.use(helmet());
   app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    // Accept any localhost origin in development (covers port changes like 5173→5176→5177)
+    // In production, restrict to the configured CORS_ORIGIN only.
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // same-origin / curl / server-to-server
+      if (env.NODE_ENV === 'development' && /^http:\/\/localhost(:\d+)?$/.test(origin)) {
+        return callback(null, true);
+      }
+      if (origin === env.CORS_ORIGIN) {
+        return callback(null, true);
+      }
+      callback(new Error(`CORS: Origin '${origin}' not allowed.`));
+    },
     credentials: true,
   }));
   app.use(express.json({ limit: '10mb' }));
@@ -38,3 +50,4 @@ export function createApp(): Express {
 
   return app;
 }
+

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { handleTriageQuery, handleTranslate } from '../controllers/aiController.js';
 import { handleAnalyzeMedicine } from '../controllers/medicineController.js';
+import { handleAnalyzeReport } from '../controllers/reportAnalysisController.js';
 import { upload } from '../middleware/uploadMiddleware.js';
 
 const router = Router();
@@ -13,6 +14,9 @@ router.post('/translate', handleTranslate);
 
 // POST /api/v1/ai/scan-medicine - AI OCR medicine strip scanner (Backward compatible)
 router.post('/scan-medicine', upload.single('image'), handleAnalyzeMedicine);
+
+// POST /api/v1/ai/analyze-report - AI Medical Report Analyzer
+router.post('/analyze-report', upload.single('report'), handleAnalyzeReport);
 
 export default router;
 

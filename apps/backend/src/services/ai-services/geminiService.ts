@@ -179,6 +179,101 @@ export class GeminiService {
     }
   }
 
+  /**
+   * Generates text content with media attachments (e.g. image or PDF) using Gemini API with fallback.
+   */
+  public async generateFromMedia(
+    prompt: string,
+    mimeType: string,
+    fileBuffer: Buffer,
+    systemInstruction?: string,
+    timeoutMs: number = 35000
+  ): Promise<string> {
+    if (!prompt || prompt.trim() === '') {
+      throw new Error('Prompt cannot be empty.');
+    }
+
+    if (!this.genAI) {
+      this.initialize();
+      if (!this.genAI) {
+        throw new Error('Google Gemini API client is unavailable.');
+      }
+    }
+
+    const start = performance.now();
+    try {
+      let lastError: Error = new Error('All models exhausted.');
+      const base64Data = fileBuffer.toString('base64');
+
+      for (const modelName of MODEL_FALLBACK_CHAIN) {
+        try {
+          const model = this.genAI.getGenerativeModel({
+            model: modelName,
+            systemInstruction: systemInstruction,
+          });
+
+          const timeoutPromise = new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error(`Gemini API call timed out after ${timeoutMs}ms`)), timeoutMs)
+          );
+
+          const result = await Promise.race([
+            model.generateContent({
+              contents: [
+                {
+                  role: 'user',
+                  parts: [
+                    { text: prompt },
+                    {
+                      inlineData: {
+                        data: base64Data,
+                        mimeType: mimeType
+                      }
+                    }
+                  ]
+                }
+              ],
+            }),
+            timeoutPromise,
+          ]);
+
+          if (!result || !result.response) {
+            throw new Error('Received an empty or invalid response from Gemini API.');
+          }
+
+          const text = result.response.text();
+          if (!text) throw new Error('Gemini returned an empty text block.');
+
+          this.activeModel = modelName;
+          logger.info({
+            message: 'Gemini media request succeeded',
+            model: modelName,
+            mimeType,
+            responseLength: text.length,
+          });
+
+          const duration = Math.round(performance.now() - start);
+          logger.info({
+            message: 'generateFromMedia completed',
+            model: modelName,
+            durationMs: duration,
+          });
+
+          return text;
+        } catch (err: any) {
+          logger.warn({ message: `Model ${modelName} failed on media request, trying next`, reason: err.message });
+          lastError = err;
+        }
+      }
+      throw lastError;
+    } catch (error: any) {
+      logger.error({
+        message: 'All Gemini models failed on media request',
+        error: error.message,
+      });
+      throw new Error(`AI report analysis error: ${error.message || 'Unknown error'}`);
+    }
+  }
+
   /** Returns the currently active (working) model name */
   public getActiveModel(): string {
     return this.activeModel;
