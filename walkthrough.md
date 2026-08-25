@@ -123,3 +123,38 @@ I have successfully integrated **Socket.IO** into the ArogyaMitra system to enab
    - Frontend Typecheck (`npx tsc -b`): **0 Errors**
    - Frontend Production Build (`npm run build`): **Success (Code 0)**
 
+---
+
+# Walkthrough: Offline-First Healthcare Core
+
+I have successfully designed and implemented the **Offline-First Healthcare Core** for ArogyaMitra, ensuring vital health profiles, first-aid education, and screening queues remain completely usable when offline.
+
+## Changes Implemented
+
+### 1. Unified Storage & Security
+- Created [`offlineStorage.ts`](file:///c:/Users/HP/Desktop/sih-frontend/src/services/offlineStorage.ts): Implements a secure, asynchronous native IndexedDB wrapper. Health data is isolated strictly by authenticated `userId` to ensure data security.
+- Refactored [`offlineScreeningStorage.ts`](file:///c:/Users/HP/Desktop/sih-frontend/src/services/offlineScreeningStorage.ts): Transitioned ASHA screening queues from localStorage to IndexedDB while maintaining existing interfaces, sync status cycles, and statistic trackers.
+- Modified [`api.ts`](file:///c:/Users/HP/Desktop/sih-frontend/src/services/api.ts): Updated `logout` behavior to automatically clear user-specific IndexedDB records upon sign-out to prevent data leakage.
+
+### 2. Connectivity & PWA shell cache
+- Created [`sw.js`](file:///c:/Users/HP/Desktop/sih-frontend/public/sw.js): Caches essential application shells and assets. Sensitive REST API responses (`/api/v1/*`) are explicitly bypassed to prevent data leaks.
+- Modified [`index.html`](file:///c:/Users/HP/Desktop/sih-frontend/index.html): Registered the service worker on load.
+
+### 3. Pages, Guides, & Routing
+- Created [`firstAidData.ts`](file:///c:/Users/HP/Desktop/sih-frontend/src/services/firstAidData.ts): High-contrast, static first-aid educational guides containing warning indicators and disclaimer.
+- Created [`OfflineHealthPage.tsx`](file:///c:/Users/HP/Desktop/sih-frontend/src/pages/citizen/OfflineHealthPage.tsx): Simplistic dashboard showcasing profiles, recent screenings, first-aid articles, and a manual "Sync Now" button.
+- Modified [`App.tsx`](file:///c:/Users/HP/Desktop/sih-frontend/src/App.tsx): Registered the routes under `/citizen/offline-health` and `/worker/offline-health`.
+- Modified [`CitizenLayout.tsx`](file:///c:/Users/HP/Desktop/sih-frontend/src/layouts/CitizenLayout.tsx) & [`WorkerLayout.tsx`](file:///c:/Users/HP/Desktop/sih-frontend/src/layouts/WorkerLayout.tsx): Added direct sidebar links.
+
+## Verification & Testing
+1. **Offline Unit Tests (`tests/offline-foundation.test.ts`):** 🟢 **7/7 Passed** (verified caching, offline retrieval, queueing, and isolation).
+2. **Suite Regression tests:**
+   - `tests/citizen-doctor-real-flow.test.ts` (**16/16 Passed**).
+   - `tests/emergency-doctor-chat.test.ts` (**19/19 Passed**).
+   - `tests/worker-screening.test.ts` (**12/12 Passed**).
+   - `tests/socket-integration.test.ts` (**5/5 Passed**).
+3. **Build compile check:**
+   - Frontend and Backend typechecks: **0 Errors**
+   - Frontend production build compile: **Success (Code 0)**
+
+
