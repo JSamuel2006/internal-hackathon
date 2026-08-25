@@ -188,7 +188,7 @@ export default function AshaFieldScreeningPage() {
     };
 
     const screeningInput = {
-      citizen_user_id: citizenId.startsWith('offline-') ? undefined : citizenId,
+      citizen_user_id: citizenId.includes('offline') ? undefined : citizenId,
       citizen_name: citizenName,
       age: 35, // Demo fallback
       gender: 'Female', // Demo fallback

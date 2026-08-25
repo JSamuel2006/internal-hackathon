@@ -52,12 +52,22 @@ export default function WorkerLayout() {
         return;
       }
 
+      console.log('[OFFLINE SYNC] Pending records found (Auto):', screenings.length);
+      for (const scr of screenings) {
+        console.log('[OFFLINE SYNC] Attempting sync (Auto) for client_record_id:', scr.client_record_id);
+      }
+
+      console.log('[OFFLINE SYNC] POST /worker/screenings/sync (Auto)');
       const res = await workerService.syncScreenings(screenings);
+      console.log('[OFFLINE SYNC] Response status (Auto):', res.success ? 'SUCCESS' : 'FAILED');
+
       if (res.success && Array.isArray(res.data)) {
         for (const item of res.data) {
           if (item.status === 'SUCCESS') {
+            console.log('[OFFLINE SYNC] Marked SYNCED (Auto):', item.client_record_id);
             await offlineScreeningStorage.updateSyncStatus(item.client_record_id, 'SYNCED');
           } else {
+            console.error('[OFFLINE SYNC] Marked FAILED (Auto):', item.client_record_id, 'Error:', item.error);
             await offlineScreeningStorage.updateSyncStatus(item.client_record_id, 'FAILED', item.error);
           }
         }
@@ -69,6 +79,7 @@ export default function WorkerLayout() {
         setSyncMessage('Synchronization failed on backend.');
       }
     } catch (err: any) {
+      console.error('[OFFLINE SYNC] Auto sync error:', err.message || err);
       setSyncMessage(`Error syncing: ${err.message || err}`);
     } finally {
       setSyncing(false);
