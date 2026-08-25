@@ -2,6 +2,7 @@ import { pool } from '../database/db.js';
 import { logger } from '../logging/logger.js';
 import { patientContextService } from './patientContextService.js';
 import { geminiService } from './ai-services/geminiService.js';
+import { emitEmergencyRequestCreated, emitEmergencyRequestUpdated, emitRequestStatusUpdated, emitChatMessage } from '../socket/socketServer.js';
 
 export interface DoctorRequestEntity {
   id: string;
@@ -102,7 +103,7 @@ export class EmergencyDoctorChatService {
 
     logger.info({ tag: '[DOCTOR_CHAT]', message: `Doctor requested for session ${sessionId}, Request ID: ${requestId}, Assigned: ${assignedDoctorId}` });
 
-    return {
+    const result = {
       id: requestId,
       emergencyId: sessionId,
       citizenUserId: requestingUserId,
@@ -111,6 +112,11 @@ export class EmergencyDoctorChatService {
       status: 'REQUESTED',
       requestedAt: new Date(),
     };
+
+    // Emit event AFTER database persistence succeeded
+    emitEmergencyRequestCreated(result);
+
+    return result;
   }
 
   // ── Doctor Actions: Accept / Decline / Close ─────────────────
@@ -224,7 +230,7 @@ export class EmergencyDoctorChatService {
       message: `Doctor ${doctorId} accepted request ${requestId} for session ${requestEmergencyId}`,
     });
 
-    return {
+    const result = {
       id: requestId,
       emergencyId: requestEmergencyId,
       citizenUserId: requestCitizenUserId,
@@ -234,6 +240,13 @@ export class EmergencyDoctorChatService {
       requestedAt: new Date(),
       acceptedAt,
     };
+
+    // Emit acceptance events
+    const docInfo = { id: doctorId, name: doctorName };
+    emitRequestStatusUpdated(requestEmergencyId, 'ACCEPTED', docInfo);
+    emitEmergencyRequestUpdated({ id: requestId, emergencyId: requestEmergencyId, status: 'ACCEPTED', doctorId });
+
+    return result;
   }
 
   async declineRequest(requestId: string, doctorId: string): Promise<void> {
@@ -319,6 +332,10 @@ export class EmergencyDoctorChatService {
        VALUES ($1, $2, 'DOCTOR_CLOSED', 'Doctor assistance chat closed', $3)`,
       [`ev-${Date.now()}-cls`, request.emergency_id, userRole === 'ROLE_DOCTOR' ? 'DOCTOR' : 'CITIZEN']
     );
+
+    // Emit close events
+    emitRequestStatusUpdated(request.emergency_id, 'CLOSED');
+    emitEmergencyRequestUpdated({ id: requestId, emergencyId: request.emergency_id, status: 'CLOSED', doctorId: request.doctor_id });
   }
 
   // ── Messaging ────────────────────────────────────────────────
@@ -371,7 +388,7 @@ export class EmergencyDoctorChatService {
       [msgId, request.emergency_id, requestId, senderId, roleString, message.trim(), createdAt]
     );
 
-    return {
+    const result = {
       id: msgId,
       emergencyId: request.emergency_id,
       conversationId: requestId,
@@ -380,6 +397,11 @@ export class EmergencyDoctorChatService {
       message: message.trim(),
       createdAt,
     };
+
+    // Emit chat message event
+    emitChatMessage(request.emergency_id, result);
+
+    return result;
   }
 
   async getMessages(requestId: string, userId: string, userRole: string): Promise<ChatMessageEntity[]> {

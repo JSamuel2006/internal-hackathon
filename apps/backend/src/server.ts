@@ -4,6 +4,8 @@ import { env } from './configuration/environment.js';
 import { initializeDatabase, closePool } from './database/db.js';
 import path from 'path';
 import fs from 'fs';
+import http from 'http';
+import { initializeSocketServer } from './socket/socketServer.js';
 
 // ─────────────────────────────────────────────────────────────
 // BOOT — structured startup with pre-flight checks
@@ -44,8 +46,12 @@ async function bootstrap() {
   // ── 3. Build Express app and start HTTP server ───────────────
   logger.info({ tag: '[SERVER]', message: 'Initialising Express application...' });
   const app = createApp();
+  const server = http.createServer(app);
 
-  const server = app.listen(env.PORT, () => {
+  // Initialize Socket.IO Server
+  initializeSocketServer(server);
+
+  server.listen(env.PORT, () => {
     logger.info({ tag: '[SERVER]', message: `✅ HTTP server listening on port ${env.PORT}` });
     logger.info({ tag: '[READY]',  message: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━' });
     logger.info({ tag: '[READY]',  message: '🚀 ArogyaVerse API is READY TO SERVE TRAFFIC' });

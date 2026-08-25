@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { emergencyNetworkService, doctorApiService, authService, workerService } from '../../services/api';
+import { socketService } from '../../services/socketService';
 
 interface DoctorProfile {
   id: string;
@@ -93,6 +94,36 @@ export default function DoctorDashboard() {
 
   useEffect(() => {
     syncDashboardData();
+
+    // Establish authenticated Socket.IO connection
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      const socket = socketService.connect(token);
+
+      socket.on('emergency_request_created', (data) => {
+        console.log('[SOCKET] emergency_request_created received, triggering REST sync', data);
+        syncDashboardData();
+      });
+
+      socket.on('emergency_request_updated', (data) => {
+        console.log('[SOCKET] emergency_request_updated received, triggering REST sync', data);
+        syncDashboardData();
+      });
+
+      socket.on('reconnect', () => {
+        console.log('[SOCKET] Socket reconnected, triggering REST queue synchronization');
+        syncDashboardData();
+      });
+    }
+
+    return () => {
+      const socket = socketService.getSocket();
+      if (socket) {
+        socket.off('emergency_request_created');
+        socket.off('emergency_request_updated');
+        socket.off('reconnect');
+      }
+    };
   }, []);
 
   // Poll for queue & active chat updates
@@ -120,7 +151,7 @@ export default function DoctorDashboard() {
       } catch (err) {
         /* quiet */
       }
-    }, 5000);
+    }, 30000); // 30 seconds fallback polling
 
     return () => clearInterval(queueInterval);
   }, [availability]);

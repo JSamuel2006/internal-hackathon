@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { emergencyNetworkService } from '../../services/api';
+import { socketService } from '../../services/socketService';
 
 export default function EmergencyDoctorChatPage() {
   const navigate = useNavigate();
@@ -79,6 +80,55 @@ export default function EmergencyDoctorChatPage() {
     startSession();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]); // Only run once per session, NOT when requestId changes
+
+  // Phase 3: Setup Socket.IO connection for real-time status and message synchronization
+  useEffect(() => {
+    if (!sessionId) return;
+
+    const token = sessionStorage.getItem('token');
+    if (!token) return;
+
+    const socket = socketService.connect(token);
+
+    socket.emit('join_session', { sessionId }, (res: any) => {
+      if (res && res.success) {
+        console.log(`[SOCKET] Authenticated and joined room session:${sessionId}`);
+      } else {
+        console.error('[SOCKET] Failed to join session room:', res?.message);
+      }
+    });
+
+    socket.on('doctor_request_status_updated', (data) => {
+      console.log('[SOCKET] doctor_request_status_updated received:', data);
+      if (data.status) {
+        setRequestStatus(data.status);
+        if (data.status === 'ACCEPTED' && data.doctor) {
+          setDoctorName(`${data.doctor.name} is connected`);
+        } else if (data.status === 'CLOSED') {
+          setDoctorName('Conversation ended.');
+        }
+      }
+    });
+
+    socket.on('emergency_chat_message', (msg) => {
+      console.log('[SOCKET] emergency_chat_message received:', msg);
+      setMessages((prev) => {
+        if (prev.some((m) => m.id === msg.id)) return prev;
+        return [...prev, msg];
+      });
+    });
+
+    socket.on('reconnect', () => {
+      console.log('[SOCKET] Citizen socket reconnected, rejoining session room');
+      socket.emit('join_session', { sessionId });
+    });
+
+    return () => {
+      socket.off('doctor_request_status_updated');
+      socket.off('emergency_chat_message');
+      socket.off('reconnect');
+    };
+  }, [sessionId]);
 
   // Phase 2: Poll status + messages every 3 seconds (runs once, stable)
   useEffect(() => {
