@@ -37,10 +37,10 @@ export default function AshaDashboard() {
   const loadData = async () => {
     setLoading(true);
     // 1. Get offline storage stats & queue
-    const localQueue = offlineScreeningStorage.getScreenings();
+    const localQueue = await offlineScreeningStorage.getScreenings();
     setHistory(localQueue);
 
-    const localStats = offlineScreeningStorage.getStats();
+    const localStats = await offlineScreeningStorage.getStats();
 
     // 2. Fetch stats & citizen list if online
     if (navigator.onLine) {
@@ -97,7 +97,7 @@ export default function AshaDashboard() {
     e.preventDefault();
     if (!navigator.onLine) {
       // Local filter
-      const localQueue = offlineScreeningStorage.getScreenings();
+      const localQueue = await offlineScreeningStorage.getScreenings();
       const filtered = localQueue
         .filter(s => s.citizen_name.toLowerCase().includes(query.toLowerCase()))
         .map(s => ({
@@ -192,18 +192,19 @@ export default function AshaDashboard() {
     if (stats.pendingSync === 0) return;
     setLoading(true);
     try {
-      const screenings = offlineScreeningStorage.getScreenings().filter(s => s.sync_status === 'PENDING' || s.sync_status === 'FAILED');
+      const activeQueue = await offlineScreeningStorage.getScreenings();
+      const screenings = activeQueue.filter(s => s.sync_status === 'PENDING' || s.sync_status === 'FAILED');
       const res = await workerService.syncScreenings(screenings);
       if (res.success && Array.isArray(res.data)) {
-        res.data.forEach((item: any) => {
+        for (const item of res.data) {
           if (item.status === 'SUCCESS') {
-            offlineScreeningStorage.updateSyncStatus(item.client_record_id, 'SYNCED');
+            await offlineScreeningStorage.updateSyncStatus(item.client_record_id, 'SYNCED');
           } else {
-            offlineScreeningStorage.updateSyncStatus(item.client_record_id, 'FAILED', item.error);
+            await offlineScreeningStorage.updateSyncStatus(item.client_record_id, 'FAILED', item.error);
           }
-        });
-        offlineScreeningStorage.clearSynced();
-        loadData();
+        }
+        await offlineScreeningStorage.clearSynced();
+        await loadData();
       }
     } catch (err) {
       console.error(err);

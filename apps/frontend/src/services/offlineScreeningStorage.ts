@@ -1,3 +1,5 @@
+import { offlineStorage } from './offlineStorage';
+
 export interface OfflineScreening {
   client_record_id: string;
   citizen_user_id?: string;
@@ -35,58 +37,60 @@ export interface OfflineScreening {
   error?: string;
 }
 
-const STORAGE_KEY = 'arogya_offline_screenings';
+const STORE_NAME = 'screenings';
+
+const getActiveUserId = (): string => {
+  const userRaw = sessionStorage.getItem('user');
+  if (userRaw) {
+    try {
+      return JSON.parse(userRaw).id || 'default_worker';
+    } catch {
+      return 'default_worker';
+    }
+  }
+  return 'default_worker';
+};
 
 export const offlineScreeningStorage = {
-  getScreenings: (): OfflineScreening[] => {
-    try {
-      const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
-    } catch (e) {
-      console.error('Failed to read offline screenings from localStorage', e);
-      return [];
-    }
+  getScreenings: async (): Promise<OfflineScreening[]> => {
+    const userId = getActiveUserId();
+    return await offlineStorage.getAllForUser(STORE_NAME, userId);
   },
 
-  saveScreenings: (screenings: OfflineScreening[]): void => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(screenings));
-    } catch (e) {
-      console.error('Failed to save offline screenings to localStorage', e);
-    }
-  },
-
-  addScreening: (screening: Omit<OfflineScreening, 'sync_status' | 'client_record_id'>): OfflineScreening => {
+  addScreening: async (screening: Omit<OfflineScreening, 'sync_status' | 'client_record_id'>): Promise<OfflineScreening> => {
     const client_record_id = `scr-client-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
     const newRecord: OfflineScreening = {
       ...screening,
       client_record_id,
       sync_status: 'PENDING'
     };
-    const screenings = offlineScreeningStorage.getScreenings();
-    screenings.unshift(newRecord);
-    offlineScreeningStorage.saveScreenings(screenings);
+    const userId = getActiveUserId();
+    await offlineStorage.set(STORE_NAME, client_record_id, userId, newRecord);
     return newRecord;
   },
 
-  updateSyncStatus: (clientRecordId: string, status: 'SYNCED' | 'FAILED', error?: string): void => {
-    const screenings = offlineScreeningStorage.getScreenings();
-    const index = screenings.findIndex(s => s.client_record_id === clientRecordId);
-    if (index !== -1) {
-      screenings[index].sync_status = status;
-      if (error) screenings[index].error = error;
-      offlineScreeningStorage.saveScreenings(screenings);
+  updateSyncStatus: async (clientRecordId: string, status: 'SYNCED' | 'FAILED', error?: string): Promise<void> => {
+    const userId = getActiveUserId();
+    const records = await offlineStorage.getAllForUser(STORE_NAME, userId);
+    const match = records.find(r => r.client_record_id === clientRecordId);
+    if (match) {
+      match.sync_status = status;
+      if (error) match.error = error;
+      await offlineStorage.set(STORE_NAME, clientRecordId, userId, match);
     }
   },
 
-  clearSynced: (): void => {
-    const screenings = offlineScreeningStorage.getScreenings();
-    const pending = screenings.filter(s => s.sync_status === 'PENDING' || s.sync_status === 'FAILED');
-    offlineScreeningStorage.saveScreenings(pending);
+  clearSynced: async (): Promise<void> => {
+    const userId = getActiveUserId();
+    const records = await offlineStorage.getAllForUser(STORE_NAME, userId);
+    const synced = records.filter(r => r.sync_status === 'SYNCED');
+    for (const r of synced) {
+      await offlineStorage.delete(STORE_NAME, r.client_record_id);
+    }
   },
 
-  getStats: () => {
-    const screenings = offlineScreeningStorage.getScreenings();
+  getStats: async () => {
+    const screenings = await offlineScreeningStorage.getScreenings();
     const pending = screenings.filter(s => s.sync_status === 'PENDING').length;
     const synced = screenings.filter(s => s.sync_status === 'SYNCED').length;
     const failed = screenings.filter(s => s.sync_status === 'FAILED').length;

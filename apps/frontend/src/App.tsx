@@ -67,6 +67,9 @@ import AshaDashboard from './pages/officer/AshaDashboard';
 import AshaWorkerDashboard from './pages/worker/AshaDashboard';
 import AshaFieldScreeningPage from './pages/worker/AshaFieldScreeningPage';
 
+// Offline Health Page
+import OfflineHealthPage from './pages/citizen/OfflineHealthPage';
+
 // Admin Portal
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
@@ -118,6 +121,7 @@ export default function App() {
           <Route path="wearables" element={<WearableDashboard />} />
           <Route path="notifications" element={<NotificationCenter />} />
           <Route path="health-analytics" element={<HealthAnalyticsDashboard />} />
+          <Route path="offline-health" element={<OfflineHealthPage />} />
         </Route>
 
         {/* Officer Portal */}
@@ -145,6 +149,7 @@ export default function App() {
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<AshaWorkerDashboard />} />
           <Route path="screening" element={<AshaFieldScreeningPage />} />
+          <Route path="offline-health" element={<OfflineHealthPage />} />
         </Route>
 
         {/* Admin Portal */}

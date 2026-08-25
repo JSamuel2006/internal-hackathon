@@ -20,6 +20,7 @@ export default function CitizenLayout() {
 
   const navItems = [
     { name: 'Dashboard', path: '/citizen/dashboard', icon: LayoutDashboard },
+    { name: '🩺 Offline Health Care', path: '/citizen/offline-health', icon: HeartPulse },
     { name: 'AI Health Twin', path: '/citizen/twin', icon: Sparkles },
     { name: 'AI Health Assistant', path: '/citizen/assistant', icon: Bot },
     { name: 'Medicine Scanner', path: '/citizen/scanner', icon: ScanLine },

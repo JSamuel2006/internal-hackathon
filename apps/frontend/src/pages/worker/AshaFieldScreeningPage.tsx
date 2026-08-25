@@ -218,14 +218,14 @@ export default function AshaFieldScreeningPage() {
     };
 
     // 1. Add to Offline Store Queue immediately
-    const queuedRecord = offlineScreeningStorage.addScreening(screeningInput);
+    const queuedRecord = await offlineScreeningStorage.addScreening(screeningInput);
 
     // 2. Check if online, trigger sync immediately
     if (navigator.onLine) {
       try {
         const res = await workerService.saveScreening(screeningInput);
         if (res.success) {
-          offlineScreeningStorage.updateSyncStatus(queuedRecord.client_record_id, 'SYNCED');
+          await offlineScreeningStorage.updateSyncStatus(queuedRecord.client_record_id, 'SYNCED');
           setSuccessResult(res.data);
         } else {
           setErrorMsg('Backend sync failed, saved locally in queue.');

@@ -38,6 +38,20 @@ export const authService = {
     return response.data;
   },
   logout: () => {
+    const userRaw = sessionStorage.getItem('user');
+    if (userRaw) {
+      try {
+        const user = JSON.parse(userRaw);
+        if (user && user.id) {
+          import('./offlineStorage').then(({ offlineStorage }) => {
+            offlineStorage.clearAllForUser('profiles', user.id);
+            offlineStorage.clearAllForUser('timelines', user.id);
+            offlineStorage.clearAllForUser('emergency', user.id);
+            offlineStorage.clearAllForUser('screenings', user.id);
+          }).catch(() => {});
+        }
+      } catch (e) {}
+    }
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('active_emergency_session_id');

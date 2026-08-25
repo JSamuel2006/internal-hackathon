@@ -23,8 +23,8 @@ export default function WorkerLayout() {
     window.addEventListener('offline', handleOffline);
 
     // Sync queue status checker
-    const checkQueue = () => {
-      const stats = offlineScreeningStorage.getStats();
+    const checkQueue = async () => {
+      const stats = await offlineScreeningStorage.getStats();
       setPendingCount(stats.pending);
     };
 
@@ -43,7 +43,8 @@ export default function WorkerLayout() {
     setSyncing(true);
     setSyncMessage('Synchronizing field screening records...');
     try {
-      const screenings = offlineScreeningStorage.getScreenings().filter(s => s.sync_status === 'PENDING' || s.sync_status === 'FAILED');
+      const activeQueue = await offlineScreeningStorage.getScreenings();
+      const screenings = activeQueue.filter(s => s.sync_status === 'PENDING' || s.sync_status === 'FAILED');
       if (screenings.length === 0) {
         setSyncMessage('No pending records to synchronize.');
         setTimeout(() => setSyncMessage(''), 2000);
@@ -53,15 +54,15 @@ export default function WorkerLayout() {
 
       const res = await workerService.syncScreenings(screenings);
       if (res.success && Array.isArray(res.data)) {
-        res.data.forEach((item: any) => {
+        for (const item of res.data) {
           if (item.status === 'SUCCESS') {
-            offlineScreeningStorage.updateSyncStatus(item.client_record_id, 'SYNCED');
+            await offlineScreeningStorage.updateSyncStatus(item.client_record_id, 'SYNCED');
           } else {
-            offlineScreeningStorage.updateSyncStatus(item.client_record_id, 'FAILED', item.error);
+            await offlineScreeningStorage.updateSyncStatus(item.client_record_id, 'FAILED', item.error);
           }
-        });
-        offlineScreeningStorage.clearSynced();
-        const stats = offlineScreeningStorage.getStats();
+        }
+        await offlineScreeningStorage.clearSynced();
+        const stats = await offlineScreeningStorage.getStats();
         setPendingCount(stats.pending);
         setSyncMessage(`Synchronization complete. Unsynced remaining: ${stats.pending}`);
       } else {
@@ -150,6 +151,13 @@ export default function WorkerLayout() {
               <ClipboardList className="w-4 h-4" />
               <span>New Screen</span>
             </Link>
+            <Link
+              to="/worker/offline-health"
+              className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl text-slate-350 hover:bg-slate-900 hover:text-slate-100 transition-all font-semibold"
+            >
+              <Activity className="w-4 h-4" />
+              <span>Offline Care</span>
+            </Link>
           </div>
 
           <button
@@ -172,6 +180,10 @@ export default function WorkerLayout() {
             <Link to="/worker/screening" className="px-3 py-1.5 bg-slate-900 rounded-lg flex items-center gap-1.5 font-bold">
               <ClipboardList className="w-3.5 h-3.5" />
               <span>Screen</span>
+            </Link>
+            <Link to="/worker/offline-health" className="px-3 py-1.5 bg-slate-900 rounded-lg flex items-center gap-1.5 font-bold">
+              <Activity className="w-3.5 h-3.5" />
+              <span>Care</span>
             </Link>
             <button onClick={handleLogout} className="px-3 py-1.5 bg-slate-900 text-rose-400 rounded-lg flex items-center gap-1.5 font-bold">
               <LogOut className="w-3.5 h-3.5" />
