@@ -27,6 +27,7 @@ import wearableRoutes from './wearable.routes.js';
 import superAdminRoutes from './superAdmin.routes.js';
 import emergencyNetworkRoutes from './emergency-network.routes.js';
 import healthRoutes from './health.routes.js';
+import workerRoutes from './worker.routes.js';
 
 const router = Router();
 
@@ -58,5 +59,6 @@ router.use('/wearables', wearableRoutes);
 router.use('/super-admin', superAdminRoutes);
 router.use('/health', healthRoutes);
 router.use('/emergency-network', emergencyNetworkRoutes);
+router.use('/worker', workerRoutes);
 
 export default router;

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   HeartPulse, ShieldAlert, CheckCircle2, AlertCircle, RefreshCw, Send, ShieldCheck, Stethoscope, Star, Check, Plus,
-  LayoutDashboard, MessageSquare, History, User, LogOut, Clock, Activity
+  LayoutDashboard, MessageSquare, History, User, LogOut, Clock, Activity, ClipboardList
 } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { emergencyNetworkService, doctorApiService, authService } from '../../services/api';
+import { emergencyNetworkService, doctorApiService, authService, workerService } from '../../services/api';
 
 interface DoctorProfile {
   id: string;
@@ -37,6 +37,7 @@ export default function DoctorDashboard() {
   const [messages, setMessages] = useState<any[]>([]);
   const [replyInput, setReplyInput] = useState('');
   const [aiSummary, setAiSummary] = useState<string>('');
+  const [ashaScreenings, setAshaScreenings] = useState<any[]>([]);
 
   // Elapsed Timer state for active consultation
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -164,6 +165,15 @@ export default function DoctorDashboard() {
             } else {
               setMedicalSummary(null);
             }
+          }
+        }
+
+        // Fetch community screenings (ASHA)
+        const citizenId = selectedRequest.citizen_user_id || selectedRequest.citizenUserId;
+        if (citizenId) {
+          const ashaRes = await workerService.getCitizenHistory(citizenId).catch(() => null);
+          if (isMounted && ashaRes && ashaRes.success) {
+            setAshaScreenings(ashaRes.data || []);
           }
         }
       } catch (err) {
@@ -394,6 +404,20 @@ export default function DoctorDashboard() {
           {/* RECORDS Section */}
           <div className="space-y-1">
             <span className="text-[9px] uppercase tracking-widest text-slate-600 font-bold block mb-1">RECORDS</span>
+            {selectedRequest && (
+              <button
+                onClick={() => setSearchParams({ tab: 'screenings' })}
+                className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center gap-2 ${
+                  activeTab === 'screenings'
+                    ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
+                    : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
+                }`}
+              >
+                <ClipboardList className="w-3.5 h-3.5" />
+                <span>ASHA Screenings</span>
+              </button>
+            )}
+
             <button
               onClick={() => setSearchParams({ tab: 'history' })}
               className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center gap-2 ${
@@ -790,6 +814,46 @@ export default function DoctorDashboard() {
                     )}
                   </div>
 
+                  {/* ASHA Field Screenings Panel */}
+                  <div className="glass-panel p-5 rounded-2xl border border-slate-900 bg-slate-950/10 space-y-3">
+                    <h4 className="text-[10px] font-bold text-slate-350 uppercase tracking-widest border-b border-slate-900 pb-2">
+                      ASHA Community Screenings
+                    </h4>
+                    {ashaScreenings && ashaScreenings.length > 0 ? (
+                      <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
+                        {ashaScreenings.map((scr: any) => (
+                          <div key={scr.id} className="p-3 bg-slate-950/85 rounded-xl border border-slate-900 text-[10px] font-mono space-y-2">
+                            <div className="flex justify-between border-b border-slate-900 pb-1 text-slate-500 text-[8px] uppercase">
+                              <span>Date: {new Date(scr.screening_date).toLocaleDateString()}</span>
+                              <span className={scr.risk_level === 'URGENT' || scr.risk_level === 'PRIORITY' ? 'text-rose-455 font-bold' : 'text-slate-500'}>
+                                {scr.risk_level}
+                              </span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-1 text-[9px]">
+                              <div>BP: <span className="text-slate-300">{scr.systolic_status === 'MEASURED' ? `${scr.systolic}/${scr.diastolic}` : 'N/A'}</span></div>
+                              <div>SpO2: <span className="text-slate-300">{scr.spo2_status === 'MEASURED' ? `${scr.spo2}%` : 'N/A'}</span></div>
+                              <div>Temp: <span className="text-slate-300">{scr.temperature_status === 'MEASURED' ? `${scr.temperature}°F` : 'N/A'}</span></div>
+                              <div>Glucose: <span className="text-slate-300">{scr.glucose_status === 'MEASURED' ? `${scr.glucose} mg/dL` : 'N/A'}</span></div>
+                            </div>
+                            {scr.symptoms && JSON.parse(scr.symptoms).length > 0 && (
+                              <div>
+                                <span className="text-[8px] text-slate-500 uppercase block">Symptoms</span>
+                                <span className="text-slate-400">{JSON.parse(scr.symptoms).join(', ')}</span>
+                              </div>
+                            )}
+                            {scr.risk_flags && JSON.parse(scr.risk_flags).length > 0 && (
+                              <div className="text-[9px] text-rose-400 font-bold">
+                                ⚠ {JSON.parse(scr.risk_flags).join('; ')}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-slate-500 italic text-[10px]">No community screening records found for this patient.</p>
+                    )}
+                  </div>
+
                 </div>
               </div>
             ) : (
@@ -797,6 +861,87 @@ export default function DoctorDashboard() {
                 <HeartPulse className="w-12 h-12 text-slate-700 mb-3 animate-pulse" />
                 <p className="text-xs">No active consultation running. Select a requested emergency from the requests queue tab.</p>
               </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'screenings' && (
+          <div className="glass-panel p-6 rounded-2xl border border-slate-900 bg-slate-950/20 space-y-4">
+            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-900 pb-2">
+              ASHA Community Field Screenings
+            </h3>
+            {ashaScreenings && ashaScreenings.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {ashaScreenings.map((scr: any) => (
+                  <div key={scr.id} className="p-5 rounded-xl border border-slate-900 bg-slate-950/50 space-y-4 text-xs font-mono">
+                    <div className="flex justify-between items-center border-b border-slate-900 pb-2 text-[10px] text-slate-500 uppercase font-bold">
+                      <span>Screening Date: {new Date(scr.screening_date).toLocaleString()}</span>
+                      <span className={`px-2 py-0.5 rounded text-[9px] font-extrabold ${
+                        scr.risk_level === 'URGENT' || scr.risk_level === 'PRIORITY' ? 'bg-rose-500/20 text-rose-400' : 'bg-slate-900 text-slate-400'
+                      }`}>
+                        {scr.risk_level}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 text-slate-300">
+                      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-900">
+                        <span className="text-[9px] text-slate-500 uppercase block mb-1">Blood Pressure</span>
+                        <strong>{scr.systolic_status === 'MEASURED' ? `${scr.systolic}/${scr.diastolic} mmHg` : scr.systolic_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
+                      </div>
+                      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-900">
+                        <span className="text-[9px] text-slate-500 uppercase block mb-1">Pulse Rate</span>
+                        <strong>{scr.pulse_status === 'MEASURED' ? `${scr.pulse} BPM` : scr.pulse_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
+                      </div>
+                      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-900">
+                        <span className="text-[9px] text-slate-500 uppercase block mb-1">SpO2 (Oxygen)</span>
+                        <strong>{scr.spo2_status === 'MEASURED' ? `${scr.spo2}%` : scr.spo2_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
+                      </div>
+                      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-900">
+                        <span className="text-[9px] text-slate-500 uppercase block mb-1">Temperature</span>
+                        <strong>{scr.temperature_status === 'MEASURED' ? `${scr.temperature}°F` : scr.temperature_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
+                      </div>
+                      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-900">
+                        <span className="text-[9px] text-slate-500 uppercase block mb-1">Random Glucose</span>
+                        <strong>{scr.glucose_status === 'MEASURED' ? `${scr.glucose} mg/dL` : scr.glucose_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
+                      </div>
+                      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-900">
+                        <span className="text-[9px] text-slate-500 uppercase block mb-1">Weight & Height</span>
+                        <strong>
+                          {scr.weight_status === 'MEASURED' ? `${scr.weight} kg` : 'N/A'} / {scr.height_status === 'MEASURED' ? `${scr.height} cm` : 'N/A'}
+                        </strong>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div>
+                        <span className="text-[9px] text-slate-500 uppercase block font-bold">Symptoms Observed</span>
+                        <p className="text-slate-355 font-semibold">{scr.symptoms ? JSON.parse(scr.symptoms).join(', ') || 'None' : 'None'}</p>
+                      </div>
+                      <div>
+                        <span className="text-[9px] text-slate-500 uppercase block font-bold">Known Conditions</span>
+                        <p className="text-slate-355 font-semibold">{scr.known_conditions ? JSON.parse(scr.known_conditions).join(', ') || 'None' : 'None'}</p>
+                      </div>
+                      <div>
+                        <span className="text-[9px] text-slate-500 uppercase block font-bold">Known Allergies</span>
+                        <p className="text-slate-355 font-semibold">{scr.allergies ? JSON.parse(scr.allergies).join(', ') || 'None' : 'None'}</p>
+                      </div>
+                      {scr.notes && (
+                        <div>
+                          <span className="text-[9px] text-slate-500 uppercase block font-bold">ASHA Worker Notes</span>
+                          <p className="text-slate-355 italic">{scr.notes}</p>
+                        </div>
+                      )}
+                      {scr.risk_flags && JSON.parse(scr.risk_flags).length > 0 && (
+                        <div className="p-3 rounded-lg bg-rose-500/5 border border-rose-500/10 text-[10px] text-rose-400 font-bold">
+                          ⚠ Referral Flags: {JSON.parse(scr.risk_flags).join('; ')}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-slate-500 italic text-center py-8">No community screening records found for this patient.</p>
             )}
           </div>
         )}

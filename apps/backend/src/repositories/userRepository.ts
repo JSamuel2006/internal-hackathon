@@ -28,11 +28,36 @@ export class UserRepository {
         updatedAt: new Date(),
       },
     ],
+    [
+      'worker-demo',
+      {
+        id: 'worker-demo',
+        name: 'Sunita Devi (ASHA)',
+        email: 'asha.haveli@arogyamitra.gov.in',
+        role: 'ROLE_WORKER',
+        jurisdiction: 'Haveli Village',
+        abhaId: 'ABHA-91-8842-1029-4412',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ],
+    [
+      'usr-citizen-demo',
+      {
+        id: 'usr-citizen-demo',
+        name: 'Rahul Verma',
+        email: 'citizen.rahul@gmail.com',
+        role: 'ROLE_CITIZEN',
+        abhaId: 'ABHA-91-8842-1029-4410',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ],
   ]);
 
   public async findByEmail(email: string): Promise<UserEntity | null> {
     for (const user of this.users.values()) {
-      if (user.email === email) return user;
+      if (user.email.toLowerCase() === email.toLowerCase()) return user;
     }
     return null;
   }
@@ -41,9 +66,33 @@ export class UserRepository {
     return this.users.get(id) || null;
   }
 
+  public async findAllCitizens(): Promise<UserEntity[]> {
+    const list: UserEntity[] = [];
+    for (const user of this.users.values()) {
+      if (user.role === 'ROLE_CITIZEN') {
+        list.push(user);
+      }
+    }
+    return list;
+  }
+
+  public async findCitizenByNameOrAbha(query: string): Promise<UserEntity[]> {
+    const list: UserEntity[] = [];
+    const q = query.toLowerCase().trim();
+    for (const user of this.users.values()) {
+      if (user.role === 'ROLE_CITIZEN') {
+        if (
+          user.name.toLowerCase().includes(q) ||
+          (user.abhaId && user.abhaId.toLowerCase().includes(q))
+        ) {
+          list.push(user);
+        }
+      }
+    }
+    return list;
+  }
+
   public async createUser(data: Omit<UserEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<UserEntity> {
-    // Deterministic ID from email — stable across server restarts so session ownership
-    // checks (session.user_id === req.user.id) remain valid after re-logins.
     const deterministicId = `usr-${crypto
       .createHash('sha256')
       .update(data.email.toLowerCase().trim())

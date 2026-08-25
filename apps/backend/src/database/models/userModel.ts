@@ -1,4 +1,4 @@
-export type UserRole = 'ROLE_CITIZEN' | 'ROLE_DOCTOR' | 'ROLE_OFFICER' | 'ROLE_ADMIN';
+export type UserRole = 'ROLE_CITIZEN' | 'ROLE_DOCTOR' | 'ROLE_OFFICER' | 'ROLE_ADMIN' | 'ROLE_WORKER';
 
 export interface UserEntity {
   id: string;

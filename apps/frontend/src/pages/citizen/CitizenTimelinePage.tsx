@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Search, Calendar, Clock, Pill, Brain, HeartPulse, User, Globe, 
   AlertTriangle, CheckCircle, XCircle, ChevronLeft, ChevronRight, 
-  Info, AlertCircle, FileText, ArrowUpDown, RefreshCw, X 
+  Info, AlertCircle, FileText, ArrowUpDown, RefreshCw, X, ClipboardList
 } from 'lucide-react';
 import { api } from '../../services/api';
 
@@ -108,11 +108,60 @@ export default function CitizenTimelinePage() {
       });
 
       if (response.data?.success) {
-        setEvents(response.data.data || []);
+        let mergedEvents = response.data.data || [];
+        
+        // Fetch ASHA screenings for timeline
+        const userRaw = sessionStorage.getItem('user');
+        const citizen = userRaw ? JSON.parse(userRaw) : null;
+        if (citizen && citizen.id) {
+          try {
+            const ashaRes = await api.get(`/worker/citizen/${citizen.id}/history`);
+            if (ashaRes.data?.success && Array.isArray(ashaRes.data.data)) {
+              const ashaEvents = ashaRes.data.data.map((scr: any) => ({
+                id: scr.id,
+                type: 'ASHA_SCREENING',
+                displayType: 'ASHA FIELD SCREENING',
+                title: `Community Screening by ASHA`,
+                description: `Recorded by ASHA worker. Risk level warning status flag: ${scr.risk_level}.`,
+                timestamp: scr.screening_date,
+                status: scr.risk_level === 'URGENT' || scr.risk_level === 'PRIORITY' ? 'warning' : 'completed',
+                metadata: {
+                  systolic: scr.systolic,
+                  systolic_status: scr.systolic_status,
+                  diastolic: scr.diastolic,
+                  diastolic_status: scr.diastolic_status,
+                  pulse: scr.pulse,
+                  pulse_status: scr.pulse_status,
+                  spo2: scr.spo2,
+                  spo2_status: scr.spo2_status,
+                  temperature: scr.temperature,
+                  temperature_status: scr.temperature_status,
+                  glucose: scr.glucose,
+                  glucose_status: scr.glucose_status,
+                  symptoms: scr.symptoms ? JSON.parse(scr.symptoms) : [],
+                  riskFlags: scr.risk_flags ? JSON.parse(scr.risk_flags) : []
+                },
+                source: 'ASHA'
+              }));
+              mergedEvents = [...mergedEvents, ...ashaEvents];
+            }
+          } catch (err) {
+            console.error('Failed to load ASHA screenings for timeline', err);
+          }
+        }
+
+        // Sort chronologically based on sortOrder selection
+        mergedEvents.sort((a: any, b: any) => {
+          const tA = new Date(a.timestamp).getTime();
+          const tB = new Date(b.timestamp).getTime();
+          return sortOrder === 'newest' ? tB - tA : tA - tB;
+        });
+
+        setEvents(mergedEvents);
         const pag = response.data.pagination;
         if (pag) {
           setTotalPages(pag.totalPages || 1);
-          setTotalItems(pag.total || 0);
+          setTotalItems(mergedEvents.length);
         }
       } else {
         throw new Error(response.data?.message || 'Unexpected response format');
@@ -143,6 +192,8 @@ export default function CitizenTimelinePage() {
         return <Globe className="w-5 h-5 text-indigo-400" />;
       case 'APPOINTMENT':
         return <Calendar className="w-5 h-5 text-teal-400" />;
+      case 'ASHA_SCREENING':
+        return <ClipboardList className="w-5 h-5 text-emerald-450" />;
       default:
         return <FileText className="w-5 h-5 text-slate-400" />;
     }
@@ -425,6 +476,23 @@ export default function CitizenTimelinePage() {
                     metadataExtra = (
                       <div className="text-[11px] font-mono text-slate-500 bg-slate-950/50 p-2.5 rounded-lg border border-slate-900">
                         Facility: <span className="text-slate-350">{e.metadata.hospitalName}</span> • Time: <span className="text-slate-350">{e.metadata.time}</span>
+                      </div>
+                    );
+                  } else if (e.type === 'ASHA_SCREENING') {
+                    metadataExtra = (
+                      <div className="space-y-2 text-[11px] font-mono text-slate-500 bg-slate-950/50 p-3 rounded-lg border border-slate-900">
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                          <div>BP: <span className="text-slate-200 font-semibold">{e.metadata.systolic_status === 'MEASURED' ? `${e.metadata.systolic}/${e.metadata.diastolic}` : 'N/A'}</span></div>
+                          <div>SpO2: <span className="text-slate-200 font-semibold">{e.metadata.spo2_status === 'MEASURED' ? `${e.metadata.spo2}%` : 'N/A'}</span></div>
+                          <div>Temp: <span className="text-slate-200 font-semibold">{e.metadata.temperature_status === 'MEASURED' ? `${e.metadata.temperature}°F` : 'N/A'}</span></div>
+                          <div>Glucose: <span className="text-slate-200 font-semibold">{e.metadata.glucose_status === 'MEASURED' ? `${e.metadata.glucose} mg/dL` : 'N/A'}</span></div>
+                        </div>
+                        {e.metadata.symptoms && e.metadata.symptoms.length > 0 && (
+                          <div>Symptoms: <span className="text-slate-350">{e.metadata.symptoms.join(', ')}</span></div>
+                        )}
+                        {e.metadata.riskFlags && e.metadata.riskFlags.length > 0 && (
+                          <div className="text-rose-455 font-bold">⚠ Referral: {e.metadata.riskFlags.join('; ')}</div>
+                        )}
                       </div>
                     );
                   }

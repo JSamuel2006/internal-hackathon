@@ -381,3 +381,38 @@ export const doctorApiService = {
     return response.data;
   },
 };
+
+// ASHA / Community Health Worker Services
+export const workerService = {
+  getCitizens: async (query = '') => {
+    const response = await api.get('/worker/citizens', { params: { query } });
+    return response.data;
+  },
+  registerCitizen: async (citizen: {
+    name: string;
+    age: number;
+    gender: string;
+    village: string;
+    phone?: string;
+    emergency_contact?: string;
+  }) => {
+    const response = await api.post('/worker/citizens', citizen);
+    return response.data;
+  },
+  saveScreening: async (screening: any) => {
+    const response = await api.post('/worker/screenings', screening);
+    return response.data;
+  },
+  syncScreenings: async (screenings: any[]) => {
+    const response = await api.post('/worker/screenings/sync', { screenings });
+    return response.data;
+  },
+  getStats: async () => {
+    const response = await api.get('/worker/stats');
+    return response.data;
+  },
+  getCitizenHistory: async (citizenId: string) => {
+    const response = await api.get(`/worker/citizen/${citizenId}/history`);
+    return response.data;
+  },
+};

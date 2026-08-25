@@ -6,6 +6,7 @@ import PublicLayout from './layouts/PublicLayout';
 import CitizenLayout from './layouts/CitizenLayout';
 import OfficerLayout from './layouts/OfficerLayout';
 import AdminLayout from './layouts/AdminLayout';
+import WorkerLayout from './layouts/WorkerLayout';
 
 // Public Pages
 import LandingPage from './pages/LandingPage';
@@ -61,6 +62,10 @@ import MedicineSupplyDashboard from './pages/officer/MedicineSupplyDashboard';
 import EmergencyIntelligenceDashboard from './pages/officer/EmergencyIntelligenceDashboard';
 import MinistryDashboard from './pages/officer/MinistryDashboard';
 import AshaDashboard from './pages/officer/AshaDashboard';
+
+// ASHA Worker Pages
+import AshaWorkerDashboard from './pages/worker/AshaDashboard';
+import AshaFieldScreeningPage from './pages/worker/AshaFieldScreeningPage';
 
 // Admin Portal
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -133,6 +138,13 @@ export default function App() {
           <Route path="emergency-intel" element={<EmergencyIntelligenceDashboard />} />
           <Route path="ministry" element={<MinistryDashboard />} />
           <Route path="asha" element={<AshaDashboard />} />
+        </Route>
+
+        {/* ASHA / Health Worker Portal */}
+        <Route path="/worker" element={<WorkerLayout />}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<AshaWorkerDashboard />} />
+          <Route path="screening" element={<AshaFieldScreeningPage />} />
         </Route>
 
         {/* Admin Portal */}

@@ -563,6 +563,41 @@ export async function initializeDatabase(): Promise<void> {
       );
     `);
 
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS screening_records (
+        id VARCHAR(255) PRIMARY KEY,
+        client_record_id VARCHAR(255) UNIQUE,
+        worker_user_id VARCHAR(255) NOT NULL,
+        citizen_user_id VARCHAR(255) NOT NULL,
+        citizen_name VARCHAR(255) NOT NULL,
+        village VARCHAR(255) NOT NULL,
+        screening_date TIMESTAMP NOT NULL,
+        systolic INTEGER,
+        systolic_status VARCHAR(50),
+        diastolic INTEGER,
+        diastolic_status VARCHAR(50),
+        pulse INTEGER,
+        pulse_status VARCHAR(50),
+        spo2 INTEGER,
+        spo2_status VARCHAR(50),
+        temperature NUMERIC(4, 1),
+        temperature_status VARCHAR(50),
+        glucose INTEGER,
+        glucose_status VARCHAR(50),
+        weight NUMERIC(5, 2),
+        weight_status VARCHAR(50),
+        height NUMERIC(5, 2),
+        height_status VARCHAR(50),
+        known_conditions TEXT,
+        allergies TEXT,
+        current_medicines TEXT,
+        symptoms TEXT,
+        risk_flags TEXT,
+        risk_level VARCHAR(50),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
     // Ensure all performance indices exist
     await client.query(`CREATE INDEX IF NOT EXISTS idx_medical_reports_user_id ON medical_reports(user_id);`);
     await client.query(`CREATE INDEX IF NOT EXISTS idx_medical_reports_report_type ON medical_reports(report_type);`);

@@ -23,6 +23,9 @@ export default function LoginPage() {
     } else if (selectedRole === 'ROLE_DOCTOR') {
       setEmail('doctor@arogyamitra.demo');
       setName('Dr. Rajesh Sharma');
+    } else if (selectedRole === 'ROLE_WORKER') {
+      setEmail('asha.haveli@arogyamitra.gov.in');
+      setName('Sunita Devi (ASHA)');
     } else {
       setEmail('citizen.rahul@gmail.com');
       setName('Rahul Verma');
@@ -48,6 +51,8 @@ export default function LoginPage() {
           navigate('/officer/dashboard');
         } else if (role === 'ROLE_DOCTOR') {
           navigate('/doctor/dashboard');
+        } else if (role === 'ROLE_WORKER') {
+          navigate('/worker/dashboard');
         } else {
           navigate('/citizen/dashboard');
         }
@@ -79,10 +84,11 @@ export default function LoginPage() {
         </div>
 
         {/* Role Switcher */}
-        <div className="grid grid-cols-4 gap-1 p-1 bg-slate-900/60 rounded-xl border border-slate-800/80 mb-6 relative z-10">
+        <div className="grid grid-cols-5 gap-1 p-1 bg-slate-900/60 rounded-xl border border-slate-800/80 mb-6 relative z-10">
           {[
             { id: 'ROLE_CITIZEN', name: 'Citizen', icon: User, color: 'text-rose-400' },
             { id: 'ROLE_DOCTOR', name: 'Doctor', icon: Stethoscope, color: 'text-amber-405' },
+            { id: 'ROLE_WORKER', name: 'ASHA', icon: Activity, color: 'text-emerald-400' },
             { id: 'ROLE_OFFICER', name: 'Officer', icon: ShieldCheck, color: 'text-teal-400' },
             { id: 'ROLE_ADMIN', name: 'Admin', icon: Lock, color: 'text-indigo-400' },
           ].map((r) => {
@@ -93,7 +99,7 @@ export default function LoginPage() {
                 key={r.id}
                 type="button"
                 onClick={() => handleRoleSelect(r.id)}
-                className={`flex flex-col items-center gap-1.5 py-2.5 rounded-lg text-[10px] font-semibold tracking-wide transition-all ${
+                className={`flex flex-col items-center gap-1.5 py-2.5 rounded-lg text-[9px] font-semibold tracking-wide transition-all ${
                   isSelected
                     ? 'bg-slate-950 text-white shadow-md border border-slate-800/40'
                     : 'text-slate-450 hover:text-slate-200'
