@@ -406,7 +406,7 @@ export class EmergencyService {
     }
 
     const clsRes = await pool.query(
-      'SELECT * FROM emergency_classifications WHERE emergency_id = $1 ORDER BY rowid DESC LIMIT 1',
+      'SELECT * FROM emergency_classifications WHERE emergency_id = $1 ORDER BY id DESC LIMIT 1',
       [sessionId]
     );
 
