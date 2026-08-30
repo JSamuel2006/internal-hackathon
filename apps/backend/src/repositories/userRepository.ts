@@ -42,6 +42,32 @@ export class UserRepository {
       },
     ],
     [
+      'worker-demo-2',
+      {
+        id: 'worker-demo-2',
+        name: 'Priya Sharma (ASHA)',
+        email: 'priya.khed@arogyamitra.gov.in',
+        role: 'ROLE_WORKER',
+        jurisdiction: 'Khed Village',
+        abhaId: 'ABHA-91-8842-1029-4413',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ],
+    [
+      'worker-demo-3',
+      {
+        id: 'worker-demo-3',
+        name: 'Lakshmi Gaikwad (ASHA)',
+        email: 'lakshmi.shirur@arogyamitra.gov.in',
+        role: 'ROLE_WORKER',
+        jurisdiction: 'Shirur Village',
+        abhaId: 'ABHA-91-8842-1029-4414',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ],
+    [
       'usr-citizen-demo',
       {
         id: 'usr-citizen-demo',
@@ -76,6 +102,16 @@ export class UserRepository {
     return list;
   }
 
+  public async findAllWorkers(): Promise<UserEntity[]> {
+    const list: UserEntity[] = [];
+    for (const user of this.users.values()) {
+      if (user.role === 'ROLE_WORKER') {
+        list.push(user);
+      }
+    }
+    return list;
+  }
+
   public async findCitizenByNameOrAbha(query: string): Promise<UserEntity[]> {
     const list: UserEntity[] = [];
     const q = query.toLowerCase().trim();
@@ -93,11 +129,11 @@ export class UserRepository {
   }
 
   public async createUser(data: Omit<UserEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<UserEntity> {
-    const deterministicId = `usr-${crypto
+    const deterministicId = 'usr-' + crypto
       .createHash('sha256')
       .update(data.email.toLowerCase().trim())
       .digest('hex')
-      .substring(0, 20)}`;
+      .substring(0, 20);
 
     const newUser: UserEntity = {
       id: deterministicId,

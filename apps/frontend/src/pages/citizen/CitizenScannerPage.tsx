@@ -6,6 +6,8 @@ import {
   ChevronDown, ChevronUp, Phone, FileText, Share2, Sparkles, Printer, User, Compass, Activity
 } from 'lucide-react';
 import { aiService } from '../../services/api';
+import { t } from '../../i18n';
+import { TextToSpeechButton } from '../../components/voice/TextToSpeechButton';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -604,17 +606,42 @@ export default function CitizenScannerPage() {
                             Quality: {imageQuality.qualityRating}
                           </span>
                         )}
+                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                          imageQuality?.confidenceLevel === 'HIGH'
+                            ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400'
+                            : imageQuality?.confidenceLevel === 'MEDIUM'
+                              ? 'bg-amber-500/10 border-amber-500/25 text-amber-400'
+                              : 'bg-rose-500/10 border-rose-500/25 text-rose-400'
+                        }`}>
+                          Confidence: {imageQuality?.confidenceLevel || 'LOW'}
+                        </span>
                       </div>
+                      
+                      {imageQuality?.confidenceLevel === 'LOW' && (
+                        <div className="mt-3 p-3 bg-rose-500/15 border border-rose-500/25 text-rose-300 rounded-xl text-xs flex gap-2">
+                          <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-bold text-rose-200 block">🔴 LOW CONFIDENCE</span>
+                            <p>{t('low_confidence_warn')}</p>
+                          </div>
+                        </div>
+                      )}
+
+                      {imageQuality?.confidenceLevel === 'MEDIUM' && (
+                        <div className="mt-3 p-3 bg-amber-500/15 border border-amber-500/25 text-amber-300 rounded-xl text-xs flex gap-2">
+                          <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-bold text-amber-200 block">🟡 POSSIBLE MATCH</span>
+                            <p>{t('possible_medicine_warn', { name: result.medicineName || 'medicine' })}</p>
+                          </div>
+                        </div>
+                      )}
+
                       <h3 className="text-2xl font-bold text-slate-100 mt-2">{result.medicineName || 'Scanned Strip'}</h3>
                       <p className="text-xs text-slate-400 mt-0.5">{result.genericName} • {result.strength} • {result.dosageForm}</p>
                     </div>
-                    <button
-                      onClick={() => speakText(`${result.medicineName || ''}. Generic ${result.genericName || ''}. Uses ${result.clinicalAnalysis?.uses || ''}`)}
-                      className="p-2.5 bg-slate-900 border border-slate-800 hover:text-rose-400 rounded-xl text-slate-400 print:hidden"
-                      title="Speak results"
-                    >
-                      <Volume2 className="w-4 h-4" />
-                    </button>
+
+                    <TextToSpeechButton text={`${result.medicineName || ''}. Generic ${result.genericName || ''}. Uses ${result.clinicalAnalysis?.uses || ''}`} />
                   </div>
 
                   {qrBarcodeVerification?.qrStatus && qrBarcodeVerification.qrStatus !== 'Not detected' && (

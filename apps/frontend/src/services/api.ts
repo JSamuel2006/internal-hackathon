@@ -430,3 +430,27 @@ export const workerService = {
     return response.data;
   },
 };
+
+// Officer ASHA Monitoring Services (Read-Only Operations)
+export const officerAshaService = {
+  getOverview: async () => {
+    const response = await api.get('/officer/asha/overview');
+    return response.data;
+  },
+  getWorkers: async () => {
+    const response = await api.get('/officer/asha/workers');
+    return response.data;
+  },
+  getScreenings: async (params: {
+    workerId?: string;
+    riskLevel?: string;
+    dateRange?: string;
+    search?: string;
+    limit?: number;
+    offset?: number;
+  } = {}) => {
+    const response = await api.get('/officer/asha/screenings', { params });
+    return response.data;
+  },
+};
+

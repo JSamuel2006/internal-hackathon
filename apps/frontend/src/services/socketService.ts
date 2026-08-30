@@ -10,7 +10,8 @@ export const socketService = {
       return socket;
     }
     
-    socket = io('http://localhost:4000', {
+    const socketUrl = import.meta.env.VITE_SOCKET_URL || 'http://localhost:4000';
+    socket = io(socketUrl, {
       auth: { token },
       transports: ['websocket'],
       autoConnect: true,

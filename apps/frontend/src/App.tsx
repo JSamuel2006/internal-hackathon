@@ -142,6 +142,7 @@ export default function App() {
           <Route path="emergency-intel" element={<EmergencyIntelligenceDashboard />} />
           <Route path="ministry" element={<MinistryDashboard />} />
           <Route path="asha" element={<AshaDashboard />} />
+          <Route path="asha-monitoring" element={<AshaDashboard />} />
         </Route>
 
         {/* ASHA / Health Worker Portal */}

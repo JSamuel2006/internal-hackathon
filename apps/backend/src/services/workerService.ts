@@ -1,3 +1,4 @@
+import { emitAshaScreeningEvent } from '../socket/socketServer.js';
 import crypto from 'crypto';
 import { screeningRepository, ScreeningRecord } from '../repositories/screeningRepository.js';
 import { userRepository } from '../repositories/userRepository.js';
@@ -185,7 +186,16 @@ export class WorkerService {
       risk_level: riskLevel,
     };
 
-    return await screeningRepository.create(dbRecord);
+    const created = await screeningRepository.create(dbRecord);
+    try {
+      emitAshaScreeningEvent('asha_screening_created', {
+        recordId: created.id,
+        workerId,
+        timestamp: new Date().toISOString(),
+        riskLevel: created.risk_level,
+      });
+    } catch { /* non-blocking */ }
+    return created;
   }
 
   public async syncScreenings(workerId: string, screenings: FieldScreeningInput[]): Promise<any[]> {
@@ -194,6 +204,14 @@ export class WorkerService {
       try {
         const res = await this.ingestScreening(workerId, scr);
         results.push({ client_record_id: scr.client_record_id, status: 'SUCCESS', id: res.id });
+        try {
+          emitAshaScreeningEvent('asha_screening_synced', {
+            recordId: res.id,
+            workerId,
+            timestamp: new Date().toISOString(),
+            riskLevel: res.risk_level,
+          });
+        } catch { /* non-blocking */ }
       } catch (err: any) {
         results.push({ client_record_id: scr.client_record_id, status: 'FAILED', error: err.message });
       }

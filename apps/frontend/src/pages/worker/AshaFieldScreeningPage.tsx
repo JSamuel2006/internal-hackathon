@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { workerService } from '../../services/api';
 import { offlineScreeningStorage } from '../../services/offlineScreeningStorage';
+import { VoiceInputButton } from '../../components/voice/VoiceInputButton';
 
 const SYMPTOMS_LIST = [
   'Fever', 'Cough', 'Difficulty Breathing', 'Chest Pain', 'Headache', 
@@ -508,20 +509,6 @@ export default function AshaFieldScreeningPage() {
           <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
             <div className="flex justify-between items-center border-b border-slate-900 pb-2">
               <span className="font-bold text-slate-205 uppercase block">Field Observation Notes</span>
-              {speechSupported && (
-                <button
-                  type="button"
-                  onClick={handleStartSpeech}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[9px] font-bold border transition-all ${
-                    listening 
-                      ? 'bg-rose-500/10 text-rose-400 border-rose-500/20 animate-pulse' 
-                      : 'bg-slate-900 text-slate-400 border-slate-800 hover:bg-slate-850'
-                  }`}
-                >
-                  {listening ? <MicOff className="w-3.5 h-3.5" /> : <Mic className="w-3.5 h-3.5" />}
-                  <span>{listening ? 'Listening...' : 'Dictate (Hindi)'}</span>
-                </button>
-              )}
             </div>
 
             <textarea
@@ -530,6 +517,8 @@ export default function AshaFieldScreeningPage() {
               className="w-full bg-slate-950 border border-slate-850 rounded-xl p-3 text-slate-300 min-h-[100px]"
               placeholder="Record any general physical symptoms or family medical history observations..."
             />
+
+            <VoiceInputButton onCapture={(text) => setNotes((prev) => (prev ? prev + ' ' + text : text))} />
           </div>
 
           {errorMsg && (

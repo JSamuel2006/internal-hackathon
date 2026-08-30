@@ -21,6 +21,7 @@ export default function OfficerLayout() {
 
   const navItems = [
     { name: 'Executive Dashboard', path: '/officer/dashboard', icon: LayoutDashboard },
+    { name: 'ASHA Field Monitoring', path: '/officer/asha-monitoring', icon: ShieldCheck },
     { name: 'Disease Heat Map', path: '/officer/heatmap', icon: Map },
     { name: 'Scenario Simulator', path: '/officer/simulator', icon: Sliders },
     { name: 'Campaign Generator', path: '/officer/campaigns', icon: Megaphone },

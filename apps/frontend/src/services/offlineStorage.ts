@@ -107,5 +107,36 @@ export const offlineStorage = {
       };
       req.onerror = () => reject(req.error);
     });
-  }
+  },
+
+  /**
+   * Cache the nearest PHC/health facility contact info for offline access.
+   * Uses the existing 'emergency' store. Key: `phc_${userId}`.
+   */
+  cachePHC: async (userId: string, phcData: {
+    name: string;
+    type: string;
+    address: string;
+    phone: string | null;
+    district?: string;
+    state?: string;
+  }): Promise<void> => {
+    return offlineStorage.set('emergency', `phc_${userId}`, userId, phcData);
+  },
+
+  /**
+   * Retrieve cached PHC contact info for offline display.
+   * Returns null if no PHC has been cached yet.
+   */
+  getCachedPHC: async (userId: string): Promise<{
+    name: string;
+    type: string;
+    address: string;
+    phone: string | null;
+    district?: string;
+    state?: string;
+  } | null> => {
+    return offlineStorage.get('emergency', `phc_${userId}`);
+  },
 };
+

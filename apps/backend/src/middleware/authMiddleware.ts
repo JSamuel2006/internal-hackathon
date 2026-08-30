@@ -28,3 +28,24 @@ export function authenticateJWT(req: Request, res: Response, next: NextFunction)
     });
   }
 }
+
+export function requireRole(allowedRoles: string[]) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const user = (req as any).user;
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Access Denied: Unauthenticated',
+      });
+    }
+
+    if (!allowedRoles.includes(user.role)) {
+      return res.status(403).json({
+        success: false,
+        message: 'Forbidden: User role ' + user.role + ' is not authorized to access this resource',
+      });
+    }
+
+    next();
+  };
+}

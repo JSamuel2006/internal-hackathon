@@ -51,7 +51,7 @@ async function bootstrap() {
   // Initialize Socket.IO Server
   initializeSocketServer(server);
 
-  server.listen(env.PORT, () => {
+  server.listen(env.PORT, '0.0.0.0', () => {
     logger.info({ tag: '[SERVER]', message: `✅ HTTP server listening on port ${env.PORT}` });
     logger.info({ tag: '[READY]',  message: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━' });
     logger.info({ tag: '[READY]',  message: '🚀 ArogyaVerse API is READY TO SERVE TRAFFIC' });

@@ -1,6 +1,7 @@
 import { Server } from 'socket.io';
 import { Server as HTTPServer } from 'http';
 import { authenticateSocket, AuthenticatedSocket } from './socketAuth.js';
+import { env } from '../configuration/environment.js';
 import { pool } from '../database/db.js';
 import { logger } from '../logging/logger.js';
 
@@ -9,7 +10,16 @@ let io: Server | null = null;
 export function initializeSocketServer(server: HTTPServer) {
   io = new Server(server, {
     cors: {
-      origin: '*',
+      origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (env.NODE_ENV === 'development' && /^http:\/\/localhost(:\d+)?$/.test(origin)) {
+          return callback(null, true);
+        }
+        if (origin === env.CORS_ORIGIN) {
+          return callback(null, true);
+        }
+        callback(new Error(`CORS: Origin '${origin}' not allowed for Socket.IO.`));
+      },
       methods: ['GET', 'POST'],
       credentials: true,
     },
@@ -23,7 +33,9 @@ export function initializeSocketServer(server: HTTPServer) {
 
     logger.info({ tag: '[SOCKET]', message: `Socket connected: ${socket.id} (User: ${user.id}, Role: ${user.role})` });
 
-    if (user.role === 'ROLE_DOCTOR') {
+    if (user.role === 'ROLE_OFFICER' || user.role === 'ROLE_ADMIN') {
+      socket.join('officers');
+    } else if (user.role === 'ROLE_DOCTOR') {
       socket.join(`doctor:${user.id}`);
       socket.join('doctors');
     } else if (user.role === 'ROLE_CITIZEN') {
@@ -126,4 +138,16 @@ export function emitRequestStatusUpdated(sessionId: string, status: string, doct
 export function emitChatMessage(sessionId: string, message: any) {
   if (!io) return;
   io.to(`session:${sessionId}`).emit('emergency_chat_message', message);
+}
+
+export function emitAshaScreeningEvent(eventType: 'asha_screening_created' | 'asha_screening_synced', payload: {
+  recordId: string;
+  workerId: string;
+  timestamp: string;
+  riskLevel: string;
+}) {
+  if (!io) return;
+  io.to('officers').emit(eventType, payload);
+  io.emit(eventType, payload);
+  logger.info({ tag: '[SOCKET]', message: 'Emitted ' + eventType + ' notification', payload });
 }

@@ -217,13 +217,13 @@ export default function CitizenAssistantPage() {
   );
 
   return (
-    <div className="flex h-[calc(100vh-140px)] gap-6 max-w-7xl mx-auto px-4">
+    <div className="flex flex-col lg:flex-row h-auto lg:h-[calc(100vh-140px)] gap-6 max-w-7xl mx-auto px-4 min-w-0">
       {/* Session sidebar */}
-      <div className="hidden md:flex flex-col w-64 glass-panel rounded-2xl border border-slate-900 shrink-0 p-4 justify-between bg-slate-950/20">
+      <div className="hidden lg:flex flex-col w-full lg:w-64 glass-panel rounded-2xl border border-slate-900 shrink-0 p-4 justify-between bg-slate-950/20">
         <div className="flex flex-col gap-4 overflow-y-auto">
           <button
             onClick={createNewSession}
-            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold bg-rose-500/10 hover:bg-rose-500/20 text-rose-455 border border-rose-500/25 transition-all"
+            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold bg-rose-500/10 hover:bg-rose-500/20 text-rose-455 border border-rose-500/25 transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>New Conversation</span>
@@ -291,7 +291,7 @@ export default function CitizenAssistantPage() {
 
       {/* Patient Context Panel */}
       {showContext && (
-        <div className="hidden lg:flex flex-col w-72 glass-panel rounded-2xl border border-slate-900 shrink-0 p-5 bg-slate-950/40 text-xs font-mono space-y-4 overflow-y-auto">
+        <div className="hidden lg:flex flex-col w-full lg:w-72 glass-panel rounded-2xl border border-slate-900 shrink-0 p-5 bg-slate-950/40 text-xs font-mono space-y-4 overflow-y-auto min-w-0">
           <div className="border-b border-slate-850 pb-2 flex justify-between items-center">
             <span className="font-bold text-slate-200">Patient Context Used</span>
             <button onClick={() => setShowContext(false)} className="text-slate-550 hover:text-slate-355">
@@ -303,24 +303,24 @@ export default function CitizenAssistantPage() {
             <div>
               <span className="text-[10px] text-rose-400 uppercase font-bold block">Documented Allergies</span>
               <ul className="list-disc list-inside text-slate-350 mt-1">
-                {patientContext.allergies.map((a: string) => <li key={a}>{a}</li>)}
+                {patientContext.allergies.map((a: string) => <li key={a} className="truncate">{a}</li>)}
               </ul>
             </div>
             <div>
               <span className="text-[10px] text-indigo-400 uppercase font-bold block">Chronic Conditions</span>
               <ul className="list-disc list-inside text-slate-350 mt-1">
-                {patientContext.chronicDiseases.map((c: string) => <li key={c}>{c}</li>)}
+                {patientContext.chronicDiseases.map((c: string) => <li key={c} className="truncate">{c}</li>)}
               </ul>
             </div>
             <div>
               <span className="text-[10px] text-emerald-400 uppercase font-bold block">Active Prescriptions</span>
               <ul className="list-disc list-inside text-slate-350 mt-1">
-                {patientContext.medications.map((m: string) => <li key={m}>{m}</li>)}
+                {patientContext.medications.map((m: string) => <li key={m} className="whitespace-normal break-words">{m}</li>)}
               </ul>
             </div>
             <div>
               <span className="text-[10px] text-amber-500 uppercase font-bold block">Latest Lab Biomarkers</span>
-              <div className="grid grid-cols-2 gap-2 mt-1 text-[10px] text-slate-400">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1 text-[10px] text-slate-400">
                 <span>HbA1c: {patientContext.biomarkers.HbA1c}</span>
                 <span>Creatinine: {patientContext.biomarkers.creatinine}</span>
               </div>
@@ -347,31 +347,31 @@ export default function CitizenAssistantPage() {
       )}
 
       {/* Chat Area */}
-      <div className="flex-1 flex flex-col glass-panel rounded-2xl border border-slate-900 overflow-hidden bg-slate-950/10">
+      <div className="flex-1 flex flex-col glass-panel rounded-2xl border border-slate-900 overflow-hidden bg-slate-950/10 min-w-0">
         {/* Chat Header */}
-        <div className="px-6 py-4 border-b border-slate-900 flex items-center justify-between bg-slate-950/30">
+        <div className="px-6 py-4 border-b border-slate-900 flex flex-col md:flex-row items-start md:items-center justify-between bg-slate-950/30 gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20">
+            <div className="p-2 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20 shrink-0">
               <Bot className="w-5 h-5 glow-pill" />
             </div>
-            <div>
-              <h3 className="font-bold text-sm text-slate-100 flex items-center gap-2">
-                ArogyaMitra AI CDSS
-                <span className="text-[9px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/25 px-1.5 py-0.5 rounded uppercase font-mono">Persistent</span>
+            <div className="min-w-0">
+              <h3 className="font-bold text-sm text-slate-100 flex flex-wrap items-center gap-2">
+                <span>ArogyaMitra AI CDSS</span>
+                <span className="text-[9px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/25 px-1.5 py-0.5 rounded uppercase font-mono shrink-0">Persistent</span>
               </h3>
-              <p className="text-[10px] text-slate-500 font-mono">ICMR / WHO GUIDELINES GROUNDED</p>
+              <p className="text-[10px] text-slate-500 font-mono break-all md:break-normal">ICMR / WHO GUIDELINES GROUNDED</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 text-[10px] font-mono">
+          <div className="flex flex-wrap items-center gap-3 text-[10px] font-mono w-full md:w-auto justify-between md:justify-end">
             {!showContext && (
               <button onClick={() => setShowContext(true)} className="text-slate-400 hover:text-slate-200 flex items-center gap-1">
                 <Eye className="w-3.5 h-3.5" />
                 <span>Show Context</span>
               </button>
             )}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 shrink-0">
               <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-              <span className="text-emerald-400">AI Clinical Intelligence</span>
+              <span className="text-emerald-400 truncate">AI Clinical Intelligence</span>
             </div>
           </div>
         </div>

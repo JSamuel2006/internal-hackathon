@@ -126,6 +126,186 @@ export class ScreeningRepository {
       client.release();
     }
   }
+
+  public async getOverviewMetrics(): Promise<{
+    totalScreenings: number;
+    todayScreenings: number;
+    thisWeekScreenings: number;
+    referrals: {
+      urgent: number;
+      priority: number;
+      needsReview: number;
+      normal: number;
+    };
+    syncStats: {
+      syncedRecords: number;
+      unresolvedPriorityCases: number;
+    };
+  }> {
+    const client = await pool.connect();
+    try {
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+
+      const weekStart = new Date();
+      weekStart.setDate(weekStart.getDate() - 7);
+      weekStart.setHours(0, 0, 0, 0);
+
+      const totalRes = await client.query(`SELECT COUNT(*) as count FROM screening_records;`);
+      const todayRes = await client.query(`SELECT COUNT(*) as count FROM screening_records WHERE screening_date >= $1;`, [todayStart]);
+      const weekRes = await client.query(`SELECT COUNT(*) as count FROM screening_records WHERE screening_date >= $1;`, [weekStart]);
+
+      const riskRes = await client.query(`
+        SELECT risk_level, COUNT(*) as count 
+        FROM screening_records 
+        GROUP BY risk_level;
+      `);
+
+      let urgent = 0;
+      let priority = 0;
+      let needsReview = 0;
+      let normal = 0;
+
+      for (const row of riskRes.rows) {
+        const rLevel = (row.risk_level || '').toUpperCase();
+        const count = parseInt(row.count || '0', 10);
+        if (rLevel === 'URGENT') urgent += count;
+        else if (rLevel === 'PRIORITY') priority += count;
+        else if (rLevel === 'NEEDS_REVIEW') needsReview += count;
+        else if (rLevel === 'NORMAL') normal += count;
+      }
+
+      const total = parseInt(totalRes.rows[0]?.count || '0', 10);
+
+      return {
+        totalScreenings: total,
+        todayScreenings: parseInt(todayRes.rows[0]?.count || '0', 10),
+        thisWeekScreenings: parseInt(weekRes.rows[0]?.count || '0', 10),
+        referrals: {
+          urgent,
+          priority,
+          needsReview,
+          normal,
+        },
+        syncStats: {
+          syncedRecords: total,
+          unresolvedPriorityCases: urgent + priority,
+        },
+      };
+    } finally {
+      client.release();
+    }
+  }
+
+  public async getWorkerAggregations(): Promise<Array<{
+    worker_user_id: string;
+    total_screenings: number;
+    today_screenings: number;
+    last_activity_date: Date | null;
+  }>> {
+    const client = await pool.connect();
+    try {
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+
+      const query = `
+        SELECT 
+          worker_user_id,
+          COUNT(*) as total_screenings,
+          COUNT(*) FILTER (WHERE screening_date >= $1) as today_screenings,
+          MAX(screening_date) as last_activity_date
+        FROM screening_records
+        GROUP BY worker_user_id;
+      `;
+
+      const res = await client.query(query, [todayStart]);
+      return res.rows.map(r => ({
+        worker_user_id: r.worker_user_id,
+        total_screenings: parseInt(r.total_screenings || '0', 10),
+        today_screenings: parseInt(r.today_screenings || '0', 10),
+        last_activity_date: r.last_activity_date ? new Date(r.last_activity_date) : null,
+      }));
+    } finally {
+      client.release();
+    }
+  }
+
+  public async findScreeningsFiltered(filters: {
+    workerId?: string;
+    riskLevel?: string;
+    dateRange?: 'today' | 'week' | 'month' | 'all';
+    search?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<{ records: ScreeningRecord[]; total: number }> {
+    const client = await pool.connect();
+    try {
+      const conditions: string[] = [];
+      const values: any[] = [];
+      let paramIdx = 1;
+
+      if (filters.workerId && filters.workerId !== 'ALL') {
+        conditions.push(`worker_user_id = $${paramIdx++}`);
+        values.push(filters.workerId);
+      }
+
+      if (filters.riskLevel && filters.riskLevel !== 'ALL') {
+        conditions.push(`risk_level = $${paramIdx++}`);
+        values.push(filters.riskLevel);
+      }
+
+      if (filters.dateRange && filters.dateRange !== 'all') {
+        const d = new Date();
+        d.setHours(0, 0, 0, 0);
+        if (filters.dateRange === 'today') {
+          conditions.push(`screening_date >= $${paramIdx++}`);
+          values.push(d);
+        } else if (filters.dateRange === 'week') {
+          d.setDate(d.getDate() - 7);
+          conditions.push(`screening_date >= $${paramIdx++}`);
+          values.push(d);
+        } else if (filters.dateRange === 'month') {
+          d.setDate(d.getDate() - 30);
+          conditions.push(`screening_date >= $${paramIdx++}`);
+          values.push(d);
+        }
+      }
+
+      if (filters.search && filters.search.trim()) {
+        const q = '%' + filters.search.trim().toLowerCase() + '%';
+        conditions.push(`(LOWER(citizen_name) LIKE $${paramIdx} OR LOWER(village) LIKE $${paramIdx})`);
+        values.push(q);
+        paramIdx++;
+      }
+
+      const whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
+
+      // Count query
+      const countQuery = `SELECT COUNT(*) as total FROM screening_records ${whereClause};`;
+      const countRes = await client.query(countQuery, values);
+      const total = parseInt(countRes.rows[0]?.total || '0', 10);
+
+      // Data query with pagination
+      const limit = filters.limit ? Math.min(Math.max(filters.limit, 1), 100) : 20;
+      const offset = filters.offset ? Math.max(filters.offset, 0) : 0;
+
+      const dataQuery = `
+        SELECT * FROM screening_records 
+        ${whereClause}
+        ORDER BY screening_date DESC
+        LIMIT $${paramIdx++} OFFSET $${paramIdx++};
+      `;
+      values.push(limit, offset);
+
+      const dataRes = await client.query(dataQuery, values);
+      return {
+        records: dataRes.rows,
+        total,
+      };
+    } finally {
+      client.release();
+    }
+  }
 }
 
 export const screeningRepository = new ScreeningRepository();

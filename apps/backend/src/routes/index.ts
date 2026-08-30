@@ -28,6 +28,7 @@ import superAdminRoutes from './superAdmin.routes.js';
 import emergencyNetworkRoutes from './emergency-network.routes.js';
 import healthRoutes from './health.routes.js';
 import workerRoutes from './worker.routes.js';
+import officerAshaRoutes from './officerAsha.routes.js';
 
 const router = Router();
 
@@ -60,5 +61,6 @@ router.use('/super-admin', superAdminRoutes);
 router.use('/health', healthRoutes);
 router.use('/emergency-network', emergencyNetworkRoutes);
 router.use('/worker', workerRoutes);
+router.use('/officer/asha', officerAshaRoutes);
 
 export default router;
