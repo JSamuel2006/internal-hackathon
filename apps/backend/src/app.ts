@@ -15,11 +15,13 @@ export function createApp(): Express {
     // Accept any localhost origin in development (covers port changes like 5173→5176→5177)
     // In production, restrict to the configured CORS_ORIGIN only.
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true); // same-origin / curl / server-to-server
+      if (!origin) return callback(null, true);
       if (env.NODE_ENV === 'development' && /^http:\/\/localhost(:\d+)?$/.test(origin)) {
         return callback(null, true);
       }
-      if (origin === env.CORS_ORIGIN) {
+      const isVercelOrigin = /^https:\/\/internal-hackathon-frontend\.vercel\.app$/i.test(origin) ||
+                             /^https:\/\/internal-hackathon-frontend(-[a-z0-9-]+)?-hackza\.vercel\.app$/i.test(origin);
+      if (origin === env.CORS_ORIGIN || isVercelOrigin) {
         return callback(null, true);
       }
       callback(new Error(`CORS: Origin '${origin}' not allowed.`));

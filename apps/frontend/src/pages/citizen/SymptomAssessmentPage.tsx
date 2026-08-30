@@ -5,7 +5,11 @@ import { t, I18nService } from '../../i18n';
 import { VoiceInputButton } from '../../components/voice/VoiceInputButton';
 import { TextToSpeechButton } from '../../components/voice/TextToSpeechButton';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api/v1';
+let API_URL = import.meta.env.VITE_API_URL || '/api/v1';
+if (API_URL.startsWith('http') && !API_URL.endsWith('/api/v1')) {
+  API_URL = `${API_URL.replace(/\/$/, '')}/api/v1`;
+}
+
 
 export default function SymptomAssessmentPage() {
   const [symptoms, setSymptoms] = useState('');

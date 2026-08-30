@@ -29,10 +29,15 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // Only handle GET requests in the service worker
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
   const url = new URL(event.request.url);
 
-  // Exclude API requests completely from Service Worker Cache for security
-  if (url.pathname.includes('/api/v1/')) {
+  // Exclude API and Auth requests completely from Service Worker Cache for security
+  if (url.pathname.includes('/api/v1/') || url.pathname.includes('/auth/')) {
     return;
   }
 

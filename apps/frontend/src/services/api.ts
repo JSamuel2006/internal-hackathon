@@ -2,7 +2,11 @@ import axios from 'axios';
 
 // Since Vite proxy is configured, we use '/api/v1' as base.
 // In production or direct connections, it can fallback to environment variable.
-const API_URL = import.meta.env.VITE_API_URL || '/api/v1';
+let API_URL = import.meta.env.VITE_API_URL || '/api/v1';
+if (API_URL.startsWith('http') && !API_URL.endsWith('/api/v1')) {
+  API_URL = `${API_URL.replace(/\/$/, '')}/api/v1`;
+}
+
 
 export const api = axios.create({
   baseURL: API_URL,
