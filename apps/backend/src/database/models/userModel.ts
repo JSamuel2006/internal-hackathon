@@ -8,6 +8,7 @@ export interface UserEntity {
   role: UserRole;
   jurisdiction?: string;
   abhaId?: string;
+  professionalId?: string;
   createdAt: Date;
   updatedAt: Date;
 }

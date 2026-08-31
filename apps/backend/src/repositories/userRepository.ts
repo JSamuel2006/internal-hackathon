@@ -81,6 +81,13 @@ export class UserRepository {
     ],
   ]);
 
+  public async findByProfessionalId(professionalId: string): Promise<UserEntity | null> {
+    for (const user of this.users.values()) {
+      if (user.professionalId && user.professionalId.toUpperCase() === professionalId.toUpperCase().trim()) return user;
+    }
+    return null;
+  }
+
   public async findByEmail(email: string): Promise<UserEntity | null> {
     for (const user of this.users.values()) {
       if (user.email.toLowerCase() === email.toLowerCase()) return user;

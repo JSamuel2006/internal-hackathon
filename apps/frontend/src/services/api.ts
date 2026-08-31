@@ -37,12 +37,16 @@ export const authService = {
     }
     return response.data;
   },
-  register: async (data: { name: string; email: string; role?: string; jurisdiction?: string; abhaId?: string }) => {
+  register: async (data: { name: string; email: string; accountType?: string; professionalId?: string; jurisdiction?: string; password?: string }) => {
     const response = await api.post('/auth/register', data);
     if (response.data?.success && response.data?.data?.token) {
       sessionStorage.setItem('token', response.data.data.token);
       sessionStorage.setItem('user', JSON.stringify(response.data.data.user));
     }
+    return response.data;
+  },
+  verifyId: async (accountType: string, professionalId: string) => {
+    const response = await api.post('/auth/verify-id', { accountType, professionalId });
     return response.data;
   },
   getCurrentUser: async () => {
