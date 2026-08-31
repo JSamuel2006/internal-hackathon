@@ -98,7 +98,7 @@ export default function LoginPage() {
     } catch (err: any) {
       setIsVerified(false);
       setError(err.response?.data?.error || 'Identity verification failed in the Authorized Prototype Registry.');
-    } fontFinally: {
+    } finally {
       setVerifying(false);
     }
   };
@@ -183,10 +183,10 @@ export default function LoginPage() {
             <Activity className="w-8 h-8 text-teal-600" />
           </div>
           <h2 className="text-2xl font-extrabold tracking-tight text-slate-900">
-            Arogya<span className="text-teal-600">Mitra</span> Portal
+            {t('auth_portal_title')}
           </h2>
           <p className="text-xs text-slate-500 mt-1 font-semibold uppercase tracking-wider">
-            National Digital Healthcare Gateway
+            {t('auth_portal_subtitle')}
           </p>
         </div>
 
@@ -201,7 +201,7 @@ export default function LoginPage() {
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            {t('nav_sign_in')}
+            {t('auth_mode_signin')}
           </button>
           <button
             type="button"
@@ -212,7 +212,7 @@ export default function LoginPage() {
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            {t('nav_sign_up')}
+            {t('auth_mode_signup')}
           </button>
         </div>
 
@@ -236,7 +236,7 @@ export default function LoginPage() {
         {mode === 'login' && (
           <div>
             <div className="mb-6">
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Select User Role</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">{t('auth_select_role')}</label>
               <div className="grid grid-cols-5 gap-1.5 p-1.5 bg-[#F8FBFD] rounded-2xl border border-slate-100">
                 {[
                   { id: 'ROLE_CITIZEN', name: 'Citizen', icon: User, color: 'text-rose-600' },
@@ -268,7 +268,7 @@ export default function LoginPage() {
 
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Full Name</label>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('auth_full_name')}</label>
                 <input
                   type="text"
                   required
@@ -280,7 +280,7 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Email Address</label>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('auth_email_address')}</label>
                 <input
                   type="email"
                   required
@@ -296,7 +296,7 @@ export default function LoginPage() {
                 disabled={loading}
                 className="w-full py-3.5 rounded-full bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-teal-500/20 transition-all disabled:opacity-50 mt-2 cursor-pointer"
               >
-                {loading ? 'Authenticating...' : 'Sign In to Portal'}
+                {loading ? 'Authenticating...' : t('auth_btn_signin')}
               </button>
             </form>
           </div>
@@ -321,7 +321,7 @@ export default function LoginPage() {
             {/* STEP 1: Choose Account Type */}
             {step === 1 && (
               <div className="space-y-4">
-                <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">What type of account are you creating?</p>
+                <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">{t('auth_account_type_question')}</p>
 
                 <div className="grid grid-cols-1 gap-3">
                   {[
@@ -382,7 +382,7 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Full Name *</label>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('auth_full_name')} *</label>
                   <input
                     type="text"
                     required
@@ -394,7 +394,7 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Email Address *</label>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('auth_email_address')} *</label>
                   <input
                     type="email"
                     required
@@ -406,7 +406,7 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Password *</label>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('auth_password')} *</label>
                   <input
                     type="password"
                     required
@@ -418,7 +418,7 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Confirm Password *</label>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('auth_confirm_password')} *</label>
                   <input
                     type="password"
                     required
@@ -435,7 +435,7 @@ export default function LoginPage() {
                     disabled={loading}
                     className="w-full py-3.5 rounded-full bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-teal-500/20 mt-4 cursor-pointer"
                   >
-                    {loading ? 'Creating Account...' : 'Complete Registration'}
+                    {loading ? 'Creating Account...' : t('auth_btn_signup')}
                   </button>
                 ) : (
                   <button
@@ -460,10 +460,8 @@ export default function LoginPage() {
                   </button>
                 </div>
 
-                {/* Prototype Registry Notice */}
                 <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-sans leading-relaxed">
-                  <strong className="font-bold block mb-0.5">Authorized Prototype Registry Notice</strong>
-                  Privileged roles require identity verification before account creation. Prototype IDs available for testing:
+                  {t('auth_prototype_notice')}
                   <div className="font-mono text-[10px] mt-1 font-bold">
                     {accountType === 'DOCTOR' && 'DOC-1001, DOC-1002, DOC-1003, DOC-1004'}
                     {accountType === 'ASHA' && 'ASHA-2001, ASHA-2002, ASHA-2003, ASHA-2004'}
@@ -473,7 +471,7 @@ export default function LoginPage() {
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    {accountType === 'DOCTOR' ? 'Doctor / Medical Registration ID *' : accountType === 'ASHA' ? 'ASHA Worker ID *' : 'Government Officer ID *'}
+                    {t('auth_prof_id')} *
                   </label>
                   <div className="flex gap-2">
                     <input
@@ -490,17 +488,16 @@ export default function LoginPage() {
                       onClick={handleVerifyIdClick}
                       className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs font-mono uppercase tracking-wider shadow-sm cursor-pointer disabled:opacity-50 shrink-0"
                     >
-                      {verifying ? 'Verifying...' : 'Verify ID'}
+                      {verifying ? t('auth_verifying') : t('auth_verify_button')}
                     </button>
                   </div>
                 </div>
 
-                {/* Verification Badge Result */}
                 {isVerified === true && verificationRecord && (
                   <div className="p-4 rounded-2xl bg-teal-50 border border-teal-200 text-teal-800 text-xs space-y-1">
                     <div className="flex items-center gap-2 font-bold text-teal-700">
                       <CheckCircle2 className="w-5 h-5 text-teal-600" />
-                      <span>✓ Identity Verified in Authorized Prototype Registry</span>
+                      <span>{t('auth_verified_badge')}</span>
                     </div>
                     <p className="text-[11px] font-medium text-teal-900 pt-1">
                       Matched: <strong>{verificationRecord.name}</strong> ({verificationRecord.title})
@@ -511,7 +508,7 @@ export default function LoginPage() {
                 {isVerified === false && (
                   <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2 font-bold">
                     <XCircle className="w-5 h-5 text-rose-600 shrink-0" />
-                    <span>✕ Identity Verification Failed. Check your Professional ID.</span>
+                    <span>{t('auth_failed_badge')}</span>
                   </div>
                 )}
 
@@ -521,7 +518,7 @@ export default function LoginPage() {
                   disabled={loading || !isVerified}
                   className="w-full py-3.5 rounded-full bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-teal-500/20 mt-4 cursor-pointer disabled:opacity-50"
                 >
-                  {loading ? 'Creating Verified Account...' : `Register Verified ${accountType} Account`}
+                  {loading ? 'Creating Verified Account...' : t('auth_btn_signup')}
                 </button>
               </div>
             )}

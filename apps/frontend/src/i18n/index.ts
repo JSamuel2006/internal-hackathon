@@ -1,3 +1,4 @@
+import React from 'react';
 import { en } from './translations/en';
 import { ta } from './translations/ta';
 import { hi } from './translations/hi';
@@ -97,3 +98,21 @@ export class I18nService {
 export const t = (key: TranslationKey, params?: Record<string, string>): string => {
   return I18nService.translate(key, params);
 };
+
+// React hook for component-level reactivity to language changes
+export function useI18n() {
+  const [lang, setLangState] = React.useState<LanguageCode>(I18nService.getLanguage());
+
+  React.useEffect(() => {
+    const unsub = I18nService.subscribe((newLang) => {
+      setLangState(newLang);
+    });
+    return unsub;
+  }, []);
+
+  return {
+    lang,
+    t: (key: TranslationKey, params?: Record<string, string>) => I18nService.translate(key, params),
+    setLanguage: (newLang: LanguageCode) => I18nService.setLanguage(newLang),
+  };
+}
