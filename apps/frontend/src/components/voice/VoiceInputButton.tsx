@@ -65,10 +65,10 @@ export const VoiceInputButton: React.FC<VoiceInputButtonProps> = ({ onCapture, l
         <button
           type="button"
           onClick={handleStart}
-          className="flex items-center gap-2 px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 rounded-xl font-bold uppercase tracking-wider text-[10px] transition-all cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2.5 bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-200 rounded-full font-bold text-xs transition-all cursor-pointer shadow-xs"
         >
-          <Mic className="w-3.5 h-3.5" />
-          <span>🎤 Tap to speak</span>
+          <Mic className="w-4 h-4 text-teal-600" />
+          <span>Talk to ArogyaMitra</span>
         </button>
       )}
 

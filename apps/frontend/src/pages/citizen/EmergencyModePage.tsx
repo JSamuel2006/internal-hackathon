@@ -132,14 +132,39 @@ export default function EmergencyModePage() {
   };
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto px-4 font-mono text-xs text-slate-350">
+    <div className="space-y-8 max-w-4xl mx-auto px-4 font-sans text-slate-800">
+      {/* ── EMERGENCY CALLOUT CARD ────────────────────────────────────── */}
+      <div className="bg-rose-50 border border-rose-200 rounded-3xl p-6 md:p-8 space-y-4 text-center shadow-sm">
+        <div className="inline-flex items-center gap-2 text-rose-700 font-extrabold text-lg">
+          <ShieldAlert className="w-6 h-6 text-rose-600 animate-pulse" />
+          <span>🚨 Need Immediate Medical Help?</span>
+        </div>
+        <p className="text-xs text-rose-900 leading-relaxed font-sans max-w-xl mx-auto font-medium">
+          If this is a life-threatening emergency, call emergency services immediately or trigger automated trauma pre-alerts.
+        </p>
+        <div className="flex flex-wrap gap-4 justify-center pt-2">
+          <a
+            href="tel:108"
+            className="px-7 py-3.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs uppercase tracking-wider shadow-md flex items-center gap-2 transition-all cursor-pointer"
+          >
+            <span>📞 CALL 108</span>
+          </a>
+          <a
+            href="tel:112"
+            className="px-7 py-3.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs uppercase tracking-wider shadow-md flex items-center gap-2 transition-all cursor-pointer"
+          >
+            <span>📞 CALL 112</span>
+          </a>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="border-b border-slate-200 pb-4 text-center">
-        <h2 className="text-xl font-bold text-slate-900 uppercase tracking-wider flex items-center justify-center gap-2">
-          <ShieldAlert className="w-6 h-6 text-rose-500" />
-          🚨 Emergency Response
+        <h2 className="text-xl font-bold text-slate-900 uppercase tracking-wider flex items-center justify-center gap-2 font-sans">
+          <ShieldAlert className="w-6 h-6 text-rose-600" />
+          Emergency Response Network
         </h2>
-        <p className="text-[10px] text-slate-500 mt-1">Get coordinated emergency assistance. One place for all emergency coordination.</p>
+        <p className="text-xs text-slate-500 mt-1 font-sans">Get coordinated emergency assistance. One place for all emergency coordination.</p>
       </div>
 
       {/* SOS Trigger Panel */}
