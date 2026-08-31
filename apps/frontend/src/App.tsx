@@ -129,21 +129,25 @@ export default function App() {
         <Route path="/officer" element={<OfficerLayout />}>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<OfficerDashboard />} />
+          <Route path="surveillance" element={<DiseaseSurveillanceDashboard />} />
+          <Route path="surveillance-gis" element={<DiseaseSurveillanceDashboard />} />
+          <Route path="disease-surveillance" element={<DiseaseSurveillanceDashboard />} />
+          <Route path="heatmaps" element={<OfficerHeatmapPage />} />
           <Route path="heatmap" element={<OfficerHeatmapPage />} />
-          <Route path="simulator" element={<OfficerSimulatorPage />} />
+          <Route path="asha-monitoring" element={<AshaDashboard />} />
+          <Route path="asha" element={<AshaDashboard />} />
+          <Route path="reports" element={<OfficerReportsPage />} />
           <Route path="campaigns" element={<OfficerCampaignPage />} />
+          <Route path="digital-twin" element={<OfficerDigitalTwinPage />} />
+          <Route path="simulator" element={<OfficerSimulatorPage />} />
           <Route path="graph" element={<OfficerKnowledgeGraphPage />} />
           <Route path="news" element={<OfficerNewsPage />} />
-          <Route path="digital-twin" element={<OfficerDigitalTwinPage />} />
-          <Route path="reports" element={<OfficerReportsPage />} />
           <Route path="national-health" element={<NationalHealthDashboard />} />
-          <Route path="surveillance-gis" element={<DiseaseSurveillanceDashboard />} />
           <Route path="hospital-occupancy" element={<HospitalIntelligenceDashboard />} />
           <Route path="medicine-supply" element={<MedicineSupplyDashboard />} />
           <Route path="emergency-intel" element={<EmergencyIntelligenceDashboard />} />
           <Route path="ministry" element={<MinistryDashboard />} />
-          <Route path="asha" element={<AshaDashboard />} />
-          <Route path="asha-monitoring" element={<AshaDashboard />} />
+          <Route path="*" element={<Navigate to="/officer/dashboard" replace />} />
         </Route>
 
         {/* ASHA / Health Worker Portal */}
