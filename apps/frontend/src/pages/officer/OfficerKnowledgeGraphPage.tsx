@@ -30,13 +30,13 @@ export default function OfficerKnowledgeGraphPage() {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between border-b border-slate-900 pb-4">
+      <div className="flex items-center justify-between border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-teal-500/10 rounded-lg text-teal-450 border border-teal-500/20">
             <Network className="w-5 h-5 glow-pill" />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-100">Pathogen Knowledge Graph</h2>
+            <h2 className="text-xl font-bold tracking-tight text-slate-900">Pathogen Knowledge Graph</h2>
             <p className="text-xs text-slate-455 mt-0.5">Explore medical schema relations: symptoms, prevention, vaccines, and schemes</p>
           </div>
         </div>
@@ -44,7 +44,7 @@ export default function OfficerKnowledgeGraphPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Nodes Grid */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 md:col-span-2 space-y-4">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 md:col-span-2 space-y-4">
           <h4 className="text-xs font-mono font-bold tracking-wider text-slate-500 uppercase">Knowledge Entities</h4>
           {loading ? (
             <p className="text-xs text-slate-500">Loading graph...</p>
@@ -57,7 +57,7 @@ export default function OfficerKnowledgeGraphPage() {
                   className={`p-3.5 rounded-xl border text-left transition-all ${
                     selectedNode?.id === node.id
                       ? 'bg-teal-500/10 border-teal-500/30 text-teal-400'
-                      : 'bg-slate-900/40 border-slate-900 hover:border-slate-800 text-slate-350'
+                      : 'bg-white border-slate-200 hover:border-slate-200 text-slate-350'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -81,10 +81,10 @@ export default function OfficerKnowledgeGraphPage() {
         </div>
 
         {/* Selected Entity Details */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-5">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-5">
           {selectedNode ? (
             <div className="space-y-4">
-              <div className="border-b border-slate-850 pb-3">
+              <div className="border-b border-slate-200 pb-3">
                 <span className="text-[9px] font-mono text-slate-500 uppercase">{selectedNode.type} Entity</span>
                 <h3 className="text-base font-bold text-slate-205 mt-1">{selectedNode.label}</h3>
               </div>
@@ -105,7 +105,7 @@ export default function OfficerKnowledgeGraphPage() {
                         const partnerId = link.source === selectedNode.id ? link.target : link.source;
                         const partnerNode = nodes.find((n) => n.id === partnerId);
                         return (
-                          <div key={i} className="flex items-center gap-2 p-2 bg-slate-900/50 rounded-lg border border-slate-850 text-slate-300">
+                          <div key={i} className="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 text-slate-700">
                             <Link2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
                             <span className="font-semibold">{partnerNode?.label || partnerId}</span>
                             <span className="text-[9px] font-mono text-slate-500">({partnerNode?.type})</span>

@@ -23,62 +23,62 @@ export default function CitizenProfilePage() {
           <User className="w-5 h-5 glow-pill" />
         </div>
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-100">Ayushman Bharat Profile</h2>
+          <h2 className="text-xl font-bold tracking-tight text-slate-900">Ayushman Bharat Profile</h2>
           <p className="text-xs text-slate-455 mt-0.5">Manage your personal physiological parameters and verified government parameters</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left column: ABHA Card preview */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 bg-gradient-to-br from-slate-900 to-slate-950 flex flex-col justify-between h-56 relative overflow-hidden md:col-span-1">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 to-slate-950 flex flex-col justify-between h-56 relative overflow-hidden md:col-span-1">
           <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/5 rounded-full blur-2xl"></div>
           <div>
             <div className="flex items-center justify-between">
-              <span className="text-[9px] font-mono tracking-widest text-slate-450 uppercase font-bold">Health Card</span>
+              <span className="text-[9px] font-mono tracking-widest text-slate-500 uppercase font-bold">Health Card</span>
               <Award className="w-4 h-4 text-teal-400" />
             </div>
-            <p className="text-sm font-bold text-slate-200 mt-3">{user.name}</p>
-            <p className="text-[10px] font-mono text-slate-400 mt-1">{user.abhaId}</p>
+            <p className="text-sm font-bold text-slate-800 mt-3">{user.name}</p>
+            <p className="text-[10px] font-mono text-slate-600 mt-1">{user.abhaId}</p>
           </div>
-          <div className="border-t border-slate-800 pt-3 flex items-center justify-between">
+          <div className="border-t border-slate-200 pt-3 flex items-center justify-between">
             <span className="text-[9px] text-slate-500 font-mono">SECURE CHIP V1</span>
             <span className="text-[10px] text-teal-400 font-bold font-mono">VERIFIED</span>
           </div>
         </div>
 
         {/* Right column: Edit Details Form */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 md:col-span-2">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 md:col-span-2">
           <form onSubmit={handleSave} className="space-y-5">
-            <h3 className="font-bold text-sm text-slate-200 border-b border-slate-850 pb-2">Medical Bio-Parameters</h3>
+            <h3 className="font-bold text-sm text-slate-800 border-b border-slate-200 pb-2">Medical Bio-Parameters</h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[10px] font-mono text-slate-450 uppercase mb-2">Blood Group</label>
+                <label className="block text-[10px] font-mono text-slate-500 uppercase mb-2">Blood Group</label>
                 <input
                   type="text"
                   value={bloodGroup}
                   onChange={(e) => setBloodGroup(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-lg bg-slate-900/50 border border-slate-800 text-xs text-slate-200 outline-none focus:border-rose-500/35"
+                  className="w-full px-3.5 py-2 rounded-lg bg-white border border-slate-200 text-xs text-slate-800 outline-none focus:border-rose-500/35"
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-mono text-slate-450 uppercase mb-2">Emergency Phone</label>
+                <label className="block text-[10px] font-mono text-slate-500 uppercase mb-2">Emergency Phone</label>
                 <input
                   type="text"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-lg bg-slate-900/50 border border-slate-800 text-xs text-slate-200 outline-none focus:border-rose-500/35"
+                  className="w-full px-3.5 py-2 rounded-lg bg-white border border-slate-200 text-xs text-slate-800 outline-none focus:border-rose-500/35"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[10px] font-mono text-slate-450 uppercase mb-2">Allergies & Contraindications</label>
+              <label className="block text-[10px] font-mono text-slate-500 uppercase mb-2">Allergies & Contraindications</label>
               <textarea
                 value={allergies}
                 onChange={(e) => setAllergies(e.target.value)}
                 rows={2}
-                className="w-full px-3.5 py-2 rounded-lg bg-slate-900/50 border border-slate-800 text-xs text-slate-200 outline-none focus:border-rose-500/35 resize-none"
+                className="w-full px-3.5 py-2 rounded-lg bg-white border border-slate-200 text-xs text-slate-800 outline-none focus:border-rose-500/35 resize-none"
               />
             </div>
 

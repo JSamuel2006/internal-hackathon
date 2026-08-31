@@ -9,8 +9,8 @@ export default function NotificationCenter() {
 
   return (
     <div className="space-y-8 max-w-4xl mx-auto px-4 font-mono text-xs text-slate-355">
-      <div className="border-b border-slate-900 pb-4">
-        <h2 className="text-xl font-bold text-slate-100 uppercase tracking-wider">Enterprise Notification Center</h2>
+      <div className="border-b border-slate-200 pb-4">
+        <h2 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Enterprise Notification Center</h2>
         <p className="text-[10px] text-slate-500 mt-1">Real-time alerts, critical recalls, and clinical timeline reminders</p>
       </div>
 
@@ -27,7 +27,7 @@ export default function NotificationCenter() {
             <Bell className="w-5 h-5 shrink-0 mt-0.5" />
             <div>
               <strong className="block font-bold text-slate-205">{a.title}</strong>
-              <p className="text-slate-400 mt-1 leading-normal">{a.message}</p>
+              <p className="text-slate-600 mt-1 leading-normal">{a.message}</p>
               <span className="text-[9px] text-slate-500 block mt-2">{a.time}</span>
             </div>
           </div>

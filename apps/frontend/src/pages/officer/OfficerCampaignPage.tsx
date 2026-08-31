@@ -68,7 +68,7 @@ export default function OfficerCampaignPage() {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between border-b border-slate-900 pb-4">
+      <div className="flex items-center justify-between border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-teal-500/10 rounded-lg text-teal-450 border border-teal-500/20">
             <Megaphone className="w-5 h-5 glow-pill" />
@@ -82,14 +82,14 @@ export default function OfficerCampaignPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left column: input */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 lg:col-span-1 flex flex-col justify-between">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 lg:col-span-1 flex flex-col justify-between">
           <form onSubmit={handleGenerate} className="space-y-5">
             <div>
-              <label className="block text-[10px] font-mono text-slate-450 uppercase mb-2">Campaign Channel</label>
+              <label className="block text-[10px] font-mono text-slate-500 uppercase mb-2">Campaign Channel</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2.5 px-3 text-xs text-slate-200 outline-none focus:border-teal-500/35"
+                className="w-full bg-white border border-slate-200 rounded-lg py-2.5 px-3 text-xs text-slate-800 outline-none focus:border-teal-500/35"
               >
                 <option value="SMS">ASHA SMS Alert</option>
                 <option value="POSTER">Social Media Poster Text</option>
@@ -99,14 +99,14 @@ export default function OfficerCampaignPage() {
             </div>
 
             <div>
-              <label className="block text-[10px] font-mono text-slate-450 uppercase mb-2">Public Health Topic / Prompt</label>
+              <label className="block text-[10px] font-mono text-slate-500 uppercase mb-2">Public Health Topic / Prompt</label>
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 rows={4}
                 required
                 placeholder="e.g. Advise citizens to discard stagnant cooler water to prevent Dengue breeding in Khed block..."
-                className="w-full px-3.5 py-2.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-200 outline-none focus:border-teal-500/35 resize-none placeholder:text-slate-600"
+                className="w-full px-3.5 py-2.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-800 outline-none focus:border-teal-500/35 resize-none placeholder:text-slate-600"
               />
             </div>
 
@@ -128,15 +128,15 @@ export default function OfficerCampaignPage() {
         </div>
 
         {/* Middle column: Preview generated text */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 lg:col-span-1 flex flex-col justify-between">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 lg:col-span-1 flex flex-col justify-between">
           <div className="space-y-4">
             <h4 className="text-xs font-mono font-bold tracking-wider text-slate-500 uppercase">AI-Drafted Copy Preview</h4>
             {generatedText ? (
-              <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-850 text-xs text-slate-300 leading-relaxed font-mono whitespace-pre-wrap">
+              <div className="p-4 rounded-xl bg-white border border-slate-200 text-xs text-slate-700 leading-relaxed font-mono whitespace-pre-wrap">
                 {generatedText}
               </div>
             ) : (
-              <div className="h-48 border border-dashed border-slate-900 rounded-xl flex flex-col items-center justify-center text-center p-4 text-slate-500">
+              <div className="h-48 border border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center text-center p-4 text-slate-500">
                 <Sparkles className="w-8 h-8 text-slate-700 mb-2" />
                 <p className="text-xs">Clinical copy generated via Gemini will show up here.</p>
               </div>
@@ -155,19 +155,19 @@ export default function OfficerCampaignPage() {
         </div>
 
         {/* Right column: History */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 lg:col-span-1 space-y-4 max-h-[500px] overflow-y-auto pr-2">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 lg:col-span-1 space-y-4 max-h-[500px] overflow-y-auto pr-2">
           <h4 className="text-xs font-mono font-bold tracking-wider text-slate-500 uppercase">Active Campaigns</h4>
           <div className="space-y-3">
             {campaigns.map((c) => (
-              <div key={c.id} className="p-3 bg-slate-900/40 border border-slate-900 rounded-xl text-xs space-y-1.5">
+              <div key={c.id} className="p-3 bg-white border border-slate-200 rounded-xl text-xs space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-slate-200 truncate">{c.title}</span>
+                  <span className="font-semibold text-slate-800 truncate">{c.title}</span>
                   <span className="text-[9px] font-mono bg-teal-500/10 text-teal-400 px-1.5 py-0.5 rounded border border-teal-500/20">
                     {c.category}
                   </span>
                 </div>
-                <p className="text-slate-400 text-[10px] leading-relaxed line-clamp-3">{c.content}</p>
-                <div className="text-[9px] text-slate-500 font-mono flex items-center justify-between pt-1 border-t border-slate-900">
+                <p className="text-slate-600 text-[10px] leading-relaxed line-clamp-3">{c.content}</p>
+                <div className="text-[9px] text-slate-500 font-mono flex items-center justify-between pt-1 border-t border-slate-200">
                   <span>Target: {c.targetAudience}</span>
                   <span className="text-emerald-450 font-bold">LIVE</span>
                 </div>

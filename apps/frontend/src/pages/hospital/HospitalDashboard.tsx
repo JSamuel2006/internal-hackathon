@@ -51,24 +51,24 @@ export default function HospitalDashboard() {
   return (
     <div className="space-y-8 max-w-7xl mx-auto px-4">
       {/* Title Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-900 pb-5">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20 shadow-lg">
             <Warehouse className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-100 flex items-center gap-2">
+            <h2 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
               Hospital Logistics & Telemetry Command Center
               <span className="text-[10px] bg-rose-500/15 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded font-mono uppercase">Facility view</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">Track bed occupancies, operational statuses, and doctor schedules across the district health grid</p>
+            <p className="text-xs text-slate-600 mt-0.5">Track bed occupancies, operational statuses, and doctor schedules across the district health grid</p>
           </div>
         </div>
 
         <button
           onClick={fetchHospitalData}
           disabled={loading}
-          className="px-4 py-2 border border-slate-800 bg-slate-900/60 hover:bg-slate-855 text-slate-355 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
+          className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-855 text-slate-355 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Sync Logistics</span>
@@ -86,8 +86,8 @@ export default function HospitalDashboard() {
       {/* Hospital details layout */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {hospitals.map((h) => (
-          <div key={h.id} className="glass-panel p-6 rounded-2xl border border-slate-900 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950/20 shadow-xl space-y-4">
-            <div className="flex justify-between items-start border-b border-slate-850 pb-2.5">
+          <div key={h.id} className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950/20 shadow-xl space-y-4">
+            <div className="flex justify-between items-start border-b border-slate-200 pb-2.5">
               <div>
                 <h3 className="text-sm font-bold text-slate-205">{h.name}</h3>
                 <span className="text-[10px] text-slate-500 font-mono block mt-0.5">{h.address}</span>
@@ -96,11 +96,11 @@ export default function HospitalDashboard() {
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-xs font-mono text-center">
-              <div className="bg-slate-950 p-3 rounded-xl border border-slate-900">
+              <div className="bg-white p-3 rounded-xl border border-slate-200">
                 <span className="text-slate-500 text-[9px] uppercase block">Bed Occupancy</span>
                 <strong className="text-lg font-bold text-amber-500 block mt-1">{h.bedOccupancy}%</strong>
               </div>
-              <div className="bg-slate-950 p-3 rounded-xl border border-slate-900">
+              <div className="bg-white p-3 rounded-xl border border-slate-200">
                 <span className="text-slate-500 text-[9px] uppercase block">Emergency Queue</span>
                 <strong className="text-lg font-bold text-rose-455 block mt-1">{h.emergencyQueue} patients</strong>
               </div>
@@ -111,7 +111,7 @@ export default function HospitalDashboard() {
               <span className="text-[9px] text-slate-550 uppercase font-mono font-bold block">Assigned Doctors:</span>
               <div className="space-y-1.5 text-[11px] font-mono">
                 {doctors.filter(d => d.hospitalId === h.id).map(doc => (
-                  <div key={doc.id} className="flex justify-between p-2 bg-slate-900/60 rounded border border-slate-850/80 text-slate-400">
+                  <div key={doc.id} className="flex justify-between p-2 bg-white rounded border border-slate-200/80 text-slate-600">
                     <span>{doc.name} ({doc.specialty})</span>
                     <span className="text-indigo-400">{doc.availability}</span>
                   </div>
@@ -124,8 +124,8 @@ export default function HospitalDashboard() {
 
       {/* LIS & PMS Analytics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 font-mono text-xs">
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-          <h4 className="font-bold text-slate-200 uppercase tracking-wider border-b border-slate-850 pb-2">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+          <h4 className="font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">
             Laboratory turnaround Time Trends (Mins)
           </h4>
           <div className="h-48">
@@ -147,8 +147,8 @@ export default function HospitalDashboard() {
           </div>
         </div>
 
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-          <h4 className="font-bold text-slate-200 uppercase tracking-wider border-b border-slate-850 pb-2">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+          <h4 className="font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">
             Pharmacy Inventory stock Levels
           </h4>
           <div className="h-48">

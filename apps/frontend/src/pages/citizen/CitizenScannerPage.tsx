@@ -49,14 +49,14 @@ type ScanStep = typeof SCAN_STEPS[number];
 function ScanProgressBar({ currentStep, error, remainingSecs }: { currentStep: ScanStep | null; error: boolean; remainingSecs: number }) {
   const idx = currentStep ? SCAN_STEPS.indexOf(currentStep) : -1;
   return (
-    <div className="glass-panel p-4 rounded-xl border border-slate-800 space-y-2">
+    <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 space-y-2">
       <div className="flex justify-between items-center text-xs">
-        <span className="font-mono text-slate-300">Scan Pipeline: {currentStep}</span>
+        <span className="font-mono text-slate-700">Scan Pipeline: {currentStep}</span>
         {remainingSecs > 0 && (
           <span className="font-mono text-amber-400">Est. remaining: {remainingSecs}s</span>
         )}
       </div>
-      <div className="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden">
+      <div className="w-full bg-white rounded-full h-1.5 overflow-hidden">
         <div
           className={`h-full transition-all duration-300 ${error ? 'bg-rose-500' : 'bg-gradient-to-r from-rose-500 to-amber-500'}`}
           style={{ width: `${((idx + 1) / SCAN_STEPS.length) * 100}%` }}
@@ -411,16 +411,16 @@ export default function CitizenScannerPage() {
             <ScanLine className="w-6 h-6 glow-pill" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               Enterprise Medicine Scanner
               <span className="px-2 py-0.5 text-[9px] bg-rose-500/20 text-rose-300 font-mono rounded border border-rose-500/30 uppercase tracking-widest">CDSS Pro</span>
             </h2>
-            <p className="text-xs text-slate-400">Hardened OCR-First Pipeline & Clinical Decision Support System</p>
+            <p className="text-xs text-slate-600">Hardened OCR-First Pipeline & Clinical Decision Support System</p>
           </div>
         </div>
 
         {/* Tab switcher */}
-        <div className="flex bg-slate-900 border border-slate-800 p-1 rounded-xl gap-1 self-stretch sm:self-auto">
+        <div className="flex bg-white border border-slate-200 p-1 rounded-xl gap-1 self-stretch sm:self-auto">
           {[
             { id: 'Scanner', icon: ScanLine, label: 'Scanner' },
             { id: 'History', icon: Clock, label: 'History' },
@@ -433,7 +433,7 @@ export default function CitizenScannerPage() {
               className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
                 activeTab === tab.id
                   ? 'bg-rose-500 text-slate-950 font-bold'
-                  : 'text-slate-400 hover:text-slate-200'
+                  : 'text-slate-600 hover:text-slate-800'
               }`}
             >
               <tab.icon className="w-3.5 h-3.5" />
@@ -445,20 +445,20 @@ export default function CitizenScannerPage() {
 
       {/* CONSENT DIALOG */}
       {showConsentDialog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm px-4">
-          <div className="glass-panel p-6 rounded-2xl border border-rose-500/20 max-w-md w-full space-y-4 text-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white backdrop-blur-sm px-4">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-rose-500/20 max-w-md w-full space-y-4 text-xs">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-rose-400" />
-              <h3 className="font-bold text-sm text-slate-100">Medical Records Access</h3>
+              <h3 className="font-bold text-sm text-slate-900">Medical Records Access</h3>
             </div>
-            <p className="text-slate-300">
+            <p className="text-slate-700">
               Allow ArogyaVerse AI to link your medical history (prescriptions, allergies, chronic diseases, lab results) to automatically run personalized safety validation?
             </p>
             <div className="flex gap-3 pt-2">
               <button onClick={handleGrantConsent} className="flex-1 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg uppercase">
                 Allow
               </button>
-              <button onClick={handleDenyConsent} className="flex-1 py-2 bg-slate-900 border border-slate-800 text-slate-350 hover:bg-slate-800 font-bold rounded-lg uppercase">
+              <button onClick={handleDenyConsent} className="flex-1 py-2 bg-white border border-slate-200 text-slate-350 hover:bg-slate-800 font-bold rounded-lg uppercase">
                 Skip
               </button>
             </div>
@@ -476,19 +476,19 @@ export default function CitizenScannerPage() {
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
-              className={`glass-panel p-6 rounded-2xl border-2 border-dashed transition-all text-center space-y-4 ${
-                isDragging ? 'border-rose-500 bg-rose-500/5' : 'border-slate-800 hover:border-slate-700'
+              className={`bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border-2 border-dashed transition-all text-center space-y-4 ${
+                isDragging ? 'border-rose-500 bg-rose-500/5' : 'border-slate-200 hover:border-slate-700'
               }`}
             >
               {!previewUrl ? (
                 <div className="py-8">
                   <Upload className="w-10 h-10 text-slate-500 mx-auto mb-3 animate-pulse" />
-                  <p className="text-xs font-medium text-slate-300">Drag & Drop packaging photo here</p>
+                  <p className="text-xs font-medium text-slate-700">Drag & Drop packaging photo here</p>
                   <p className="text-[10px] text-slate-500 mt-1">PNG, JPG or WEBP (Max 12MB)</p>
                   <div className="mt-4">
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      className="px-4 py-2 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-200 text-xs rounded-xl transition-all font-semibold"
+                      className="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-800 text-slate-800 text-xs rounded-xl transition-all font-semibold"
                     >
                       Browse Files
                     </button>
@@ -506,15 +506,15 @@ export default function CitizenScannerPage() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="border border-slate-850 rounded-lg overflow-hidden flex justify-center bg-slate-950 relative">
+                  <div className="border border-slate-200 rounded-lg overflow-hidden flex justify-center bg-white relative">
                     <canvas ref={canvasRef} className="max-h-56 max-w-full object-contain" />
                   </div>
                   
                   {/* Preview controls */}
                   <div className="flex justify-center gap-2">
-                    <button onClick={() => setZoom(z => Math.min(z + 0.1, 2))} className="p-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded border border-slate-800" title="Zoom In"><ZoomIn className="w-3.5 h-3.5" /></button>
-                    <button onClick={() => setZoom(z => Math.max(z - 0.1, 0.5))} className="p-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded border border-slate-800" title="Zoom Out"><ZoomOut className="w-3.5 h-3.5" /></button>
-                    <button onClick={() => setRotation(r => (r + 90) % 360)} className="p-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded border border-slate-800" title="Rotate"><RotateCw className="w-3.5 h-3.5" /></button>
+                    <button onClick={() => setZoom(z => Math.min(z + 0.1, 2))} className="p-1.5 bg-white hover:bg-slate-800 text-slate-700 rounded border border-slate-200" title="Zoom In"><ZoomIn className="w-3.5 h-3.5" /></button>
+                    <button onClick={() => setZoom(z => Math.max(z - 0.1, 0.5))} className="p-1.5 bg-white hover:bg-slate-800 text-slate-700 rounded border border-slate-200" title="Zoom Out"><ZoomOut className="w-3.5 h-3.5" /></button>
+                    <button onClick={() => setRotation(r => (r + 90) % 360)} className="p-1.5 bg-white hover:bg-slate-800 text-slate-700 rounded border border-slate-200" title="Rotate"><RotateCw className="w-3.5 h-3.5" /></button>
                     <button onClick={handleReset} className="p-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded border border-rose-500/20" title="Reset"><RefreshCw className="w-3.5 h-3.5" /></button>
                   </div>
                 </div>
@@ -554,9 +554,9 @@ export default function CitizenScannerPage() {
             {loading && (
               <div className="space-y-6">
                 <ScanProgressBar currentStep={currentStep} error={stepError} remainingSecs={remainingTime} />
-                <div className="glass-panel p-8 rounded-2xl border border-slate-800 flex flex-col items-center justify-center space-y-3">
+                <div className="bg-white border border-slate-200 shadow-sm p-8 rounded-2xl border border-slate-200 flex flex-col items-center justify-center space-y-3">
                   <Loader2 className="w-8 h-8 text-rose-500 animate-spin" />
-                  <p className="text-xs font-mono text-slate-400 animate-pulse">Running OCR character recognition & database safety check...</p>
+                  <p className="text-xs font-mono text-slate-600 animate-pulse">Running OCR character recognition & database safety check...</p>
                 </div>
               </div>
             )}
@@ -565,7 +565,7 @@ export default function CitizenScannerPage() {
               <div className="space-y-6 print:space-y-4">
                 
                 {/* ID & ACTION BAR */}
-                <div className="glass-panel p-4 rounded-xl border border-slate-800 flex flex-wrap justify-between items-center gap-3 print:hidden">
+                <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 flex flex-wrap justify-between items-center gap-3 print:hidden">
                   <div className="flex items-center gap-2">
                     <span className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono font-bold rounded">
                       ✔ SCAN COMPLETED
@@ -573,17 +573,17 @@ export default function CitizenScannerPage() {
                     <span className="font-mono text-[10px] text-slate-500">ID: {scanId}</span>
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={handlePrint} className="p-2 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-350 rounded-lg text-xs flex items-center gap-1.5">
+                    <button onClick={handlePrint} className="p-2 bg-white border border-slate-200 hover:bg-slate-800 text-slate-350 rounded-lg text-xs flex items-center gap-1.5">
                       <Printer className="w-3.5 h-3.5" /> Print
                     </button>
-                    <button onClick={() => setShowShareModal(true)} className="p-2 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-350 rounded-lg text-xs flex items-center gap-1.5">
+                    <button onClick={() => setShowShareModal(true)} className="p-2 bg-white border border-slate-200 hover:bg-slate-800 text-slate-350 rounded-lg text-xs flex items-center gap-1.5">
                       <Share2 className="w-3.5 h-3.5" /> Share
                     </button>
                   </div>
                 </div>
 
                 {/* CLINICAL SUMMARY */}
-                <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-3 relative overflow-hidden">
+                <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-3 relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-3 text-rose-500/10">
                     <Sparkles className="w-20 h-20" />
                   </div>
@@ -637,8 +637,8 @@ export default function CitizenScannerPage() {
                         </div>
                       )}
 
-                      <h3 className="text-2xl font-bold text-slate-100 mt-2">{result.medicineName || 'Scanned Strip'}</h3>
-                      <p className="text-xs text-slate-400 mt-0.5">{result.genericName} • {result.strength} • {result.dosageForm}</p>
+                      <h3 className="text-2xl font-bold text-slate-900 mt-2">{result.medicineName || 'Scanned Strip'}</h3>
+                      <p className="text-xs text-slate-600 mt-0.5">{result.genericName} • {result.strength} • {result.dosageForm}</p>
                     </div>
 
                     <TextToSpeechButton text={`${result.medicineName || ''}. Generic ${result.genericName || ''}. Uses ${result.clinicalAnalysis?.uses || ''}`} />
@@ -659,15 +659,15 @@ export default function CitizenScannerPage() {
                 </div>
 
                 {/* CALIBRATED QUALITY DASHBOARD */}
-                <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4">
-                  <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2 border-b border-slate-800 pb-2">
+                <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4">
+                  <h4 className="text-xs font-bold text-slate-700 uppercase tracking-widest flex items-center gap-2 border-b border-slate-200 pb-2">
                     <Activity className="w-4 h-4 text-rose-500" />
                     Intelligent OCR Quality & Accuracy Calibration
                   </h4>
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {/* Overall Image Quality */}
-                    <div className="bg-slate-950/60 p-3.5 rounded-xl border border-slate-900 space-y-1">
+                    <div className="bg-white p-3.5 rounded-xl border border-slate-200 space-y-1">
                       <span className="text-[10px] font-mono text-slate-500 uppercase block">Overall Quality</span>
                       <span className={`text-base font-bold font-mono block ${
                         imageQuality?.overallRating === 'Excellent' || imageQuality?.overallRating === 'Good'
@@ -679,7 +679,7 @@ export default function CitizenScannerPage() {
                     </div>
 
                     {/* OCR Accuracy */}
-                    <div className="bg-slate-950/60 p-3.5 rounded-xl border border-slate-900 space-y-2">
+                    <div className="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2">
                       <span className="text-[10px] font-mono text-slate-500 uppercase block">OCR Accuracy</span>
                       <div className="flex items-center gap-1.5">
                         <span className="text-sm font-bold text-rose-400 font-mono">{imageQuality?.ocrAccuracy || 80}%</span>
@@ -690,7 +690,7 @@ export default function CitizenScannerPage() {
                     </div>
 
                     {/* Field Coverage */}
-                    <div className="bg-slate-950/60 p-3.5 rounded-xl border border-slate-900 space-y-2">
+                    <div className="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2">
                       <span className="text-[10px] font-mono text-slate-500 uppercase block">Field Coverage</span>
                       <div className="flex items-center gap-1.5">
                         <span className="text-sm font-bold text-teal-400 font-mono">{imageQuality?.fieldCoverage || 60}%</span>
@@ -701,7 +701,7 @@ export default function CitizenScannerPage() {
                     </div>
 
                     {/* Processing Speed */}
-                    <div className="bg-slate-950/60 p-3.5 rounded-xl border border-slate-900 space-y-1">
+                    <div className="bg-white p-3.5 rounded-xl border border-slate-200 space-y-1">
                       <span className="text-[10px] font-mono text-slate-500 uppercase block">Processing Latency</span>
                       <span className="text-sm font-bold text-amber-400 font-mono block">
                         {imageQuality?.processingTime || perfMetrics?.ocrTime || 0}ms
@@ -710,7 +710,7 @@ export default function CitizenScannerPage() {
                   </div>
 
                   {/* Physics & Regions Breakdown */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-slate-950/40 p-3.5 rounded-xl border border-slate-900 text-[10px] font-mono text-slate-400">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-3.5 rounded-xl border border-slate-200 text-[10px] font-mono text-slate-600">
                     <div>
                       <span className="text-slate-500 block uppercase">Winning Pass</span>
                       <span>{imageQuality?.winningPass || 'Default'}</span>
@@ -736,7 +736,7 @@ export default function CitizenScannerPage() {
                     {/* Detected & Missing Checklist */}
                     <div className="space-y-3">
                       <div className="space-y-1.5">
-                        <span className="text-[10px] font-mono text-slate-400 uppercase block">Detected Fields Checklist</span>
+                        <span className="text-[10px] font-mono text-slate-600 uppercase block">Detected Fields Checklist</span>
                         <div className="grid grid-cols-2 gap-1.5 text-[10.5px] font-mono">
                           {imageQuality?.detectedFields && imageQuality.detectedFields.length > 0 ? (
                             imageQuality.detectedFields.map((field: string) => (
@@ -753,7 +753,7 @@ export default function CitizenScannerPage() {
 
                       {imageQuality?.missingFields && imageQuality.missingFields.length > 0 && (
                         <div className="space-y-1.5">
-                          <span className="text-[10px] font-mono text-slate-400 uppercase block">Missing Fields Checklist</span>
+                          <span className="text-[10px] font-mono text-slate-600 uppercase block">Missing Fields Checklist</span>
                           <div className="grid grid-cols-2 gap-1.5 text-[10.5px] font-mono">
                             {imageQuality.missingFields.map((field: string) => (
                               <div key={field} className="flex items-center gap-1 text-rose-500">
@@ -769,7 +769,7 @@ export default function CitizenScannerPage() {
                     {/* Quality Suggestions & Pass Details */}
                     <div className="space-y-3">
                       <div className="space-y-1.5">
-                        <span className="text-[10px] font-mono text-slate-400 uppercase block">Diagnostics & Suggestions</span>
+                        <span className="text-[10px] font-mono text-slate-600 uppercase block">Diagnostics & Suggestions</span>
                         <div className="space-y-1">
                           {imageQuality?.qualitySuggestions && imageQuality.qualitySuggestions.length > 0 ? (
                             imageQuality.qualitySuggestions.map((s: string, idx: number) => (
@@ -789,10 +789,10 @@ export default function CitizenScannerPage() {
 
                       {/* Expandable OCR Details */}
                       <details className="group cursor-pointer">
-                        <summary className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1 select-none hover:text-slate-200">
+                        <summary className="text-[10px] font-mono text-slate-600 uppercase flex items-center gap-1 select-none hover:text-slate-800">
                           <span>▸ View Advanced OCR Pass Details</span>
                         </summary>
-                        <div className="mt-2 bg-slate-950/60 p-3 rounded-lg border border-slate-900 text-[10px] font-mono space-y-1 text-slate-400">
+                        <div className="mt-2 bg-white p-3 rounded-lg border border-slate-200 text-[10px] font-mono space-y-1 text-slate-600">
                           <div><span className="text-slate-500">Winning OCR Pass:</span> {imageQuality?.winningPass || 'Default'}</div>
                           <div><span className="text-slate-500">Characters Detected:</span> {ocrData?.detectedText?.length || 0}</div>
                           <div><span className="text-slate-500">Confidence Score:</span> {ocrData?.confidence || 'Unknown'}</div>
@@ -804,19 +804,19 @@ export default function CitizenScannerPage() {
 
                 {/* SAFETY CHECK GRID */}
                 {contextUsed && (
-                  <div className="glass-panel p-5 rounded-2xl border border-rose-500/20 space-y-4">
-                    <h4 className="text-xs font-bold text-rose-300 uppercase tracking-widest flex items-center gap-2 border-b border-slate-800 pb-2">
+                  <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-rose-500/20 space-y-4">
+                    <h4 className="text-xs font-bold text-rose-300 uppercase tracking-widest flex items-center gap-2 border-b border-slate-200 pb-2">
                       <ShieldAlert className="w-4 h-4" />
                       Clinical Safety Verification Engine
                       {patientCtxSummary && (
-                        <button onClick={() => setShowContext(!showContext)} className="ml-auto text-slate-500 hover:text-slate-300 print:hidden">
+                        <button onClick={() => setShowContext(!showContext)} className="ml-auto text-slate-500 hover:text-slate-700 print:hidden">
                           {showContext ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
                       )}
                     </h4>
 
                     {showContext && patientCtxSummary && (
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-slate-950/60 p-4 rounded-xl border border-slate-900 text-[10px] font-mono">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-slate-200 text-[10px] font-mono">
                         <div>
                           <span className="text-slate-500 block">Allergies</span>
                           <span className="text-rose-400">{patientCtxSummary.allergies?.join(', ') || 'None'}</span>
@@ -866,8 +866,8 @@ export default function CitizenScannerPage() {
                 )}
 
                 {/* EXTRACTED FIELDS TABLE */}
-                <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4">
-                  <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest border-b border-slate-800 pb-2">
+                <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4">
+                  <h4 className="text-xs font-bold text-slate-700 uppercase tracking-widest border-b border-slate-200 pb-2">
                     Extracted Packaging Information (OCR First)
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -883,11 +883,11 @@ export default function CitizenScannerPage() {
                       { label: 'QR Status', val: qrBarcodeVerification?.qrStatus || 'Not detected', conf: qrBarcodeVerification?.qrStatus && qrBarcodeVerification.qrStatus !== 'Not detected' ? 0.95 : 0, source: ocrData?.fieldSources?.qrCode || 'OCR' },
                       { label: 'Barcode Status', val: qrBarcodeVerification?.barcodeStatus || 'Not detected', conf: qrBarcodeVerification?.barcodeStatus && qrBarcodeVerification.barcodeStatus !== 'Not detected' ? 0.95 : 0, source: ocrData?.fieldSources?.barcode || 'OCR' }
                     ].map((f, i) => (
-                      <div key={i} className="p-3 bg-slate-950/60 border border-slate-900 rounded-xl flex justify-between items-center">
+                      <div key={i} className="p-3 bg-white border border-slate-200 rounded-xl flex justify-between items-center">
                         <div className="space-y-1">
                           <span className="text-[10px] font-mono text-slate-500 block uppercase">{f.label}</span>
-                          <span className="text-sm font-bold text-slate-200 block">{f.val || 'Unable to Detect'}</span>
-                          <span className="px-1.5 py-0.5 bg-slate-900 border border-slate-800 text-[8px] font-mono text-slate-400 rounded inline-block">
+                          <span className="text-sm font-bold text-slate-800 block">{f.val || 'Unable to Detect'}</span>
+                          <span className="px-1.5 py-0.5 bg-white border border-slate-200 text-[8px] font-mono text-slate-600 rounded inline-block">
                             Source: {f.source}
                           </span>
                         </div>
@@ -899,35 +899,35 @@ export default function CitizenScannerPage() {
 
                 {/* CLINICAL FACTS */}
                 {result.clinicalAnalysis && (
-                  <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4">
-                    <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest border-b border-slate-800 pb-2">
+                  <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4">
+                    <h4 className="text-xs font-bold text-slate-700 uppercase tracking-widest border-b border-slate-200 pb-2">
                       Clinical Facts & Guidelines
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                       <div className="space-y-1">
                         <span className="text-slate-500 font-mono block">Primary Indications & Uses</span>
-                        <p className="text-slate-300 leading-relaxed">{result.clinicalAnalysis.uses}</p>
+                        <p className="text-slate-700 leading-relaxed">{result.clinicalAnalysis.uses}</p>
                       </div>
                       <div className="space-y-1">
                         <span className="text-slate-500 font-mono block">Dosage & Food Advice</span>
-                        <p className="text-slate-300 leading-relaxed">{result.clinicalAnalysis.beforeAfterFood}</p>
+                        <p className="text-slate-700 leading-relaxed">{result.clinicalAnalysis.beforeAfterFood}</p>
                       </div>
                       <div className="space-y-1">
                         <span className="text-slate-500 font-mono block">Mechanism of Action</span>
-                        <p className="text-slate-300 leading-relaxed">{result.clinicalAnalysis.mechanismOfAction}</p>
+                        <p className="text-slate-700 leading-relaxed">{result.clinicalAnalysis.mechanismOfAction}</p>
                       </div>
                       <div className="space-y-1">
                         <span className="text-slate-500 font-mono block">Missed Dose Guidance</span>
-                        <p className="text-slate-300 leading-relaxed">{result.clinicalAnalysis.missedDoseGuidance}</p>
+                        <p className="text-slate-700 leading-relaxed">{result.clinicalAnalysis.missedDoseGuidance}</p>
                       </div>
                     </div>
                   </div>
                 )}
 
                 {/* PHARMACY SELECTOR */}
-                <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4 print:hidden">
-                  <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-                    <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
+                <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4 print:hidden">
+                  <div className="flex justify-between items-center border-b border-slate-200 pb-2">
+                    <h4 className="text-xs font-bold text-slate-700 uppercase tracking-widest flex items-center gap-1.5">
                       <MapPin className="w-4 h-4 text-rose-500 animate-bounce" /> Nearby Pharmacies & Kendras
                     </h4>
                     {locPermission !== 'granted' && (
@@ -943,14 +943,14 @@ export default function CitizenScannerPage() {
                   <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                     <div className="md:col-span-5 space-y-2 max-h-72 overflow-y-auto pr-2">
                       {pharmacies.map((p, idx) => (
-                        <div key={idx} className="p-3 bg-slate-950/60 border border-slate-900 rounded-xl hover:border-slate-800 transition-all text-xs space-y-1">
+                        <div key={idx} className="p-3 bg-white border border-slate-200 rounded-xl hover:border-slate-200 transition-all text-xs space-y-1">
                           <div className="flex justify-between items-center">
-                            <span className="font-bold text-slate-200">{p.name}</span>
+                            <span className="font-bold text-slate-800">{p.name}</span>
                             <span className="px-1.5 py-0.5 bg-emerald-500/15 text-emerald-400 text-[8px] font-mono rounded">
                               {p.stock}
                             </span>
                           </div>
-                          <p className="text-slate-400 font-mono text-[10px]">{p.type} • {p.dist} away ({p.time} travel)</p>
+                          <p className="text-slate-600 font-mono text-[10px]">{p.type} • {p.dist} away ({p.time} travel)</p>
                           <p className="text-slate-500 text-[10px]">Hours: {p.hours}</p>
                           <div className="flex gap-2 pt-1">
                             <a href={`tel:${p.phone}`} className="flex items-center gap-1 text-[9px] font-mono text-teal-400 hover:underline">
@@ -969,7 +969,7 @@ export default function CitizenScannerPage() {
                       ))}
                     </div>
 
-                    <div className="md:col-span-7 h-72 border border-slate-900 rounded-xl overflow-hidden relative">
+                    <div className="md:col-span-7 h-72 border border-slate-200 rounded-xl overflow-hidden relative">
                       <MapContainer center={[coords.lat, coords.lng]} zoom={14} className="h-full w-full">
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                         <Marker position={[coords.lat, coords.lng]} icon={UserDot}>
@@ -993,13 +993,13 @@ export default function CitizenScannerPage() {
 
                 {/* DEBUG METRICS */}
                 {perfMetrics && (
-                  <div className="glass-panel p-4 rounded-xl border border-slate-800 bg-slate-950/40 text-[10px] font-mono text-slate-500 space-y-1 print:hidden">
-                    <span className="font-bold text-slate-400 uppercase tracking-widest block text-[9px] mb-1">Observability Analytics (Admin Mode)</span>
+                  <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 bg-white text-[10px] font-mono text-slate-500 space-y-1 print:hidden">
+                    <span className="font-bold text-slate-600 uppercase tracking-widest block text-[9px] mb-1">Observability Analytics (Admin Mode)</span>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                      <p>OCR Engine: <span className="text-slate-400">{perfMetrics.ocrTime}ms</span></p>
-                      <p>AI Explanation: <span className="text-slate-400">{perfMetrics.aiTime}ms</span></p>
-                      <p>DB Write latency: <span className="text-slate-400">{perfMetrics.dbTime}ms</span></p>
-                      <p>Total time: <span className="text-slate-400">{perfMetrics.totalTimeMs}ms</span></p>
+                      <p>OCR Engine: <span className="text-slate-600">{perfMetrics.ocrTime}ms</span></p>
+                      <p>AI Explanation: <span className="text-slate-600">{perfMetrics.aiTime}ms</span></p>
+                      <p>DB Write latency: <span className="text-slate-600">{perfMetrics.dbTime}ms</span></p>
+                      <p>Total time: <span className="text-slate-600">{perfMetrics.totalTimeMs}ms</span></p>
                     </div>
                   </div>
                 )}
@@ -1013,19 +1013,19 @@ export default function CitizenScannerPage() {
       {activeTab === 'History' && (
         <div className="space-y-4">
           <div className="flex flex-wrap gap-3 items-center justify-between">
-            <h3 className="text-lg font-bold text-slate-200">Scanned Strip Archives</h3>
+            <h3 className="text-lg font-bold text-slate-800">Scanned Strip Archives</h3>
             <div className="flex gap-2">
               <input
                 type="text"
                 placeholder="Search scans..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-200 outline-none"
+                className="bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-800 outline-none"
               />
               <select
                 value={filterQuality}
                 onChange={(e) => setFilterQuality(e.target.value)}
-                className="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 outline-none"
+                className="bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 outline-none"
               >
                 <option value="All">All Quality</option>
                 <option value="Excellent">Excellent</option>
@@ -1041,26 +1041,26 @@ export default function CitizenScannerPage() {
               .filter(h => h.medicineName.toLowerCase().includes(searchQuery.toLowerCase()) || h.scanId.includes(searchQuery))
               .filter(h => filterQuality === 'All' || h.imageQuality === filterQuality)
               .map((h) => (
-                <div key={h.scanId} className="glass-panel p-4 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-3">
+                <div key={h.scanId} className="bg-white border border-slate-200 shadow-sm p-4 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-3">
                   <div>
                     <div className="flex justify-between items-center text-[10px] font-mono text-slate-500">
                       <span>{h.date}</span>
                       <span>{h.scanId}</span>
                     </div>
-                    <h4 className="text-base font-bold text-slate-200 mt-1">{h.medicineName}</h4>
-                    <p className="text-xs text-slate-400 truncate">{h.genericName}</p>
+                    <h4 className="text-base font-bold text-slate-800 mt-1">{h.medicineName}</h4>
+                    <p className="text-xs text-slate-600 truncate">{h.genericName}</p>
                     <div className="flex gap-1.5 mt-2 flex-wrap">
                       <span className="px-2 py-0.5 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[8px] font-mono rounded">
                         Quality: {h.imageQuality}
                       </span>
                       {h.dbValidation?.matchStatus && (
-                        <span className="px-2 py-0.5 bg-slate-900 text-slate-400 text-[8px] font-mono rounded">
+                        <span className="px-2 py-0.5 bg-white text-slate-600 text-[8px] font-mono rounded">
                           {h.dbValidation.matchStatus}
                         </span>
                       )}
                     </div>
                   </div>
-                  <div className="flex justify-between items-center pt-2 border-t border-slate-850">
+                  <div className="flex justify-between items-center pt-2 border-t border-slate-200">
                     <button onClick={() => reopenScan(h)} className="text-xs font-bold text-rose-400 hover:text-rose-350">
                       Reopen scan
                     </button>
@@ -1078,16 +1078,16 @@ export default function CitizenScannerPage() {
       {activeTab === 'Compare' && (
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-bold text-slate-200">Compare Medicine Packages</h3>
-            <span className="text-xs text-slate-400">{compareIds.length} of 2 selected</span>
+            <h3 className="text-lg font-bold text-slate-800">Compare Medicine Packages</h3>
+            <span className="text-xs text-slate-600">{compareIds.length} of 2 selected</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="md:col-span-1 space-y-2">
-              <span className="text-xs text-slate-400 block font-mono">Select 2 scans to compare:</span>
+              <span className="text-xs text-slate-600 block font-mono">Select 2 scans to compare:</span>
               <div className="space-y-1.5 max-h-96 overflow-y-auto">
                 {historyList.map(h => (
-                  <label key={h.scanId} className="flex items-center gap-2 p-2 bg-slate-900/60 rounded-lg border border-slate-850 cursor-pointer">
+                  <label key={h.scanId} className="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={compareIds.includes(h.scanId)}
@@ -1102,7 +1102,7 @@ export default function CitizenScannerPage() {
                       className="accent-rose-500"
                     />
                     <div className="text-[11px] truncate">
-                      <span className="font-bold text-slate-200 block truncate">{h.medicineName}</span>
+                      <span className="font-bold text-slate-800 block truncate">{h.medicineName}</span>
                       <span className="text-[9px] text-slate-500 font-mono">{h.scanId}</span>
                     </div>
                   </label>
@@ -1112,19 +1112,19 @@ export default function CitizenScannerPage() {
 
             <div className="md:col-span-3">
               {compareIds.length < 2 ? (
-                <div className="glass-panel p-10 rounded-2xl border border-slate-800 text-center text-slate-500 text-xs">
+                <div className="bg-white border border-slate-200 shadow-sm p-10 rounded-2xl border border-slate-200 text-center text-slate-500 text-xs">
                   Please select at least 2 scans from the left panel to display comparison analysis.
                 </div>
               ) : (
-                <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4 overflow-x-auto text-xs">
+                <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4 overflow-x-auto text-xs">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-slate-800">
+                      <tr className="border-b border-slate-200">
                         <th className="py-2 text-slate-455 font-mono">Field</th>
                         {compareIds.map(id => {
                           const item = historyList.find(h => h.scanId === id);
                           return (
-                            <th key={id} className="py-2 text-slate-200 font-bold">{item?.medicineName}</th>
+                            <th key={id} className="py-2 text-slate-800 font-bold">{item?.medicineName}</th>
                           );
                         })}
                       </tr>
@@ -1138,13 +1138,13 @@ export default function CitizenScannerPage() {
                         { label: 'Retail Price (MRP)', key: 'mrp', path: 'data' },
                         { label: 'Expiry Date', key: 'expiryDate', path: 'data' }
                       ].map((row, i) => (
-                        <tr key={i} className="border-b border-slate-850">
-                          <td className="py-3 font-mono text-slate-400">{row.label}</td>
+                        <tr key={i} className="border-b border-slate-200">
+                          <td className="py-3 font-mono text-slate-600">{row.label}</td>
                           {compareIds.map(id => {
                             const item = historyList.find(h => h.scanId === id);
                             const val = row.path === 'data' ? item?.data?.[row.key] : item?.[row.key];
                             return (
-                              <td key={id} className="py-3 text-slate-300 font-semibold">{val || '—'}</td>
+                              <td key={id} className="py-3 text-slate-700 font-semibold">{val || '—'}</td>
                             );
                           })}
                         </tr>
@@ -1171,7 +1171,7 @@ export default function CitizenScannerPage() {
               }, 0) / historyList.length * 100)}%` : 'N/A', desc: 'Preprocessed pass averages' },
               { label: 'Avg processing speed', val: '1.8s', desc: 'Image to warning delivery' }
             ].map((stat, i) => (
-              <div key={i} className="glass-panel p-4 rounded-xl border border-slate-800 space-y-1">
+              <div key={i} className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 space-y-1">
                 <span className="text-[10px] font-mono text-slate-500 uppercase block">{stat.label}</span>
                 <span className="text-xl font-bold text-rose-400 font-mono block">{stat.val}</span>
                 <span className="text-[9px] text-slate-500 block">{stat.desc}</span>
@@ -1179,14 +1179,14 @@ export default function CitizenScannerPage() {
             ))}
           </div>
 
-          <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4">
-            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest border-b border-slate-800 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4">
+            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-widest border-b border-slate-200 pb-2">
               longitudinal Scan Logs (Observability Database)
             </h4>
             <div className="overflow-x-auto text-[10px] font-mono">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-500">
+                  <tr className="border-b border-slate-200 text-slate-500">
                     <th className="py-2">Scan ID</th>
                     <th className="py-2">Medicine Name</th>
                     <th className="py-2">Quality</th>
@@ -1197,9 +1197,9 @@ export default function CitizenScannerPage() {
                 </thead>
                 <tbody>
                   {historyList.map(h => (
-                    <tr key={h.scanId} className="border-b border-slate-850 text-slate-400">
+                    <tr key={h.scanId} className="border-b border-slate-200 text-slate-600">
                       <td className="py-2">{h.scanId}</td>
-                      <td className="py-2 font-bold text-slate-300">{h.medicineName}</td>
+                      <td className="py-2 font-bold text-slate-700">{h.medicineName}</td>
                       <td className="py-2">{h.imageQuality}</td>
                       <td className="py-2">{h.dbValidation?.matchStatus || '❓ Not Found'}</td>
                       <td className="py-2">{h.performance?.totalTimeMs || 1800}ms</td>
@@ -1215,13 +1215,13 @@ export default function CitizenScannerPage() {
 
       {/* SHARE MODAL */}
       {showShareModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm px-4">
-          <div className="glass-panel p-6 rounded-2xl border border-rose-500/20 max-w-md w-full space-y-4 text-xs">
-            <div className="flex items-center justify-between border-b border-slate-850 pb-2">
-              <h3 className="font-bold text-sm text-slate-100 flex items-center gap-1.5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white backdrop-blur-sm px-4">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-rose-500/20 max-w-md w-full space-y-4 text-xs">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+              <h3 className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
                 <Share2 className="w-4 h-4 text-rose-400" /> Share Scan Summary
               </h3>
-              <button onClick={() => setShowShareModal(false)} className="text-slate-500 hover:text-slate-300">✕</button>
+              <button onClick={() => setShowShareModal(false)} className="text-slate-500 hover:text-slate-700">✕</button>
             </div>
             <div className="space-y-3">
               <button
@@ -1230,18 +1230,18 @@ export default function CitizenScannerPage() {
                   setCopySuccess(true);
                   setTimeout(() => setCopySuccess(false), 2000);
                 }}
-                className="w-full py-2 bg-slate-900 border border-slate-850 text-slate-200 hover:bg-slate-800 rounded-lg text-left px-3 flex justify-between"
+                className="w-full py-2 bg-white border border-slate-200 text-slate-800 hover:bg-slate-800 rounded-lg text-left px-3 flex justify-between"
               >
                 <span>Copy Summary Text</span>
                 <span className="text-rose-400 font-mono">{copySuccess ? 'Copied!' : 'Copy'}</span>
               </button>
-              <button onClick={() => { alert('Shared securely with doctor session.'); setShowShareModal(false); }} className="w-full py-2 bg-slate-900 border border-slate-850 text-slate-200 hover:bg-slate-800 rounded-lg text-left px-3">
+              <button onClick={() => { alert('Shared securely with doctor session.'); setShowShareModal(false); }} className="w-full py-2 bg-white border border-slate-200 text-slate-800 hover:bg-slate-800 rounded-lg text-left px-3">
                 Share with Prescribing Doctor
               </button>
-              <button onClick={() => { alert('Shared with registered family member.'); setShowShareModal(false); }} className="w-full py-2 bg-slate-900 border border-slate-850 text-slate-200 hover:bg-slate-800 rounded-lg text-left px-3">
+              <button onClick={() => { alert('Shared with registered family member.'); setShowShareModal(false); }} className="w-full py-2 bg-white border border-slate-200 text-slate-800 hover:bg-slate-800 rounded-lg text-left px-3">
                 Share with Family (WhatsApp / SMS)
               </button>
-              <button onClick={() => { alert('Integrated to ABHA Health Records repository.'); setShowShareModal(false); }} className="w-full py-2 bg-slate-900 border border-slate-850 text-slate-200 hover:bg-slate-800 rounded-lg text-left px-3 font-mono font-bold text-indigo-400">
+              <button onClick={() => { alert('Integrated to ABHA Health Records repository.'); setShowShareModal(false); }} className="w-full py-2 bg-white border border-slate-200 text-slate-800 hover:bg-slate-800 rounded-lg text-left px-3 font-mono font-bold text-indigo-400">
                 ABHA Health Vault Integration (Future-Ready)
               </button>
             </div>

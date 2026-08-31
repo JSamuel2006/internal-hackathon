@@ -187,7 +187,7 @@ export default function CitizenHospitalsPage() {
           <MapPin className="w-5 h-5 glow-pill" />
         </div>
         <div className="flex-1">
-          <h2 className="text-xl font-bold tracking-tight text-slate-100">Healthcare Locator</h2>
+          <h2 className="text-xl font-bold tracking-tight text-slate-900">Healthcare Locator</h2>
           <p className="text-xs text-slate-455 mt-0.5">Find nearby government hospitals, PHCs, and immunization points</p>
         </div>
         {/* Location bar */}
@@ -210,7 +210,7 @@ export default function CitizenHospitalsPage() {
           )}
           <button
             onClick={requestLocation}
-            className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:bg-rose-500/10 hover:text-rose-400 transition-colors"
+            className="p-1.5 rounded-lg bg-white border border-slate-200 hover:bg-rose-500/10 hover:text-rose-400 transition-colors"
             title="Refresh location"
           >
             <RefreshCw className="w-3.5 h-3.5" />
@@ -227,13 +227,13 @@ export default function CitizenHospitalsPage() {
       )}
 
       {manualMode && (
-        <div className="glass-panel p-5 rounded-2xl border border-slate-900 space-y-3">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-3">
           <span className="text-xs font-bold text-slate-205 uppercase">Choose Your Location Manually</span>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <select
               value={manualState}
               onChange={e => setManualState(e.target.value)}
-              className="bg-slate-950 border border-slate-850 rounded-xl p-2 text-slate-202 text-xs focus:outline-none"
+              className="bg-white border border-slate-200 rounded-xl p-2 text-slate-202 text-xs focus:outline-none"
               aria-label="Select State"
             >
               <option value="">Select State</option>
@@ -245,7 +245,7 @@ export default function CitizenHospitalsPage() {
               value={manualCity}
               onChange={e => setManualCity(e.target.value)}
               aria-label="City or district input"
-              className="bg-slate-950 border border-slate-850 rounded-xl p-2 text-slate-202 text-xs focus:outline-none"
+              className="bg-white border border-slate-200 rounded-xl p-2 text-slate-202 text-xs focus:outline-none"
             />
             <input
               type="text"
@@ -253,7 +253,7 @@ export default function CitizenHospitalsPage() {
               value={manualPin}
               onChange={e => setManualPin(e.target.value)}
               aria-label="PIN code input"
-              className="bg-slate-950 border border-slate-850 rounded-xl p-2 text-slate-202 text-xs focus:outline-none"
+              className="bg-white border border-slate-200 rounded-xl p-2 text-slate-202 text-xs focus:outline-none"
             />
           </div>
           <button
@@ -280,21 +280,21 @@ export default function CitizenHospitalsPage() {
                   className={`w-full text-left p-4 rounded-xl border transition-all ${
                     selectedHospital?.id === hosp.id
                       ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
-                      : 'bg-slate-900/50 border-slate-900 hover:border-slate-800 text-slate-350'
+                      : 'bg-white border-slate-200 hover:border-slate-200 text-slate-350'
                   }`}
                 >
                   <div className="flex items-start justify-between">
-                    <h4 className="text-xs font-bold text-slate-200">{hosp.name}</h4>
-                    <span className="text-[9px] font-mono bg-slate-950 border border-slate-850 px-1.5 py-0.5 rounded text-rose-400 shrink-0 ml-1">
+                    <h4 className="text-xs font-bold text-slate-800">{hosp.name}</h4>
+                    <span className="text-[9px] font-mono bg-white border border-slate-200 px-1.5 py-0.5 rounded text-rose-400 shrink-0 ml-1">
                       {hosp.type}
                     </span>
                   </div>
-                  <div className="mt-3 flex flex-col gap-1 text-[10px] text-slate-450 font-mono">
+                  <div className="mt-3 flex flex-col gap-1 text-[10px] text-slate-500 font-mono">
                     <span className="flex items-center gap-1.5">
                       <Phone className="w-3.5 h-3.5" />
                       {hosp.phone}
                     </span>
-                    <span className="flex items-center gap-1.5 mt-1 text-slate-300">
+                    <span className="flex items-center gap-1.5 mt-1 text-slate-700">
                       <Bed className="w-3.5 h-3.5 text-teal-400" />
                       {hosp.beds} General Beds Available
                     </span>
@@ -320,7 +320,7 @@ export default function CitizenHospitalsPage() {
           </div>
 
           {/* Map panel */}
-          <div className="col-span-1 md:col-span-2 h-[450px] rounded-2xl border border-slate-900 overflow-hidden relative">
+          <div className="col-span-1 md:col-span-2 h-[450px] rounded-2xl border border-slate-200 overflow-hidden relative">
             <MapContainer center={[centerLat, centerLng]} zoom={13} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
               <MapRecenter lat={centerLat} lng={centerLng} />
               <TileLayer
@@ -349,12 +349,12 @@ export default function CitizenHospitalsPage() {
           </div>
         </div>
       ) : !locating && (
-        <div className="glass-panel p-12 rounded-2xl border border-slate-900 text-center space-y-3">
+        <div className="bg-white border border-slate-200 shadow-sm p-12 rounded-2xl border border-slate-200 text-center space-y-3">
           <MapPin className="w-10 h-10 text-slate-700 mx-auto animate-pulse" />
           <p className="text-slate-500 text-xs font-mono">Allow location access or enter your city to find nearby healthcare facilities.</p>
           <button
             onClick={() => setManualMode(true)}
-            className="px-4 py-2 bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded-xl hover:bg-slate-850 transition-colors"
+            className="px-4 py-2 bg-white border border-slate-200 text-xs text-slate-700 rounded-xl hover:bg-slate-850 transition-colors"
           >
             Enter Location Manually
           </button>

@@ -5,13 +5,13 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 export default function AdminMonitoringPage() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      <div className="flex items-center justify-between border-b border-slate-900 pb-4">
+      <div className="flex items-center justify-between border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-indigo-500/10 rounded-lg text-indigo-400 border border-indigo-500/20">
             <Activity className="w-5 h-5 glow-pill" />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-100">Infrastructure Monitoring</h2>
+            <h2 className="text-xl font-bold tracking-tight text-slate-900">Infrastructure Monitoring</h2>
             <p className="text-xs text-slate-455 mt-0.5">Real-time health status of databases, APIs, and AI nodes</p>
           </div>
         </div>
@@ -19,8 +19,8 @@ export default function AdminMonitoringPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Server & DB health */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-          <h3 className="text-xs font-mono font-bold tracking-wider text-slate-500 uppercase border-b border-slate-900 pb-2">Core Services</h3>
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+          <h3 className="text-xs font-mono font-bold tracking-wider text-slate-500 uppercase border-b border-slate-200 pb-2">Core Services</h3>
           <div className="space-y-3.5 text-xs">
             <div className="flex justify-between items-center">
               <span className="text-slate-350 flex items-center gap-2">
@@ -45,8 +45,8 @@ export default function AdminMonitoringPage() {
         </div>
 
         {/* AI & OCR pipelines */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-          <h3 className="text-xs font-mono font-bold tracking-wider text-slate-500 uppercase border-b border-slate-900 pb-2">AI Micro-Services</h3>
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+          <h3 className="text-xs font-mono font-bold tracking-wider text-slate-500 uppercase border-b border-slate-200 pb-2">AI Micro-Services</h3>
           <div className="space-y-3.5 text-xs">
             <div className="flex justify-between items-center">
               <span className="text-slate-350 flex items-center gap-2">
@@ -73,8 +73,8 @@ export default function AdminMonitoringPage() {
 
       {/* LIS/PMS National Analytics */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-          <h3 className="text-xs font-bold tracking-wider text-slate-200 uppercase border-b border-slate-900 pb-2">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+          <h3 className="text-xs font-bold tracking-wider text-slate-800 uppercase border-b border-slate-200 pb-2">
             National drug Utilization trends (Daily)
           </h3>
           <div className="h-44">
@@ -96,8 +96,8 @@ export default function AdminMonitoringPage() {
           </div>
         </div>
 
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-          <h3 className="text-xs font-bold tracking-wider text-slate-200 uppercase border-b border-slate-900 pb-2">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+          <h3 className="text-xs font-bold tracking-wider text-slate-800 uppercase border-b border-slate-200 pb-2">
             Regional Medicine Supply Forecasts
           </h3>
           <div className="h-44">

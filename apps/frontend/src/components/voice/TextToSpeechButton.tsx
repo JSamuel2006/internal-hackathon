@@ -29,7 +29,7 @@ export const TextToSpeechButton: React.FC<TextToSpeechButtonProps> = ({ text, la
       <button
         type="button"
         onClick={handleSpeak}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 border border-slate-800 hover:text-rose-400 rounded-lg text-slate-400 transition-colors text-[10px] uppercase font-mono font-bold cursor-pointer"
+        className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:text-rose-400 rounded-lg text-slate-600 transition-colors text-[10px] uppercase font-mono font-bold cursor-pointer"
         title="Speak this content"
       >
         <Volume2 className="w-3.5 h-3.5" />

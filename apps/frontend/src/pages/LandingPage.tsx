@@ -370,7 +370,7 @@ export default function LandingPage() {
                 <div key={i} className="p-6 rounded-3xl bg-[#F5FAFC] border border-slate-200/70 space-y-3 relative group hover:border-teal-300 transition-all">
                   <div className="flex items-center justify-between">
                     <span className="text-2xl font-black text-teal-600 font-mono">{st.step}</span>
-                    <Icon className="w-5 h-5 text-slate-400 group-hover:text-teal-600 transition-colors" />
+                    <Icon className="w-5 h-5 text-slate-600 group-hover:text-teal-600 transition-colors" />
                   </div>
                   <h4 className="font-bold text-sm text-slate-900 leading-snug">{st.title}</h4>
                   <p className="text-xs text-slate-600 leading-relaxed">{st.desc}</p>
@@ -416,7 +416,7 @@ export default function LandingPage() {
 
                   <Link
                     to={p.link}
-                    className="w-full text-center py-3 rounded-full bg-slate-900 hover:bg-teal-600 text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full text-center py-3 rounded-full bg-white hover:bg-teal-600 text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <span>{t('portal_enter')}</span>
                     <ArrowRight className="w-4 h-4" />

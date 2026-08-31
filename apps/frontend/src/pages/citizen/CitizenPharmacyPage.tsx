@@ -251,24 +251,24 @@ export default function CitizenPharmacyPage() {
   return (
     <div className="space-y-8 max-w-7xl mx-auto px-4">
       {/* Title Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-900 pb-5">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20 shadow-lg">
             <Sliders className="w-5 h-5 glow-pill" />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-100 flex items-center gap-2">
+            <h2 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
               Pharmacy & Prescription intelligence
               <span className="text-[10px] bg-rose-500/15 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded font-mono uppercase">PMS Node</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">Dispense generic alternatives, see price margins, and query AI drug interactions</p>
+            <p className="text-xs text-slate-600 mt-0.5">Dispense generic alternatives, see price margins, and query AI drug interactions</p>
           </div>
         </div>
 
         <button
           onClick={fetchPrescriptions}
           disabled={loading}
-          className="px-4 py-2 border border-slate-800 bg-slate-900/60 hover:bg-slate-855 text-slate-355 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
+          className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-855 text-slate-355 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Refresh Queue</span>
@@ -293,8 +293,8 @@ export default function CitizenPharmacyPage() {
         {/* Left Column (Prescriptions queue & Reminders scheduler) */}
         <div className="lg:col-span-5 space-y-6 self-start">
           {/* Voice assistant module */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-            <div className="border-b border-slate-850 pb-2 flex justify-between items-center">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+            <div className="border-b border-slate-200 pb-2 flex justify-between items-center">
               <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider">
                 Voice Medicine Assistant
               </h3>
@@ -309,7 +309,7 @@ export default function CitizenPharmacyPage() {
                 value={selectedLang}
                 aria-label="Preferred voice assistant language selector"
                 onChange={e => setSelectedLang(e.target.value)}
-                className="bg-slate-950 border border-slate-850 rounded-xl p-2 text-slate-355 text-xs focus:outline-none"
+                className="bg-white border border-slate-200 rounded-xl p-2 text-slate-355 text-xs focus:outline-none"
               >
                 <option value="en">English</option>
                 <option value="hi">Hindi (हिन्दी)</option>
@@ -324,7 +324,7 @@ export default function CitizenPharmacyPage() {
                 className={`p-2.5 rounded-xl border flex items-center justify-center transition-all ${
                   isListening 
                     ? 'bg-rose-500/20 border-rose-500/30 text-rose-400 animate-pulse'
-                    : 'bg-slate-950 border-slate-850 text-slate-400 hover:text-slate-200'
+                    : 'bg-white border-slate-200 text-slate-600 hover:text-slate-800'
                 }`}
               >
                 {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
@@ -346,7 +346,7 @@ export default function CitizenPharmacyPage() {
                 aria-label="Spoken query text transcript"
                 value={voiceQuery}
                 onChange={e => setVoiceQuery(e.target.value)}
-                className="bg-slate-950 border border-slate-850 rounded-xl p-2.5 text-slate-355 text-xs flex-1 focus:outline-none"
+                className="bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 text-xs flex-1 focus:outline-none"
               />
               <button
                 onClick={triggerVoiceAssistantQuery}
@@ -357,14 +357,14 @@ export default function CitizenPharmacyPage() {
             </div>
 
             {assistantOutput && (
-              <div className="p-4 bg-slate-950 rounded-xl border border-indigo-500/20 text-xs font-mono space-y-2">
+              <div className="p-4 bg-white rounded-xl border border-indigo-500/20 text-xs font-mono space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-indigo-400 font-bold">Voice Answer</span>
-                  <button onClick={() => speakResponse(assistantOutput.answer)} className="text-slate-400 hover:text-slate-200">
+                  <button onClick={() => speakResponse(assistantOutput.answer)} className="text-slate-600 hover:text-slate-800">
                     <Volume2 className="w-4 h-4" />
                   </button>
                 </div>
-                <p className="text-slate-300">{assistantOutput.answer}</p>
+                <p className="text-slate-700">{assistantOutput.answer}</p>
                 {assistantOutput.safetyWarnings && (
                   <p className="text-[10px] text-amber-500">⚠️ {assistantOutput.safetyWarnings}</p>
                 )}
@@ -372,13 +372,13 @@ export default function CitizenPharmacyPage() {
             )}
 
             {/* Conversation History */}
-            <div className="space-y-2 border-t border-slate-850 pt-3">
+            <div className="space-y-2 border-t border-slate-200 pt-3">
               <span className="text-[10px] text-slate-500 uppercase block">Recent voice queries</span>
               <div className="space-y-2 max-h-36 overflow-y-auto">
                 {voiceHistory.map((v) => (
-                  <div key={v.id} className="p-2 bg-slate-950 rounded border border-slate-900 flex justify-between items-center text-[10px] font-mono">
+                  <div key={v.id} className="p-2 bg-white rounded border border-slate-200 flex justify-between items-center text-[10px] font-mono">
                     <div className="flex-1">
-                      <span className="text-slate-400 block font-semibold">Q: {v.question}</span>
+                      <span className="text-slate-600 block font-semibold">Q: {v.question}</span>
                       <span className="text-slate-500 block">A: {v.answer}</span>
                     </div>
                     <button onClick={() => handleDeleteVoiceItem(v.id)} className="text-slate-600 hover:text-rose-455 transition-colors">
@@ -390,8 +390,8 @@ export default function CitizenPharmacyPage() {
             </div>
           </div>
 
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-850 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2">
               Active Prescriptions Queue
             </h3>
 
@@ -409,7 +409,7 @@ export default function CitizenPharmacyPage() {
                     className={`p-4 rounded-xl border transition-all text-left font-mono space-y-2.5 cursor-pointer ${
                       selectedPresc?.id === pr.id
                         ? 'bg-rose-500/10 border-rose-500/30'
-                        : 'bg-slate-950/60 border-slate-900 hover:border-slate-800'
+                        : 'bg-white border-slate-200 hover:border-slate-200'
                     }`}
                   >
                     <div className="flex justify-between items-center">
@@ -419,7 +419,7 @@ export default function CitizenPharmacyPage() {
                       }`}>{pr.status}</span>
                     </div>
                     <p className="text-[10px] text-slate-500">Doctor: {pr.doctorName || 'Dr. Patil'}</p>
-                    <p className="text-[11px] text-slate-300 font-semibold">{pr.medicines}</p>
+                    <p className="text-[11px] text-slate-700 font-semibold">{pr.medicines}</p>
                   </div>
                 ))
               ) : (
@@ -432,8 +432,8 @@ export default function CitizenPharmacyPage() {
           </div>
 
           {/* Medicine Reminder Timeline scheduler */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-850 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2">
               Medicine Reminders & Schedule
             </h3>
 
@@ -444,13 +444,13 @@ export default function CitizenPharmacyPage() {
                 aria-label="New medicine reminder name"
                 value={newReminderName}
                 onChange={e => setNewReminderName(e.target.value)}
-                className="bg-slate-950 border border-slate-850 rounded-xl p-2 text-slate-355 flex-1 focus:outline-none"
+                className="bg-white border border-slate-200 rounded-xl p-2 text-slate-355 flex-1 focus:outline-none"
               />
               <select
                 value={newReminderTime}
                 aria-label="New medicine time slot select"
                 onChange={e => setNewReminderTime(e.target.value)}
-                className="bg-slate-950 border border-slate-850 rounded-xl p-2 text-slate-355 focus:outline-none"
+                className="bg-white border border-slate-200 rounded-xl p-2 text-slate-355 focus:outline-none"
               >
                 <option>Morning</option>
                 <option>Afternoon</option>
@@ -464,12 +464,12 @@ export default function CitizenPharmacyPage() {
 
             <div className="space-y-2 max-h-48 overflow-y-auto">
               {reminders.map(rem => (
-                <div key={rem.id} className="flex justify-between items-center p-2.5 bg-slate-950 rounded-lg border border-slate-900 text-xs font-mono">
+                <div key={rem.id} className="flex justify-between items-center p-2.5 bg-white rounded-lg border border-slate-200 text-xs font-mono">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleToggleReminderStatus(rem.id, rem.status)}
                       className={`p-1 rounded border transition-colors ${
-                        rem.status === 'Taken' ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400' : 'border-slate-800 text-slate-600'
+                        rem.status === 'Taken' ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400' : 'border-slate-200 text-slate-600'
                       }`}
                     >
                       <Check className="w-3 h-3" />
@@ -493,9 +493,9 @@ export default function CitizenPharmacyPage() {
           {selectedPresc ? (
             <div className="space-y-6 animate-fade-in">
               {/* Trigger checkup button */}
-              <div className="glass-panel p-5 rounded-2xl border border-slate-900 flex justify-between items-center text-xs font-mono">
+              <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 flex justify-between items-center text-xs font-mono">
                 <div>
-                  <span className="text-slate-200 block font-bold">Query AI drug interactions</span>
+                  <span className="text-slate-800 block font-bold">Query AI drug interactions</span>
                   <p className="text-slate-500 mt-0.5">Analyze chemical formulas for contraindications and generic Jan Aushadhi swaps</p>
                 </div>
                 <button
@@ -510,98 +510,98 @@ export default function CitizenPharmacyPage() {
               {aiReport && (
                 <div className="space-y-6 animate-fade-in">
                   {/* Section 1: AI Clinical Explanation */}
-                  <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4 text-xs font-mono">
-                    <div className="border-b border-slate-850 pb-2 flex justify-between items-center">
+                  <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
+                    <div className="border-b border-slate-200 pb-2 flex justify-between items-center">
                       <h4 className="font-bold text-slate-205 text-xs uppercase">AI Clinical Explanation</h4>
                       <span className="text-indigo-400 font-bold">Confidence: {aiReport.confidenceScore}%</span>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <span className="text-slate-500 text-[9px] uppercase block">Disease Treated</span>
-                        <strong className="text-slate-300 block">{aiReport.diseaseBeingTreated}</strong>
+                        <strong className="text-slate-700 block">{aiReport.diseaseBeingTreated}</strong>
                       </div>
                       <div>
                         <span className="text-slate-500 text-[9px] uppercase block">Expected Recovery</span>
-                        <strong className="text-slate-300 block">{aiReport.expectedRecoveryTime}</strong>
+                        <strong className="text-slate-700 block">{aiReport.expectedRecoveryTime}</strong>
                       </div>
                       <div className="md:col-span-2">
                         <span className="text-slate-500 text-[9px] uppercase block">How Medicine Works</span>
-                        <p className="text-slate-400 leading-normal">{aiReport.howMedicineWorks}</p>
+                        <p className="text-slate-600 leading-normal">{aiReport.howMedicineWorks}</p>
                       </div>
                       <div className="md:col-span-2">
                         <span className="text-slate-500 text-[9px] uppercase block">Clinical Explanation</span>
-                        <p className="text-slate-400 leading-normal">{aiReport.clinicalExplanation}</p>
+                        <p className="text-slate-600 leading-normal">{aiReport.clinicalExplanation}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Section 2: Drug Interaction Analysis */}
-                  <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4 text-xs font-mono">
-                    <div className="border-b border-slate-850 pb-2 flex justify-between items-center">
+                  <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
+                    <div className="border-b border-slate-200 pb-2 flex justify-between items-center">
                       <h4 className="font-bold text-slate-205 text-xs uppercase">Drug Interaction Analysis</h4>
                       <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] rounded font-bold uppercase">Safe Combination</span>
                     </div>
                     <div className="space-y-2">
                       <div>
                         <span className="text-slate-500 text-[9px] uppercase block">Interaction Severity</span>
-                        <strong className="text-slate-300 block">{aiReport.interactionSeverity || 'None'}</strong>
+                        <strong className="text-slate-700 block">{aiReport.interactionSeverity || 'None'}</strong>
                       </div>
                       <div>
                         <span className="text-slate-500 text-[9px] uppercase block">Contraindications</span>
-                        <p className="text-slate-400">{aiReport.contraindications?.join(', ') || 'None reported.'}</p>
+                        <p className="text-slate-600">{aiReport.contraindications?.join(', ') || 'None reported.'}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Section 3: Side Effects & Organ Warnings */}
-                  <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4 text-xs font-mono">
-                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-850 pb-2">Side Effects & Organ Warnings</h4>
+                  <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
+                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-200 pb-2">Side Effects & Organ Warnings</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="bg-slate-950 p-3 rounded-xl border border-slate-900">
+                      <div className="bg-white p-3 rounded-xl border border-slate-200">
                         <span className="text-amber-400 text-[9px] uppercase block">Common Side Effects</span>
-                        <p className="text-slate-400 mt-1">{aiReport.commonSideEffects}</p>
+                        <p className="text-slate-600 mt-1">{aiReport.commonSideEffects}</p>
                       </div>
-                      <div className="bg-slate-950 p-3 rounded-xl border border-slate-900">
+                      <div className="bg-white p-3 rounded-xl border border-slate-200">
                         <span className="text-rose-455 text-[9px] uppercase block">Serious Side Effects</span>
-                        <p className="text-slate-400 mt-1">{aiReport.seriousSideEffects}</p>
+                        <p className="text-slate-600 mt-1">{aiReport.seriousSideEffects}</p>
                       </div>
                     </div>
-                    <div className="p-3 bg-slate-950 rounded-xl border border-slate-900 space-y-2">
+                    <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-2">
                       <span className="text-indigo-400 text-[9px] uppercase block">Organ Warnings</span>
                       <div className="grid grid-cols-3 gap-2 text-center text-[10px]">
                         <div>
                           <span className="text-slate-500 block">Kidney</span>
-                          <span className="text-slate-300 block font-semibold">{aiReport.organWarnings?.kidney || 'Safe'}</span>
+                          <span className="text-slate-700 block font-semibold">{aiReport.organWarnings?.kidney || 'Safe'}</span>
                         </div>
                         <div>
                           <span className="text-slate-500 block">Liver</span>
-                          <span className="text-slate-300 block font-semibold">{aiReport.organWarnings?.liver || 'Moderate'}</span>
+                          <span className="text-slate-700 block font-semibold">{aiReport.organWarnings?.liver || 'Moderate'}</span>
                         </div>
                         <div>
                           <span className="text-slate-500 block">Pregnancy</span>
-                          <span className="text-slate-300 block font-semibold">{aiReport.organWarnings?.pregnancy || 'Consult Doctor'}</span>
+                          <span className="text-slate-700 block font-semibold">{aiReport.organWarnings?.pregnancy || 'Consult Doctor'}</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Section 4: Prescription Safety Dashboard */}
-                  <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4 text-xs font-mono">
-                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-850 pb-2">Prescription Safety Scorecards</h4>
+                  <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
+                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-200 pb-2">Prescription Safety Scorecards</h4>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                      <div className="bg-slate-950 p-3 rounded-xl border border-slate-900">
+                      <div className="bg-white p-3 rounded-xl border border-slate-200">
                         <span className="text-[9px] text-slate-550 block uppercase">Allergy Safety</span>
                         <strong className="text-base text-emerald-400 font-bold block mt-1">{aiReport.safetyScores?.Allergy || 95}%</strong>
                       </div>
-                      <div className="bg-slate-950 p-3 rounded-xl border border-slate-900">
+                      <div className="bg-white p-3 rounded-xl border border-slate-200">
                         <span className="text-[9px] text-slate-550 block uppercase">Kidney Safety</span>
                         <strong className="text-base text-emerald-400 font-bold block mt-1">{aiReport.safetyScores?.Kidney || 90}%</strong>
                       </div>
-                      <div className="bg-slate-950 p-3 rounded-xl border border-slate-900">
+                      <div className="bg-white p-3 rounded-xl border border-slate-200">
                         <span className="text-[9px] text-slate-550 block uppercase">Liver Safety</span>
                         <strong className="text-base text-amber-500 font-bold block mt-1">{aiReport.safetyScores?.Liver || 85}%</strong>
                       </div>
-                      <div className="bg-slate-950 p-3 rounded-xl border border-slate-900">
+                      <div className="bg-white p-3 rounded-xl border border-slate-200">
                         <span className="text-[9px] text-slate-550 block uppercase">Pregnancy Safety</span>
                         <strong className="text-base text-indigo-400 font-bold block mt-1">{aiReport.safetyScores?.Pregnancy || 92}%</strong>
                       </div>
@@ -609,18 +609,18 @@ export default function CitizenPharmacyPage() {
                   </div>
 
                   {/* Section 5: Generic Medicine comparison */}
-                  <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4 text-xs font-mono">
-                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-850 pb-2">Generic Alternative Price Comparisons</h4>
-                    <div className="p-4 bg-slate-950 rounded-xl border border-slate-900 flex justify-between items-center">
+                  <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
+                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-200 pb-2">Generic Alternative Price Comparisons</h4>
+                    <div className="p-4 bg-white rounded-xl border border-slate-200 flex justify-between items-center">
                       {aiReport.estimatedSavings ? (
                         <div>
                           <span className="text-[10px] text-slate-500 block">Brand Price: ₹{aiReport.estimatedSavings.brandPrice} | Generic Price: ₹{aiReport.estimatedSavings.genericPrice}</span>
-                          <span className="text-slate-200 font-bold block mt-0.5">Est. Savings: ₹{aiReport.estimatedSavings.savings} ({aiReport.estimatedSavings.percentage}% Off)</span>
+                          <span className="text-slate-800 font-bold block mt-0.5">Est. Savings: ₹{aiReport.estimatedSavings.savings} ({aiReport.estimatedSavings.percentage}% Off)</span>
                         </div>
                       ) : (
                         <div>
                           <span className="text-[10px] text-slate-500 block">Brand Price: ₹120 | Generic Price: ₹30</span>
-                          <span className="text-slate-200 font-bold block mt-0.5">Est. Savings: ₹90 (75% Off)</span>
+                          <span className="text-slate-800 font-bold block mt-0.5">Est. Savings: ₹90 (75% Off)</span>
                         </div>
                       )}
                       <span className="text-emerald-400 font-bold text-xs bg-emerald-500/10 px-2 py-1 rounded">High Savings</span>
@@ -628,13 +628,13 @@ export default function CitizenPharmacyPage() {
                   </div>
 
                   {/* Section 8: Nearby Pharmacy listings */}
-                  <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4 text-xs font-mono">
-                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-850 pb-2">Nearby Pharmacy Availability</h4>
+                  <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
+                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-200 pb-2">Nearby Pharmacy Availability</h4>
                     <div className="space-y-2.5">
                       {nearbyPharmacies.map((pharm, idx) => (
-                        <div key={idx} className="p-3 bg-slate-950 rounded border border-slate-900 flex justify-between items-center">
+                        <div key={idx} className="p-3 bg-white rounded border border-slate-200 flex justify-between items-center">
                           <div>
-                            <span className="text-slate-200 font-bold block">{pharm.name}</span>
+                            <span className="text-slate-800 font-bold block">{pharm.name}</span>
                             <span className="text-[10px] text-slate-500">Distance: {pharm.distance} | Contact: {pharm.phone}</span>
                           </div>
                           <span className="text-indigo-400 font-bold text-[10px]">{pharm.hours}</span>
@@ -644,8 +644,8 @@ export default function CitizenPharmacyPage() {
                   </div>
 
                   {/* Section 5 Adherence charts */}
-                  <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4 text-xs font-mono">
-                    <div className="border-b border-slate-850 pb-2 flex justify-between items-center">
+                  <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
+                    <div className="border-b border-slate-200 pb-2 flex justify-between items-center">
                       <h4 className="font-bold text-slate-205 text-xs uppercase">Medication Adherence Analytics</h4>
                       <span className="text-emerald-400 font-bold">Compliance Score: {aiReport.medicineAdherenceScore}%</span>
                     </div>
@@ -666,22 +666,22 @@ export default function CitizenPharmacyPage() {
                         </AreaChart>
                       </ResponsiveContainer>
                     </div>
-                    <p className="text-[10px] text-slate-500 bg-slate-950 p-2.5 rounded border border-slate-900">
+                    <p className="text-[10px] text-slate-500 bg-white p-2.5 rounded border border-slate-200">
                       <strong>💡 AI Suggestion:</strong> {aiReport.AIAdherenceSuggestions}
                     </p>
                   </div>
 
                   {/* Section 6 Refill Progress */}
-                  <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4 text-xs font-mono">
-                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-850 pb-2">Refill Progress Dashboard</h4>
+                  <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
+                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-200 pb-2">Refill Progress Dashboard</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <span className="text-slate-500 text-[9px] block uppercase">Remaining Tablets</span>
-                        <strong className="text-slate-200 text-sm block mt-0.5">{aiReport.remainingTablets} Tablets</strong>
+                        <strong className="text-slate-800 text-sm block mt-0.5">{aiReport.remainingTablets} Tablets</strong>
                       </div>
                       <div>
                         <span className="text-slate-550 text-[9px] block uppercase">Estimated Days left</span>
-                        <strong className="text-slate-200 text-sm block mt-0.5">{aiReport.estimatedRemainingDays} Days</strong>
+                        <strong className="text-slate-800 text-sm block mt-0.5">{aiReport.estimatedRemainingDays} Days</strong>
                       </div>
                       <div className="col-span-2">
                         <span className="text-slate-500 text-[9px] block uppercase">Expected Refill Date</span>
@@ -712,7 +712,7 @@ export default function CitizenPharmacyPage() {
                     </button>
                     <button
                       onClick={() => window.print()}
-                      className="px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 font-bold"
+                      className="px-3 py-2 bg-white border border-slate-200 rounded-lg text-slate-700 font-bold"
                     >
                       Print
                     </button>
@@ -726,7 +726,7 @@ export default function CitizenPharmacyPage() {
               )}
             </div>
           ) : (
-            <div className="h-64 flex flex-col items-center justify-center text-center p-8 text-slate-500 glass-panel rounded-2xl border border-slate-900">
+            <div className="h-64 flex flex-col items-center justify-center text-center p-8 text-slate-500 bg-white border border-slate-200 shadow-sm rounded-2xl border border-slate-200">
               <HeartPulse className="w-12 h-12 text-slate-700 mb-3 animate-pulse" />
               <p className="text-xs">Select a prescription queue item on the left to verify chemical compatibility, check generic equivalent margins, and print refill logs.</p>
             </div>

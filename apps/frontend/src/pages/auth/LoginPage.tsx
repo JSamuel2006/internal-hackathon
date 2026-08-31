@@ -258,7 +258,7 @@ export default function LoginPage() {
                           : 'text-slate-500 hover:text-slate-800'
                       }`}
                     >
-                      <Icon className={`w-4 h-4 ${isSelected ? r.color : 'text-slate-400'}`} />
+                      <Icon className={`w-4 h-4 ${isSelected ? r.color : 'text-slate-600'}`} />
                       <span>{r.name}</span>
                     </button>
                   );
@@ -486,7 +486,7 @@ export default function LoginPage() {
                       type="button"
                       disabled={verifying}
                       onClick={handleVerifyIdClick}
-                      className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs font-mono uppercase tracking-wider shadow-sm cursor-pointer disabled:opacity-50 shrink-0"
+                      className="px-5 py-3 rounded-xl bg-white hover:bg-slate-800 text-white font-bold text-xs font-mono uppercase tracking-wider shadow-sm cursor-pointer disabled:opacity-50 shrink-0"
                     >
                       {verifying ? t('auth_verifying') : t('auth_verify_button')}
                     </button>

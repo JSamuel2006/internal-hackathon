@@ -114,24 +114,24 @@ export default function CitizenHealthExchangePage() {
   return (
     <div className="space-y-8 max-w-7xl mx-auto px-4">
       {/* Title Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-900 pb-5">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-indigo-500/10 rounded-xl text-indigo-400 border border-indigo-500/20 shadow-lg">
             <Globe className="w-5 h-5 animate-spin" />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-100 flex items-center gap-2">
+            <h2 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
               National Health Exchange Interoperability
               <span className="text-[10px] bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded font-mono uppercase">ABDM Linkage</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">Ayushman Bharat Digital Mission (ABDM) compliance and HL7 FHIR record exchange</p>
+            <p className="text-xs text-slate-600 mt-0.5">Ayushman Bharat Digital Mission (ABDM) compliance and HL7 FHIR record exchange</p>
           </div>
         </div>
 
         <button
           onClick={fetchProfile}
           disabled={loading}
-          className="px-4 py-2 border border-slate-800 bg-slate-900/60 hover:bg-slate-855 text-slate-355 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
+          className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-855 text-slate-355 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Sync ABDM Status</span>
@@ -158,19 +158,19 @@ export default function CitizenHealthExchangePage() {
         <div className="lg:col-span-6 space-y-6">
           {/* ABHA card registration/linkage */}
           {profile?.verified ? (
-            <div className="glass-panel p-6 rounded-3xl border border-slate-900 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950/40 relative overflow-hidden shadow-2xl space-y-6">
+            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950/40 relative overflow-hidden shadow-2xl space-y-6">
               {/* Card headers */}
               <div className="flex justify-between items-start">
                 <div className="space-y-1">
                   <span className="text-[10px] text-slate-500 font-mono tracking-wider block uppercase">National Health Authority</span>
-                  <h3 className="text-sm font-bold text-slate-200 uppercase tracking-widest font-mono">ABHA HEALTH ID CARD</h3>
+                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-widest font-mono">ABHA HEALTH ID CARD</h3>
                 </div>
                 <span className="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-bold uppercase font-mono">ABDM Link Active</span>
               </div>
 
               {/* Citizen Card detail rows */}
               <div className="flex gap-4 items-center pt-2">
-                <div className="w-16 h-16 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 shrink-0">
+                <div className="w-16 h-16 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-500 shrink-0">
                   <User className="w-8 h-8" />
                 </div>
                 <div className="space-y-1 text-xs font-mono">
@@ -186,19 +186,19 @@ export default function CitizenHealthExchangePage() {
               </div>
 
               {/* Validation Status footer */}
-              <div className="border-t border-slate-850/60 pt-4 flex justify-between items-center text-[10px] font-mono text-slate-500">
+              <div className="border-t border-slate-200/60 pt-4 flex justify-between items-center text-[10px] font-mono text-slate-500">
                 <span>Status: Verified Citizen ID</span>
                 <span>Linked: {profile.syncTimeline?.[0]?.timestamp ? new Date(profile.syncTimeline[0].timestamp).toLocaleDateString() : 'N/A'}</span>
               </div>
             </div>
           ) : (
-            <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
+            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
               <div className="space-y-1">
-                <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                   <Lock className="w-4 h-4 text-indigo-400" />
                   Link ABDM ABHA Address
                 </h3>
-                <p className="text-xs text-slate-400">Provide your Ayushman Bharat Address to automatically fetch linked diagnostic logs</p>
+                <p className="text-xs text-slate-600">Provide your Ayushman Bharat Address to automatically fetch linked diagnostic logs</p>
               </div>
 
               <div className="flex gap-2">
@@ -207,7 +207,7 @@ export default function CitizenHealthExchangePage() {
                   placeholder="e.g. name@abha"
                   value={abhaAddressInput}
                   onChange={e => setAbhaAddressInput(e.target.value)}
-                  className="bg-slate-950 border border-slate-850 rounded-xl px-3 py-2 text-xs text-slate-355 w-full focus:outline-none font-mono"
+                  className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-355 w-full focus:outline-none font-mono"
                 />
                 <button
                   onClick={handleLinkABHA}
@@ -221,14 +221,14 @@ export default function CitizenHealthExchangePage() {
           )}
 
           {/* Consent requests list */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-            <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider border-b border-slate-850 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">
               ABDM Consent Requests Management
             </h3>
 
             <div className="space-y-3">
               {(profile?.consents || []).map((c: any) => (
-                <div key={c.id} className="p-4 bg-slate-950/60 rounded-xl border border-slate-900 space-y-3 text-xs font-mono">
+                <div key={c.id} className="p-4 bg-white rounded-xl border border-slate-200 space-y-3 text-xs font-mono">
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-slate-205">{c.hospital}</span>
                     <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${
@@ -237,7 +237,7 @@ export default function CitizenHealthExchangePage() {
                       'bg-slate-800 text-slate-500'
                     }`}>{c.status}</span>
                   </div>
-                  <p className="text-slate-400">Purpose: {c.purpose}</p>
+                  <p className="text-slate-600">Purpose: {c.purpose}</p>
                   
                   {c.status === 'Pending' && (
                     <div className="flex gap-2 pt-1">
@@ -249,7 +249,7 @@ export default function CitizenHealthExchangePage() {
                       </button>
                       <button
                         onClick={() => handleConsentAction(c.id, 'Rejected')}
-                        className="px-3.5 py-1.5 bg-slate-900 border border-slate-800 text-slate-400 font-bold rounded-lg text-[10px] uppercase"
+                        className="px-3.5 py-1.5 bg-white border border-slate-200 text-slate-600 font-bold rounded-lg text-[10px] uppercase"
                       >
                         Reject
                       </button>
@@ -264,8 +264,8 @@ export default function CitizenHealthExchangePage() {
         {/* Right Column (FHIR Bundle JSON Viewer & Timeline) */}
         <div className="lg:col-span-6 space-y-6">
           {/* Interactive FHIR Bundle Viewer */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-850 pb-2.5">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+            <div className="flex justify-between items-center border-b border-slate-200 pb-2.5">
               <h3 className="text-sm font-bold text-slate-205 uppercase tracking-wider flex items-center gap-2">
                 <FileText className="w-4 h-4 text-indigo-400" />
                 HL7 FHIR Bundle Package
@@ -274,13 +274,13 @@ export default function CitizenHealthExchangePage() {
               <div className="flex gap-2">
                 <button
                   onClick={handleCopyJSON}
-                  className="p-1.5 border border-slate-850 bg-slate-900 rounded-lg text-slate-400 hover:text-white"
+                  className="p-1.5 border border-slate-200 bg-white rounded-lg text-slate-600 hover:text-white"
                 >
                   <Copy className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={handleDownloadFHIR}
-                  className="p-1.5 border border-slate-850 bg-slate-900 rounded-lg text-slate-400 hover:text-white"
+                  className="p-1.5 border border-slate-200 bg-white rounded-lg text-slate-600 hover:text-white"
                 >
                   <Download className="w-3.5 h-3.5" />
                 </button>
@@ -288,7 +288,7 @@ export default function CitizenHealthExchangePage() {
             </div>
 
             {fhirBundle ? (
-              <pre className="p-4 bg-slate-950 rounded-xl border border-slate-900 max-h-72 overflow-y-auto text-[10px] font-mono text-slate-400 leading-relaxed">
+              <pre className="p-4 bg-white rounded-xl border border-slate-200 max-h-72 overflow-y-auto text-[10px] font-mono text-slate-600 leading-relaxed">
                 {JSON.stringify(fhirBundle, null, 2)}
               </pre>
             ) : (
@@ -297,19 +297,19 @@ export default function CitizenHealthExchangePage() {
           </div>
 
           {/* Sync timeline */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-            <h3 className="text-sm font-bold text-slate-205 uppercase tracking-wider border-b border-slate-850 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+            <h3 className="text-sm font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-2">
               Exchange Sync History Log
             </h3>
 
             <div className="space-y-3.5 max-h-60 overflow-y-auto font-mono text-xs">
               {(profile?.syncTimeline || []).map((item: any) => (
                 <div key={item.id} className="flex gap-3 items-start">
-                  <div className="p-1.5 bg-slate-950 border border-slate-900 rounded-lg text-slate-500 mt-0.5 shrink-0">
+                  <div className="p-1.5 bg-white border border-slate-200 rounded-lg text-slate-500 mt-0.5 shrink-0">
                     <Calendar className="w-3.5 h-3.5" />
                   </div>
                   <div className="space-y-0.5">
-                    <span className="font-semibold text-slate-300 block">{item.description}</span>
+                    <span className="font-semibold text-slate-700 block">{item.description}</span>
                     <span className="text-[10px] text-slate-550 block">{item.system} • {new Date(item.timestamp).toLocaleString()}</span>
                   </div>
                 </div>

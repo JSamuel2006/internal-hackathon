@@ -24,12 +24,12 @@ export default function OfficerNewsPage() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      <div className="flex items-center gap-3 border-b border-slate-900 pb-4">
+      <div className="flex items-center gap-3 border-b border-slate-200 pb-4">
         <div className="p-2 bg-teal-500/10 rounded-lg text-teal-450 border border-teal-500/20">
           <Newspaper className="w-5 h-5 glow-pill" />
         </div>
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-100">National News & Advisories</h2>
+          <h2 className="text-xl font-bold tracking-tight text-slate-900">National News & Advisories</h2>
           <p className="text-xs text-slate-455 mt-0.5">Real-time health advisories with Gemini-synthesized clinical takeaways</p>
         </div>
       </div>
@@ -39,7 +39,7 @@ export default function OfficerNewsPage() {
       ) : (
         <div className="space-y-4">
           {advisories.map((adv) => (
-            <div key={adv.id} className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
+            <div key={adv.id} className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2.5">
@@ -62,12 +62,12 @@ export default function OfficerNewsPage() {
                 <Sparkles className="w-4 h-4 text-teal-400 shrink-0 mt-0.5 animate-pulse" />
                 <div>
                   <span className="text-[9px] font-mono text-teal-450 uppercase block font-bold">Gemini Clinical Takeaway</span>
-                  <p className="text-xs text-slate-300 mt-1 leading-relaxed">{adv.summary}</p>
+                  <p className="text-xs text-slate-700 mt-1 leading-relaxed">{adv.summary}</p>
                 </div>
               </div>
 
-              <div className="text-xs text-slate-400 leading-relaxed border-t border-slate-900 pt-3">
-                <span className="font-semibold text-slate-300 block mb-1">Full Advisory Details</span>
+              <div className="text-xs text-slate-600 leading-relaxed border-t border-slate-200 pt-3">
+                <span className="font-semibold text-slate-700 block mb-1">Full Advisory Details</span>
                 <p>{adv.fullAdvisory}</p>
               </div>
             </div>

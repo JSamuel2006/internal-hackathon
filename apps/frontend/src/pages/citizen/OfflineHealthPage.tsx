@@ -75,7 +75,7 @@ function CallButton({
           w-full flex items-center gap-4 px-5 py-4 rounded-2xl border-2 transition-all
           text-left active:scale-95
           ${(!phone || disabled)
-            ? 'bg-slate-900/60 border-slate-800 text-slate-500 cursor-not-allowed'
+            ? 'bg-white border-slate-200 text-slate-500 cursor-not-allowed'
             : `${colorClass} border-transparent text-white shadow-lg hover:brightness-110 cursor-pointer`
           }
         `}
@@ -151,7 +151,7 @@ function EmergencyCardModal({
         <X className="w-6 h-6" />
       </button>
 
-      <div className="w-full max-w-sm bg-slate-950 border-4 border-rose-500 rounded-3xl p-7 space-y-5 shadow-2xl shadow-rose-900/40">
+      <div className="w-full max-w-sm bg-white border-4 border-rose-500 rounded-3xl p-7 space-y-5 shadow-2xl shadow-rose-900/40">
         {/* Header */}
         <div className="text-center border-b border-rose-500/40 pb-4">
           <span className="text-4xl">🚨</span>
@@ -186,14 +186,14 @@ function EmergencyCardModal({
 
           {/* Latest Screening */}
           {recentScreening && (
-            <div className="bg-slate-900 rounded-xl p-3 space-y-1 border border-slate-800">
+            <div className="bg-white rounded-xl p-3 space-y-1 border border-slate-200">
               <span className="block text-[10px] uppercase text-slate-500 font-bold tracking-wider">
                 Latest Community Screening
               </span>
               <div className="grid grid-cols-3 gap-2 text-center text-xs font-mono mt-1">
                 <div>
                   <span className="text-slate-500 block text-[9px]">BP</span>
-                  <span className="text-slate-200 font-bold">
+                  <span className="text-slate-800 font-bold">
                     {recentScreening.systolic}/{recentScreening.diastolic}
                   </span>
                 </div>
@@ -203,7 +203,7 @@ function EmergencyCardModal({
                 </div>
                 <div>
                   <span className="text-slate-500 block text-[9px]">Pulse</span>
-                  <span className="text-slate-200 font-bold">{recentScreening.pulse} bpm</span>
+                  <span className="text-slate-800 font-bold">{recentScreening.pulse} bpm</span>
                 </div>
               </div>
               <p className="text-[9px] text-slate-600 mt-1 italic">
@@ -217,7 +217,7 @@ function EmergencyCardModal({
         {profile?.abhaId && (
           <div className="text-center">
             <span className="text-[10px] text-slate-600 font-mono uppercase block">ABHA ID</span>
-            <span className="text-slate-400 font-mono text-sm">{profile.abhaId}</span>
+            <span className="text-slate-600 font-mono text-sm">{profile.abhaId}</span>
           </div>
         )}
 
@@ -528,11 +528,11 @@ export default function OfflineHealthPage() {
           </span>
           {cachedPHC ? (
             <div className="space-y-2">
-              <div className="bg-slate-900/70 border border-slate-800 rounded-xl p-3 flex items-start gap-3">
+              <div className="bg-white border border-slate-200 rounded-xl p-3 flex items-start gap-3">
                 <Hospital className="w-5 h-5 text-teal-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="block text-sm font-bold text-slate-100">{cachedPHC.name}</span>
-                  <span className="block text-xs text-slate-400 mt-0.5">{cachedPHC.type} · {cachedPHC.address}</span>
+                  <span className="block text-sm font-bold text-slate-900">{cachedPHC.name}</span>
+                  <span className="block text-xs text-slate-600 mt-0.5">{cachedPHC.type} · {cachedPHC.address}</span>
                 </div>
               </div>
               {cachedPHC.phone ? (
@@ -544,7 +544,7 @@ export default function OfflineHealthPage() {
                   colorClass="bg-teal-700 hover:bg-teal-600"
                 />
               ) : (
-                <div className="flex items-center gap-3 px-4 py-3 rounded-2xl border border-slate-700 text-slate-500 bg-slate-900/50">
+                <div className="flex items-center gap-3 px-4 py-3 rounded-2xl border border-slate-700 text-slate-500 bg-white">
                   <Hospital className="w-6 h-6 opacity-40" />
                   <div>
                     <span className="block text-sm font-semibold">PHC phone number not configured</span>
@@ -600,11 +600,11 @@ export default function OfflineHealthPage() {
       </div>
 
       {/* ── 🩺 MY EMERGENCY INFORMATION ───────────────────────────────── */}
-      <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+      <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div className="flex items-center gap-2">
             <Stethoscope className="w-5 h-5 text-indigo-400" />
-            <h3 className="font-bold text-sm text-slate-100 uppercase tracking-wider">🩺 My Emergency Information</h3>
+            <h3 className="font-bold text-sm text-slate-900 uppercase tracking-wider">🩺 My Emergency Information</h3>
           </div>
           {/* Show Full-Screen Card Button */}
           <button
@@ -621,14 +621,14 @@ export default function OfflineHealthPage() {
         {profile ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
             {[
-              { icon: <User className="w-3.5 h-3.5" />, label: 'Name', value: profile.name, color: 'text-slate-100' },
-              { icon: <Activity className="w-3.5 h-3.5" />, label: 'ABHA ID', value: profile.abhaId, color: 'text-slate-300' },
+              { icon: <User className="w-3.5 h-3.5" />, label: 'Name', value: profile.name, color: 'text-slate-900' },
+              { icon: <Activity className="w-3.5 h-3.5" />, label: 'ABHA ID', value: profile.abhaId, color: 'text-slate-700' },
               { icon: <Droplets className="w-3.5 h-3.5 text-rose-400" />, label: 'Blood Group', value: profile.bloodGroup, color: 'text-rose-400 font-extrabold text-sm' },
               { icon: <AlertCircle className="w-3.5 h-3.5 text-amber-400" />, label: 'Allergies', value: profile.allergies, color: 'text-amber-300 font-bold' },
               { icon: <Heart className="w-3.5 h-3.5 text-indigo-400" />, label: 'Known Conditions', value: profile.conditions, color: 'text-indigo-300' },
               { icon: <Pill className="w-3.5 h-3.5 text-teal-400" />, label: 'Current Medicines', value: profile.medicines, color: 'text-teal-300' },
             ].map(({ icon, label, value, color }) => (
-              <div key={label} className="p-3 bg-slate-950 rounded-xl border border-slate-900 flex items-start gap-2.5">
+              <div key={label} className="p-3 bg-white rounded-xl border border-slate-200 flex items-start gap-2.5">
                 <span className="text-slate-500 mt-0.5 shrink-0">{icon}</span>
                 <div>
                   <span className="text-slate-500 uppercase text-[10px] block font-bold">{label}</span>
@@ -638,13 +638,13 @@ export default function OfflineHealthPage() {
             ))}
 
             {/* Emergency Contact with call button */}
-            <div className="sm:col-span-2 p-3 bg-slate-950 rounded-xl border border-emerald-900/40 flex items-center justify-between gap-3">
+            <div className="sm:col-span-2 p-3 bg-white rounded-xl border border-emerald-900/40 flex items-center justify-between gap-3">
               <div className="flex items-start gap-2.5">
                 <Phone className="w-3.5 h-3.5 text-emerald-400 mt-0.5 shrink-0" />
                 <div>
                   <span className="text-slate-500 uppercase text-[10px] block font-bold">Emergency Contact</span>
                   {profile.emergencyContactName && (
-                    <span className="text-slate-300 font-bold block mt-0.5">{profile.emergencyContactName}</span>
+                    <span className="text-slate-700 font-bold block mt-0.5">{profile.emergencyContactName}</span>
                   )}
                   <span className="text-emerald-300 font-bold block">{profile.emergencyContact || 'Not recorded'}</span>
                 </div>
@@ -670,18 +670,18 @@ export default function OfflineHealthPage() {
 
         {/* Latest Community Screening */}
         {recentScreening && (
-          <div className="border-t border-slate-850 pt-4">
+          <div className="border-t border-slate-200 pt-4">
             <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block mb-2">
               Latest Community Screening — for first-responder reference only
             </span>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
-                { label: 'Date', value: new Date(recentScreening.screening_date || recentScreening.createdAt).toLocaleDateString(), color: 'text-slate-300' },
-                { label: 'Blood Pressure', value: `${recentScreening.systolic}/${recentScreening.diastolic} mmHg`, color: 'text-slate-200 font-bold' },
+                { label: 'Date', value: new Date(recentScreening.screening_date || recentScreening.createdAt).toLocaleDateString(), color: 'text-slate-700' },
+                { label: 'Blood Pressure', value: `${recentScreening.systolic}/${recentScreening.diastolic} mmHg`, color: 'text-slate-800 font-bold' },
                 { label: 'SpO₂ (Oxygen)', value: `${recentScreening.spo2}%`, color: 'text-emerald-400 font-bold' },
-                { label: 'Pulse', value: `${recentScreening.pulse} bpm`, color: 'text-slate-200' },
+                { label: 'Pulse', value: `${recentScreening.pulse} bpm`, color: 'text-slate-800' },
               ].map(({ label, value, color }) => (
-                <div key={label} className="p-2.5 bg-slate-950 rounded-xl border border-slate-900 text-center font-mono">
+                <div key={label} className="p-2.5 bg-white rounded-xl border border-slate-200 text-center font-mono">
                   <span className="text-slate-500 text-[9px] uppercase block">{label}</span>
                   <span className={`text-xs ${color} block mt-0.5`}>{value}</span>
                 </div>
@@ -697,19 +697,19 @@ export default function OfflineHealthPage() {
       {/* ── Sync Manager + Profile Grid ────────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Sync Queue */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 flex flex-col justify-between space-y-4">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-4">
           <div>
-            <div className="flex items-center gap-2 border-b border-slate-900 pb-3">
+            <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
               <RefreshCw className="w-5 h-5 text-amber-400" />
-              <h3 className="font-bold text-sm text-slate-200 uppercase tracking-wider">🔄 Offline Sync Manager</h3>
+              <h3 className="font-bold text-sm text-slate-800 uppercase tracking-wider">🔄 Offline Sync Manager</h3>
             </div>
-            <p className="text-xs text-slate-400 mt-2">
+            <p className="text-xs text-slate-600 mt-2">
               ASHA screening records created during network outages are queued locally. They will transfer automatically once a network connection is restored.
             </p>
-            <div className="mt-4 p-4 bg-slate-955 rounded-xl border border-slate-900 flex justify-between items-center">
-              <span className="text-xs text-slate-400">Pending Sync Queue</span>
+            <div className="mt-4 p-4 bg-slate-955 rounded-xl border border-slate-200 flex justify-between items-center">
+              <span className="text-xs text-slate-600">Pending Sync Queue</span>
               <span className={`px-2.5 py-1 rounded-full text-xs font-bold font-mono ${
-                pendingCount > 0 ? 'bg-amber-500/20 text-amber-400 animate-pulse' : 'bg-slate-900 text-slate-500'
+                pendingCount > 0 ? 'bg-amber-500/20 text-amber-400 animate-pulse' : 'bg-white text-slate-500'
               }`}>
                 {pendingCount} Records
               </span>
@@ -723,7 +723,7 @@ export default function OfflineHealthPage() {
           <button
             onClick={handleSyncNow}
             disabled={syncing || pendingCount === 0}
-            className="w-full py-3.5 bg-indigo-650 hover:bg-indigo-600 disabled:bg-slate-900 disabled:text-slate-600 text-slate-950 font-bold uppercase text-xs rounded-xl tracking-widest transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3.5 bg-indigo-650 hover:bg-indigo-600 disabled:bg-white disabled:text-slate-600 text-slate-950 font-bold uppercase text-xs rounded-xl tracking-widest transition-colors flex items-center justify-center gap-2"
           >
             <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
             <span>{syncing ? 'SYNCING...' : 'SYNC NOW'}</span>
@@ -731,10 +731,10 @@ export default function OfflineHealthPage() {
         </div>
 
         {/* What Works Offline Info Card */}
-        <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-3">
-          <div className="flex items-center gap-2 border-b border-slate-900 pb-3">
-            <Info className="w-5 h-5 text-slate-400" />
-            <h3 className="font-bold text-sm text-slate-200 uppercase tracking-wider">ℹ️ What Works Offline</h3>
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-3">
+          <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+            <Info className="w-5 h-5 text-slate-600" />
+            <h3 className="font-bold text-sm text-slate-800 uppercase tracking-wider">ℹ️ What Works Offline</h3>
           </div>
           <div className="space-y-2 text-xs font-mono">
             {[
@@ -754,7 +754,7 @@ export default function OfflineHealthPage() {
                   ? <CheckCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                   : <X className="w-3.5 h-3.5 text-slate-600 shrink-0" />
                 }
-                <span className={works ? 'text-slate-300' : 'text-slate-600'}>{text}</span>
+                <span className={works ? 'text-slate-700' : 'text-slate-600'}>{text}</span>
               </div>
             ))}
           </div>
@@ -762,10 +762,10 @@ export default function OfflineHealthPage() {
       </div>
 
       {/* ── 🩹 First-Aid Guidance ──────────────────────────────────────── */}
-      <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-        <div className="flex items-center gap-2 border-b border-slate-900 pb-3">
+      <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+        <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
           <BookOpen className="w-5 h-5 text-teal-400" />
-          <h3 className="font-bold text-sm text-slate-200 uppercase tracking-wider">🩹 {t('first_aid_title', {}, 'First-Aid Guidance')}</h3>
+          <h3 className="font-bold text-sm text-slate-800 uppercase tracking-wider">🩹 {t('first_aid_title', {}, 'First-Aid Guidance')}</h3>
           <span className="ml-auto text-[10px] text-teal-500 bg-teal-500/10 border border-teal-500/20 px-2 py-0.5 rounded font-mono uppercase">Works Offline</span>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -773,10 +773,10 @@ export default function OfflineHealthPage() {
             <button
               key={art.id}
               onClick={() => setSelectedArticle(art)}
-              className="p-3.5 bg-slate-950 hover:bg-slate-900 text-left border border-slate-850 hover:border-teal-500/30 rounded-xl transition-all space-y-1.5 group cursor-pointer"
+              className="p-3.5 bg-white hover:bg-white text-left border border-slate-200 hover:border-teal-500/30 rounded-xl transition-all space-y-1.5 group cursor-pointer"
             >
               <span className="text-[10px] text-teal-400 font-bold block">{t(art.category)}</span>
-              <span className="text-xs text-slate-200 font-bold block group-hover:text-teal-200 transition-colors">
+              <span className="text-xs text-slate-800 font-bold block group-hover:text-teal-200 transition-colors">
                 {t(art.title)}
               </span>
             </button>
@@ -786,16 +786,16 @@ export default function OfflineHealthPage() {
 
       {/* ── First-Aid Article Modal ────────────────────────────────────── */}
       {selectedArticle && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[45] flex items-center justify-center p-4">
-          <div className="glass-panel max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 rounded-2xl border border-slate-900 space-y-6">
-            <div className="flex justify-between items-start border-b border-slate-900 pb-3">
+        <div className="fixed inset-0 bg-white backdrop-blur-sm z-[45] flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 shadow-sm max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 rounded-2xl border border-slate-200 space-y-6">
+            <div className="flex justify-between items-start border-b border-slate-200 pb-3">
               <div>
                 <span className="text-[10px] text-teal-400 font-bold block uppercase tracking-wider">{t(selectedArticle.category)}</span>
-                <h4 className="text-lg font-bold text-slate-100">{t(selectedArticle.title)}</h4>
+                <h4 className="text-lg font-bold text-slate-900">{t(selectedArticle.title)}</h4>
               </div>
               <button
                 onClick={() => setSelectedArticle(null)}
-                className="px-2.5 py-1 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-[10px] text-slate-400 font-bold uppercase rounded cursor-pointer"
+                className="px-2.5 py-1 bg-white hover:bg-slate-850 border border-slate-200 text-[10px] text-slate-600 font-bold uppercase rounded cursor-pointer"
                 aria-label="Close first-aid article"
               >
                 Close
@@ -803,8 +803,8 @@ export default function OfflineHealthPage() {
             </div>
             <p className="text-xs text-slate-350 leading-relaxed">{t(selectedArticle.description)}</p>
             <div className="space-y-2">
-              <span className="text-[10px] text-slate-450 uppercase font-bold tracking-wider block">Recommended Steps</span>
-              <ol className="list-decimal list-inside text-xs text-slate-300 space-y-2 leading-relaxed">
+              <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block">Recommended Steps</span>
+              <ol className="list-decimal list-inside text-xs text-slate-700 space-y-2 leading-relaxed">
                 {selectedArticle.steps.map((st: string, i: number) => (
                   <li key={i}>{t(st)}</li>
                 ))}

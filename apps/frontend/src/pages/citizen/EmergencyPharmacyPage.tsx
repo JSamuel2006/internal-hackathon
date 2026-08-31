@@ -49,7 +49,7 @@ const STATUS_LABELS: Record<string, { label: string; color: string; desc: string
   ACKNOWLEDGED:     { label: 'Acknowledged',  color: 'text-sky-400',     desc: 'Pharmacist is reviewing your request.' },
   PREPARING:        { label: 'Preparing',     color: 'text-violet-400',  desc: 'Pharmacist is preparing assistance.' },
   ASSISTANCE_READY: { label: '✓ Ready',       color: 'text-emerald-400', desc: 'Head to the pharmacy — assistance is ready.' },
-  REJECTED:         { label: 'Declined',      color: 'text-slate-400',   desc: 'Pharmacy unable to assist. Try another or call 112.' },
+  REJECTED:         { label: 'Declined',      color: 'text-slate-600',   desc: 'Pharmacy unable to assist. Try another or call 112.' },
   ESCALATED:        { label: '⚠ Escalated',   color: 'text-rose-400',    desc: 'Pharmacist recommends immediate emergency care. Call 112 now.' },
   RESOLVED:         { label: 'Resolved',      color: 'text-slate-500',   desc: 'Assistance completed.' },
 };
@@ -64,7 +64,7 @@ function SafetyCallout() {
         <p className="text-rose-300 font-bold text-xs uppercase tracking-wider mb-0.5">
           Life-Threatening Emergency? Call 112 First.
         </p>
-        <p className="text-slate-400 text-[11px] leading-relaxed">
+        <p className="text-slate-600 text-[11px] leading-relaxed">
           Pharmacy assistance is for non-life-threatening situations. If the patient is unconscious,
           cannot breathe, or is in cardiac arrest — <strong className="text-rose-300">call 112 immediately</strong>.
         </p>
@@ -74,11 +74,11 @@ function SafetyCallout() {
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const meta = STATUS_LABELS[status] || { label: status, color: 'text-slate-400', desc: '' };
+  const meta = STATUS_LABELS[status] || { label: status, color: 'text-slate-600', desc: '' };
   return (
     <div>
       <span className={`font-bold text-sm ${meta.color}`}>{meta.label}</span>
-      {meta.desc && <p className="text-slate-400 text-[11px] mt-0.5">{meta.desc}</p>}
+      {meta.desc && <p className="text-slate-600 text-[11px] mt-0.5">{meta.desc}</p>}
     </div>
   );
 }
@@ -172,8 +172,8 @@ export default function EmergencyPharmacyPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 font-mono text-sm">
       {/* Header */}
-      <div className="border-b border-slate-900 pb-4">
-        <h2 className="text-lg font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
+      <div className="border-b border-slate-200 pb-4">
+        <h2 className="text-lg font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
           <Package className="w-5 h-5 text-violet-400" />
           Emergency Pharmacy Assistance
         </h2>
@@ -218,12 +218,12 @@ export default function EmergencyPharmacyPage() {
                     className={`w-full text-left p-4 rounded-xl border transition-all ${
                       selectedId === p.id
                         ? 'border-violet-500/60 bg-violet-500/10'
-                        : 'border-slate-800 bg-slate-900/60 hover:border-slate-700 hover:bg-slate-900'
+                        : 'border-slate-200 bg-white hover:border-slate-700 hover:bg-white'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="text-slate-200 font-semibold text-sm">{p.name}</p>
+                        <p className="text-slate-800 font-semibold text-sm">{p.name}</p>
                         {p.address && <p className="text-slate-500 text-[11px] mt-0.5">{p.address}</p>}
                       </div>
                       <div className="text-right flex-shrink-0">
@@ -248,9 +248,9 @@ export default function EmergencyPharmacyPage() {
           </div>
 
           {selectedPharmacy && (
-            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+            <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-3">
               <p className="text-[10px] text-slate-500 uppercase tracking-wider">You are requesting assistance from:</p>
-              <p className="text-slate-200 font-bold">{selectedPharmacy.name}</p>
+              <p className="text-slate-800 font-bold">{selectedPharmacy.name}</p>
               <p className="text-[11px] text-amber-300 leading-relaxed">
                 A pharmacist will review your emergency context and independently determine appropriate assistance.
                 <strong className="text-rose-300"> No medication will be dispensed without professional assessment.</strong>
@@ -298,7 +298,7 @@ export default function EmergencyPharmacyPage() {
             <button
               onClick={fetchStatuses}
               disabled={statusLoading}
-              className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-slate-300"
+              className="flex items-center gap-1 text-[10px] text-slate-600 hover:text-slate-700"
             >
               <RefreshCcw className={`w-3 h-3 ${statusLoading ? 'animate-spin' : ''}`} />
               Refresh
@@ -320,12 +320,12 @@ export default function EmergencyPharmacyPage() {
                       ? 'border-emerald-500/40 bg-emerald-500/10'
                       : s.status === 'ESCALATED'
                       ? 'border-rose-500/40 bg-rose-500/10'
-                      : 'border-slate-800 bg-slate-900/60'
+                      : 'border-slate-200 bg-white'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-slate-200 font-semibold text-sm mb-1">{s.pharmacyName}</p>
+                      <p className="text-slate-800 font-semibold text-sm mb-1">{s.pharmacyName}</p>
                       <StatusBadge status={s.status} />
                     </div>
                     <div className="text-right text-[10px] text-slate-500 flex-shrink-0">
@@ -353,7 +353,7 @@ export default function EmergencyPharmacyPage() {
           <button
             id="add-another-pharmacy"
             onClick={() => setStep('choose')}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-700 text-slate-400 text-xs hover:bg-slate-800 transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-700 text-slate-600 text-xs hover:bg-slate-800 transition-colors"
           >
             <ArrowRight className="w-3.5 h-3.5" />
             Request from Another Pharmacy
@@ -364,13 +364,13 @@ export default function EmergencyPharmacyPage() {
             <div className="flex gap-2">
               <Link
                 to={`/citizen/emergency/${sessionId}/doctor-chat`}
-                className="flex-1 text-center py-2.5 rounded-xl border border-slate-800 text-slate-500 text-xs hover:text-slate-300 hover:bg-slate-900 transition-colors"
+                className="flex-1 text-center py-2.5 rounded-xl border border-slate-200 text-slate-500 text-xs hover:text-slate-700 hover:bg-white transition-colors"
               >
                 Doctor Chat
               </Link>
               <Link
                 to="/citizen/emergency"
-                className="flex-1 text-center py-2.5 rounded-xl border border-slate-800 text-slate-500 text-xs hover:text-slate-300 hover:bg-slate-900 transition-colors"
+                className="flex-1 text-center py-2.5 rounded-xl border border-slate-200 text-slate-500 text-xs hover:text-slate-700 hover:bg-white transition-colors"
               >
                 Emergency Mode
               </Link>

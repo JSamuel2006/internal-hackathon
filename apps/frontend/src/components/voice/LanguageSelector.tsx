@@ -52,13 +52,13 @@ export const LanguageSelector: React.FC = () => {
       >
         <Globe className="w-3.5 h-3.5 text-teal-400" />
         <span>{currentObj.flag} {currentObj.label}</span>
-        <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-3.5 h-3.5 text-slate-600 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
 
       {/* Dropdown Menu */}
       {open && (
         <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 p-2 space-y-1 animate-in fade-in slide-in-from-top-2 duration-150">
-          <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono border-b border-slate-100 mb-1">
+          <div className="px-3 py-1.5 text-[10px] font-bold text-slate-600 uppercase tracking-wider font-mono border-b border-slate-100 mb-1">
             {I18nService.translate('select_language')}
           </div>
 

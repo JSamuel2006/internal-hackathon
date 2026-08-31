@@ -35,7 +35,7 @@ export default function OfficerHeatmapPage() {
             <Map className="w-5 h-5 glow-pill" />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-100">Disease Outbreak Heat Map</h2>
+            <h2 className="text-xl font-bold tracking-tight text-slate-900">Disease Outbreak Heat Map</h2>
             <p className="text-xs text-slate-455 mt-0.5">District surveillance query density and hotspot mapping</p>
           </div>
         </div>
@@ -45,7 +45,7 @@ export default function OfficerHeatmapPage() {
           <select
             value={disease}
             onChange={(e) => setDisease(e.target.value)}
-            className="bg-slate-900 border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 outline-none focus:border-teal-500/35"
+            className="bg-white border border-slate-200 rounded-lg py-2 px-3 text-xs text-slate-800 outline-none focus:border-teal-500/35"
           >
             <option value="All">All Pathogens</option>
             <option value="Dengue">Dengue / High Fever</option>
@@ -54,7 +54,7 @@ export default function OfficerHeatmapPage() {
           </select>
           <button
             onClick={fetchHeatmap}
-            className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors"
+            className="p-2 bg-white border border-slate-200 rounded-lg text-slate-600 hover:text-white transition-colors"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
@@ -67,9 +67,9 @@ export default function OfficerHeatmapPage() {
           <span className="text-[10px] font-mono tracking-wider text-slate-500 uppercase px-1">Hotspot Blocks</span>
           <div className="space-y-3">
             {heatmapPoints.map((pt, i) => (
-              <div key={i} className="p-4 rounded-xl bg-slate-900/40 border border-slate-900 flex justify-between items-center text-xs">
+              <div key={i} className="p-4 rounded-xl bg-white border border-slate-200 flex justify-between items-center text-xs">
                 <div>
-                  <span className="font-semibold text-slate-200 block">{pt.district} District</span>
+                  <span className="font-semibold text-slate-800 block">{pt.district} District</span>
                   <span className="text-[10px] text-slate-500 font-mono">GeoHash: {pt.geoHash}</span>
                 </div>
                 <div className="text-right">
@@ -84,7 +84,7 @@ export default function OfficerHeatmapPage() {
         </div>
 
         {/* Map Panel */}
-        <div className="col-span-1 md:col-span-3 h-[480px] rounded-2xl border border-slate-900 overflow-hidden relative">
+        <div className="col-span-1 md:col-span-3 h-[480px] rounded-2xl border border-slate-200 overflow-hidden relative">
           <MapContainer center={[18.5204, 73.8567]} zoom={9} scrollWheelZoom={true}>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

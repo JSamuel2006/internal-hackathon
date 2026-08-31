@@ -92,13 +92,13 @@ export default function MotherChildDashboard() {
   return (
     <div className="space-y-8 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-350">
       {/* Title Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-900 pb-5">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-indigo-500/10 rounded-xl text-indigo-400 border border-indigo-500/20 shadow-lg">
             <Activity className="w-5 h-5 glow-pill" />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-100 flex items-center gap-2">
+            <h2 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
               Mother & Child Health Module
               <span className="text-[10px] bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded font-mono uppercase">MCH Portal</span>
             </h2>
@@ -125,14 +125,14 @@ export default function MotherChildDashboard() {
         {/* Left column (registrations) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Pregnancy Registration */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-            <h3 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-850 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+            <h3 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-2">
               Pregnancy registration
             </h3>
             {motherProfile ? (
               <div className="space-y-2">
-                <p>Mother ABHA: <strong className="text-slate-200">{motherProfile.abhaId}</strong></p>
-                <p>EDD: <strong className="text-slate-200">{motherProfile.edd}</strong></p>
+                <p>Mother ABHA: <strong className="text-slate-800">{motherProfile.abhaId}</strong></p>
+                <p>EDD: <strong className="text-slate-800">{motherProfile.edd}</strong></p>
                 <p>Risk Score: <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 text-[10px] rounded font-bold">{motherProfile.risk}</span></p>
               </div>
             ) : (
@@ -143,7 +143,7 @@ export default function MotherChildDashboard() {
                   value={motherAbha}
                   aria-label="Mother ABHA ID"
                   onChange={e => setMotherAbha(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-850 rounded-xl p-2.5 text-slate-355 focus:outline-none"
+                  className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 focus:outline-none"
                 />
                 <input
                   type="date"
@@ -151,7 +151,7 @@ export default function MotherChildDashboard() {
                   value={edd}
                   aria-label="Estimated Date of Delivery"
                   onChange={e => setEdd(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-850 rounded-xl p-2.5 text-slate-355 focus:outline-none"
+                  className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 focus:outline-none"
                 />
                 <button type="submit" className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-slate-950 font-bold rounded-xl uppercase">
                   Register Pregnancy
@@ -161,14 +161,14 @@ export default function MotherChildDashboard() {
           </div>
 
           {/* Child Registration */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-            <h3 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-850 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+            <h3 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-2">
               Child growth registry
             </h3>
             {childProfile ? (
               <div className="space-y-2">
-                <p>Child Name: <strong className="text-slate-200">{childProfile.name}</strong></p>
-                <p>Child ABHA: <strong className="text-slate-200">{childProfile.abhaId}</strong></p>
+                <p>Child Name: <strong className="text-slate-800">{childProfile.name}</strong></p>
+                <p>Child ABHA: <strong className="text-slate-800">{childProfile.abhaId}</strong></p>
               </div>
             ) : (
               <form onSubmit={handleRegisterChild} className="space-y-3">
@@ -178,7 +178,7 @@ export default function MotherChildDashboard() {
                   value={childName}
                   aria-label="Child Name"
                   onChange={e => setChildName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-850 rounded-xl p-2.5 text-slate-355 focus:outline-none"
+                  className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 focus:outline-none"
                 />
                 <input
                   type="text"
@@ -186,7 +186,7 @@ export default function MotherChildDashboard() {
                   value={childAbha}
                   aria-label="Child ABHA ID"
                   onChange={e => setChildAbha(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-850 rounded-xl p-2.5 text-slate-355 focus:outline-none"
+                  className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 focus:outline-none"
                 />
                 <button type="submit" className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-slate-950 font-bold rounded-xl uppercase">
                   Register Child
@@ -199,14 +199,14 @@ export default function MotherChildDashboard() {
         {/* Right column (vaccines & growth charts) */}
         <div className="lg:col-span-7 space-y-6">
           {/* Vaccination schedule */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-            <h3 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-850 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+            <h3 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-2">
               Immunization Timeline
             </h3>
             <div className="space-y-2 max-h-48 overflow-y-auto">
               {vaccinations.length > 0 ? (
                 vaccinations.map((vac) => (
-                  <div key={vac.id} className="p-3 bg-slate-950 rounded border border-slate-900 flex justify-between items-center">
+                  <div key={vac.id} className="p-3 bg-white rounded border border-slate-200 flex justify-between items-center">
                     <div>
                       <span className="font-bold text-slate-202 block">{vac.vaccine_name}</span>
                       <span className="text-[10px] text-slate-550">Due date: {vac.due_date}</span>
@@ -221,8 +221,8 @@ export default function MotherChildDashboard() {
           </div>
 
           {/* Growth curves chart */}
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-            <h3 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-850 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+            <h3 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-2">
               Pediatric Growth Curves (Percentiles)
             </h3>
             <div className="h-44">

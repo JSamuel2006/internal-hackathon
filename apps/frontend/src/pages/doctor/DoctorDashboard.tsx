@@ -353,25 +353,25 @@ export default function DoctorDashboard() {
     ONLINE: { text: 'text-emerald-400', label: '🟢 AVAILABLE', desc: 'Ready to accept patients' },
     BUSY: { text: 'text-amber-400', label: '🟠 BUSY', desc: 'Not accepting new emergency requests' },
     IN_CONSULTATION: { text: 'text-rose-500', label: '🔴 IN CONSULTATION', desc: 'Currently attending a patient' },
-    OFFLINE: { text: 'text-slate-400', label: '⚫ OFFLINE', desc: 'Not available for emergency requests' }
+    OFFLINE: { text: 'text-slate-600', label: '⚫ OFFLINE', desc: 'Not available for emergency requests' }
   };
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 font-mono text-xs flex">
+    <div className="min-h-screen bg-[#030712] text-slate-900 font-mono text-xs flex">
       {/* Sidebar Panel */}
-      <aside className="w-64 border-r border-slate-900 bg-slate-950 p-6 flex flex-col justify-between shrink-0 select-none">
+      <aside className="w-64 border-r border-slate-200 bg-white p-6 flex flex-col justify-between shrink-0 select-none">
         <div className="space-y-6">
-          <div className="flex items-center gap-2 pb-4 border-b border-slate-900">
+          <div className="flex items-center gap-2 pb-4 border-b border-slate-200">
             <HeartPulse className="w-6 h-6 text-rose-500 animate-pulse" />
             <div>
-              <span className="font-bold text-sm tracking-wide text-slate-200">ArogyaMitra</span>
+              <span className="font-bold text-sm tracking-wide text-slate-800">ArogyaMitra</span>
               <span className="text-[9px] block text-rose-500 uppercase tracking-widest font-bold">DOCTOR PORTAL</span>
             </div>
           </div>
 
           {doctor && (
-            <div className="py-2 border-b border-slate-900">
-              <span className="text-slate-200 font-bold block text-[11px]">{doctor.name}</span>
+            <div className="py-2 border-b border-slate-200">
+              <span className="text-slate-800 font-bold block text-[11px]">{doctor.name}</span>
               <span className="text-slate-500 text-[9px] block uppercase">{doctor.specialty}</span>
             </div>
           )}
@@ -384,7 +384,7 @@ export default function DoctorDashboard() {
               className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center gap-2 ${
                 activeTab === 'dashboard'
                   ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
+                  : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-white'
               }`}
             >
               <LayoutDashboard className="w-3.5 h-3.5" />
@@ -400,7 +400,7 @@ export default function DoctorDashboard() {
               className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center justify-between ${
                 activeTab === 'emergency'
                   ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
+                  : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-white'
               }`}
             >
               <div className="flex items-center gap-2">
@@ -419,7 +419,7 @@ export default function DoctorDashboard() {
               className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center justify-between ${
                 activeTab === 'chats'
                   ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
+                  : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-white'
               }`}
             >
               <div className="flex items-center gap-2">
@@ -441,7 +441,7 @@ export default function DoctorDashboard() {
                 className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center gap-2 ${
                   activeTab === 'screenings'
                     ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                    : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
+                    : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-white'
                 }`}
               >
                 <ClipboardList className="w-3.5 h-3.5" />
@@ -454,7 +454,7 @@ export default function DoctorDashboard() {
               className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center gap-2 ${
                 activeTab === 'history'
                   ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
+                  : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-white'
               }`}
             >
               <History className="w-3.5 h-3.5" />
@@ -466,7 +466,7 @@ export default function DoctorDashboard() {
               className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center gap-2 ${
                 activeTab === 'profile'
                   ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
+                  : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-white'
               }`}
             >
               <User className="w-3.5 h-3.5" />
@@ -475,7 +475,7 @@ export default function DoctorDashboard() {
           </div>
 
           {/* MY AVAILABILITY Section */}
-          <div className="space-y-2 pt-2 border-t border-slate-900">
+          <div className="space-y-2 pt-2 border-t border-slate-200">
             <span className="text-[9px] uppercase tracking-widest text-slate-600 font-bold block">MY AVAILABILITY</span>
             <div className="flex flex-col gap-1">
               {(['AVAILABLE', 'BUSY', 'OFFLINE'] as const).map((status) => (
@@ -505,7 +505,7 @@ export default function DoctorDashboard() {
           </div>
 
           {/* CURRENT STATUS Info */}
-          <div className="p-3 rounded-xl bg-slate-900/50 border border-slate-900 text-[10px]">
+          <div className="p-3 rounded-xl bg-white border border-slate-200 text-[10px]">
             <span className="text-slate-550 block uppercase text-[8px] tracking-wider mb-1 font-bold">CURRENT STATUS</span>
             <strong className={availStatusColors[availability].text}>{availStatusColors[availability].label}</strong>
             <p className="text-slate-500 text-[9px] mt-0.5">{availStatusColors[availability].desc}</p>
@@ -537,7 +537,7 @@ export default function DoctorDashboard() {
 
         <button 
           onClick={handleLogout}
-          className="w-full py-2 border border-slate-900 bg-slate-950 text-slate-500 hover:text-rose-455 hover:bg-rose-500/5 transition-all text-center rounded-xl font-bold uppercase tracking-wider text-[9px]"
+          className="w-full py-2 border border-slate-200 bg-white text-slate-500 hover:text-rose-455 hover:bg-rose-500/5 transition-all text-center rounded-xl font-bold uppercase tracking-wider text-[9px]"
         >
           Sign Out Portal
         </button>
@@ -547,10 +547,10 @@ export default function DoctorDashboard() {
       <main className="flex-1 p-8 overflow-y-auto space-y-6">
         
         {/* Dashboard Status Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-900 pb-5">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
           {doctor ? (
             <div>
-              <h2 className="text-base font-bold text-slate-100 flex items-center gap-2">
+              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 {doctor.name}
                 <span className="text-[9px] bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded font-mono uppercase font-bold">
                   SIH Demo Doctor
@@ -567,14 +567,14 @@ export default function DoctorDashboard() {
           <div className="flex flex-col lg:flex-row lg:items-end gap-3 text-right">
             <div>
               <span className="text-[9px] text-slate-550 block uppercase tracking-wider">Current Patient Status</span>
-              <strong className="text-slate-300">
+              <strong className="text-slate-700">
                 {selectedRequest ? `Consulting ID: ${selectedRequest.emergencyId.substring(0, 8)}...` : 'None'}
               </strong>
             </div>
             <button
               onClick={syncDashboardData}
               disabled={loading}
-              className="px-4 py-2 border border-slate-800 bg-slate-900/60 hover:bg-slate-800 text-slate-300 font-semibold rounded-xl text-[9px] uppercase flex items-center gap-2 transition-all"
+              className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-800 text-slate-700 font-semibold rounded-xl text-[9px] uppercase flex items-center gap-2 transition-all"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               <span>Sync Dashboard</span>
@@ -610,9 +610,9 @@ export default function DoctorDashboard() {
         {/* Dynamic Route/Tab rendering */}
         {activeTab === 'dashboard' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="glass-panel p-6 rounded-2xl border border-slate-900 bg-slate-950/20 space-y-2">
+            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-2">
               <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Status State</span>
-              <p className="text-lg font-bold text-slate-100 flex items-center gap-2">
+              <p className="text-lg font-bold text-slate-900 flex items-center gap-2">
                 <span className={`w-3.5 h-3.5 rounded-full ${
                   availability === 'AVAILABLE' ? 'bg-emerald-500 animate-pulse' : availability === 'BUSY' ? 'bg-amber-500' : availability === 'IN_CONSULTATION' ? 'bg-rose-500 animate-ping' : 'bg-slate-500'
                 }`} />
@@ -621,7 +621,7 @@ export default function DoctorDashboard() {
               <p className="text-slate-500 text-[10px]">Toggled availability will control triage flow.</p>
             </div>
             
-            <div className="glass-panel p-6 rounded-2xl border border-slate-900 bg-slate-950/20 space-y-2">
+            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-2">
               <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Pending Requests</span>
               <p className="text-xl font-bold text-rose-400">
                 {emergencyRequests.filter(r => r.status === 'REQUESTED').length} Requests
@@ -629,9 +629,9 @@ export default function DoctorDashboard() {
               <p className="text-slate-500 text-[10px]">Awaiting acceptance from availability queue.</p>
             </div>
 
-            <div className="glass-panel p-6 rounded-2xl border border-slate-900 bg-slate-950/20 space-y-2">
+            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-2">
               <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Active Consultation</span>
-              <p className="text-base font-bold text-slate-200">
+              <p className="text-base font-bold text-slate-800">
                 {selectedRequest ? '1 consultation running' : 'No active session'}
               </p>
               <p className="text-slate-500 text-[10px]">Derived securely using authenticated JWT credentials.</p>
@@ -640,8 +640,8 @@ export default function DoctorDashboard() {
         )}
 
         {activeTab === 'emergency' && (
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 bg-slate-950/20 space-y-4">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-900 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-4">
+            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-200 pb-2">
               Assistance Request Queue
             </h3>
             
@@ -652,7 +652,7 @@ export default function DoctorDashboard() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {emergencyRequests.filter(r => r.status === 'REQUESTED').map((req) => (
-                  <div key={req.requestId} className="p-4 rounded-xl border border-slate-900 bg-slate-950/50 space-y-3">
+                  <div key={req.requestId} className="p-4 rounded-xl border border-slate-200 bg-white space-y-3">
                     <div className="flex justify-between items-start">
                       <div>
                         {req.priority === 'HIGH' && (
@@ -660,14 +660,14 @@ export default function DoctorDashboard() {
                             🔴 High Priority Emergency
                           </span>
                         )}
-                        <h4 className="text-[11px] font-bold text-slate-200">{req.category} EMERGENCY</h4>
+                        <h4 className="text-[11px] font-bold text-slate-800">{req.category} EMERGENCY</h4>
                       </div>
                       <span className="text-[9px] text-slate-500 font-mono">
                         {new Date(req.requestedAt).toLocaleTimeString()}
                       </span>
                     </div>
 
-                    <div className="text-[10px] text-slate-450 space-y-1">
+                    <div className="text-[10px] text-slate-500 space-y-1">
                       <p>Session ID: <strong className="text-slate-350">{req.emergencyId}</strong></p>
                       <p>Priority Triage: <strong className="text-slate-350">{req.priority}</strong></p>
                     </div>
@@ -687,7 +687,7 @@ export default function DoctorDashboard() {
                       </button>
                       <button 
                         onClick={() => handleDeclineRequest(req.requestId)}
-                        className="py-1.5 px-3 bg-slate-950 border border-slate-800 text-slate-450 hover:text-rose-455 rounded-lg text-[9px] uppercase"
+                        className="py-1.5 px-3 bg-white border border-slate-200 text-slate-500 hover:text-rose-455 rounded-lg text-[9px] uppercase"
                       >
                         Decline
                       </button>
@@ -707,12 +707,12 @@ export default function DoctorDashboard() {
                 <div className="lg:col-span-8 space-y-6">
                   
                   {/* Secure Consultation Chat Room */}
-                  <div className="flex flex-col h-[380px] glass-panel rounded-2xl border border-slate-900 bg-slate-950/10 overflow-hidden">
-                    <div className="p-3 bg-slate-950 border-b border-slate-900 flex justify-between items-center">
+                  <div className="flex flex-col h-[380px] bg-white border border-slate-200 shadow-sm rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                    <div className="p-3 bg-white border-b border-slate-200 flex justify-between items-center">
                       <span className="font-bold text-[9px] text-slate-500 tracking-wider uppercase">Secure Trauma Consultation Message Node</span>
                       <button
                         onClick={handleCloseEmergency}
-                        className="px-3 py-1 bg-rose-650 hover:bg-rose-555 text-slate-100 rounded-lg text-[9px] uppercase font-bold"
+                        className="px-3 py-1 bg-rose-650 hover:bg-rose-555 text-slate-900 rounded-lg text-[9px] uppercase font-bold"
                       >
                         Close Session
                       </button>
@@ -725,7 +725,7 @@ export default function DoctorDashboard() {
 
                         if (isSystem) {
                           return (
-                            <div key={m.id} className="p-2 bg-slate-950 border border-slate-900/60 rounded text-[9px] text-slate-500 text-center">
+                            <div key={m.id} className="p-2 bg-white border border-slate-200/60 rounded text-[9px] text-slate-500 text-center">
                               {m.message}
                             </div>
                           );
@@ -735,8 +735,8 @@ export default function DoctorDashboard() {
                           <div key={m.id} className={`flex ${isDoctor ? 'justify-end' : 'justify-start'}`}>
                             <div className={`max-w-[75%] p-3 rounded-xl border text-[11px] leading-relaxed ${
                               isDoctor
-                                ? 'bg-rose-500/10 border-rose-500/20 text-slate-200'
-                                : 'bg-slate-900 border-slate-800 text-slate-200'
+                                ? 'bg-rose-500/10 border-rose-500/20 text-slate-800'
+                                : 'bg-white border-slate-200 text-slate-800'
                             }`}>
                               <p className="text-[8px] text-slate-500 uppercase mb-0.5 tracking-wider font-bold">
                                 {isDoctor ? 'You' : 'Patient'}
@@ -749,14 +749,14 @@ export default function DoctorDashboard() {
                       <div ref={messagesEndRef} />
                     </div>
 
-                    <form onSubmit={handleSendChatMessage} className="p-3 bg-slate-950 border-t border-slate-900 flex gap-2">
+                    <form onSubmit={handleSendChatMessage} className="p-3 bg-white border-t border-slate-200 flex gap-2">
                       <input
                         type="text"
                         value={replyInput}
                         onChange={(e) => setReplyInput(e.target.value)}
                         disabled={selectedRequest.status === 'CLOSED'}
                         placeholder={selectedRequest.status === 'CLOSED' ? 'Session closed.' : 'Type clinical emergency guidance response...'}
-                        className="flex-1 px-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-200 text-xs focus:outline-none disabled:opacity-50"
+                        className="flex-1 px-4 py-2 bg-white border border-slate-200 rounded-xl text-slate-800 text-xs focus:outline-none disabled:opacity-50"
                       />
                       <button
                         type="submit"
@@ -770,7 +770,7 @@ export default function DoctorDashboard() {
 
                   {/* AI Summary compiled summary */}
                   {messages.length > 1 && (
-                    <div className="glass-panel p-5 rounded-2xl border border-slate-900 bg-slate-950/10 space-y-3">
+                    <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
                       <button
                         onClick={generateHandoffSummary}
                         className="w-full py-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 rounded-xl font-bold flex items-center justify-center gap-1.5"
@@ -779,7 +779,7 @@ export default function DoctorDashboard() {
                         <span>Compile AI Hand-off summary</span>
                       </button>
                       {aiSummary && (
-                        <div className="p-3.5 bg-slate-950 border border-slate-900 rounded-xl text-[10px] text-slate-400 leading-relaxed whitespace-pre-line">
+                        <div className="p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] text-slate-600 leading-relaxed whitespace-pre-line">
                           {aiSummary}
                         </div>
                       )}
@@ -792,7 +792,7 @@ export default function DoctorDashboard() {
                 <div className="lg:col-span-4 space-y-6">
                   
                   {/* Active Trauma info banner */}
-                  <div className="glass-panel p-5 rounded-2xl border border-slate-900 bg-slate-950/10 space-y-3">
+                  <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
                     <h4 className="text-[10px] font-bold text-rose-455 uppercase tracking-widest flex items-center gap-1.5">
                       <ShieldAlert className="w-4 h-4" />
                       Coordination Details
@@ -802,11 +802,11 @@ export default function DoctorDashboard() {
                       <div className="text-[10px] space-y-2 leading-normal">
                         <div className="space-y-1">
                           <span className="text-slate-550 block uppercase text-[8px] tracking-wider">Reported Symptoms</span>
-                          <p className="text-slate-300 font-semibold">{emergencyContext.symptoms.join(', ')}</p>
+                          <p className="text-slate-700 font-semibold">{emergencyContext.symptoms.join(', ')}</p>
                         </div>
                         <div className="space-y-1">
                           <span className="text-slate-550 block uppercase text-[8px] tracking-wider">Triage Class</span>
-                          <p className="text-slate-300 font-semibold">{emergencyContext.category}</p>
+                          <p className="text-slate-700 font-semibold">{emergencyContext.category}</p>
                         </div>
                         <div className="space-y-1">
                           <span className="text-slate-550 block uppercase text-[8px] tracking-wider">Triage Priority</span>
@@ -817,28 +817,28 @@ export default function DoctorDashboard() {
                   </div>
 
                   {/* Consent-gated Patient Records */}
-                  <div className="glass-panel p-5 rounded-2xl border border-slate-900 bg-slate-950/10 space-y-3">
-                    <h4 className="text-[10px] font-bold text-slate-350 uppercase tracking-widest border-b border-slate-900 pb-2">
+                  <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
+                    <h4 className="text-[10px] font-bold text-slate-350 uppercase tracking-widest border-b border-slate-200 pb-2">
                       Medical Summary
                     </h4>
 
                     {medicalSummary ? (
                       <div className="text-[10px] font-mono space-y-3">
-                        <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-900">
+                        <div className="bg-white p-3 rounded-xl border border-slate-200">
                           <span className="text-slate-550 uppercase text-[8px] block mb-0.5">Blood Group</span>
                           <strong className="text-teal-400 font-bold">{medicalSummary.bloodGroup}</strong>
                         </div>
-                        <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-900">
+                        <div className="bg-white p-3 rounded-xl border border-slate-200">
                           <span className="text-slate-550 uppercase text-[8px] block mb-0.5">Allergies</span>
                           <strong className="text-rose-455 font-bold">{medicalSummary.allergies.join(', ') || 'None'}</strong>
                         </div>
-                        <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-900">
+                        <div className="bg-white p-3 rounded-xl border border-slate-200">
                           <span className="text-slate-550 uppercase text-[8px] block mb-0.5">Chronic Conditions</span>
-                          <strong className="text-slate-300 font-semibold">{medicalSummary.chronicConditions.join(', ') || 'None'}</strong>
+                          <strong className="text-slate-700 font-semibold">{medicalSummary.chronicConditions.join(', ') || 'None'}</strong>
                         </div>
                       </div>
                     ) : (
-                      <div className="p-4 bg-slate-950 rounded-xl border border-slate-900 flex items-center gap-2.5 text-slate-500">
+                      <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center gap-2.5 text-slate-500">
                         <ShieldCheck className="w-5 h-5 text-slate-700 shrink-0" />
                         <span>Medical history locked. Waiting for patient consent...</span>
                       </div>
@@ -846,30 +846,30 @@ export default function DoctorDashboard() {
                   </div>
 
                   {/* ASHA Field Screenings Panel */}
-                  <div className="glass-panel p-5 rounded-2xl border border-slate-900 bg-slate-950/10 space-y-3">
-                    <h4 className="text-[10px] font-bold text-slate-350 uppercase tracking-widest border-b border-slate-900 pb-2">
+                  <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
+                    <h4 className="text-[10px] font-bold text-slate-350 uppercase tracking-widest border-b border-slate-200 pb-2">
                       ASHA Community Screenings
                     </h4>
                     {ashaScreenings && ashaScreenings.length > 0 ? (
                       <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
                         {ashaScreenings.map((scr: any) => (
-                          <div key={scr.id} className="p-3 bg-slate-950/85 rounded-xl border border-slate-900 text-[10px] font-mono space-y-2">
-                            <div className="flex justify-between border-b border-slate-900 pb-1 text-slate-500 text-[8px] uppercase">
+                          <div key={scr.id} className="p-3 bg-white rounded-xl border border-slate-200 text-[10px] font-mono space-y-2">
+                            <div className="flex justify-between border-b border-slate-200 pb-1 text-slate-500 text-[8px] uppercase">
                               <span>Date: {new Date(scr.screening_date).toLocaleDateString()}</span>
                               <span className={scr.risk_level === 'URGENT' || scr.risk_level === 'PRIORITY' ? 'text-rose-455 font-bold' : 'text-slate-500'}>
                                 {scr.risk_level}
                               </span>
                             </div>
                             <div className="grid grid-cols-2 gap-1 text-[9px]">
-                              <div>BP: <span className="text-slate-300">{scr.systolic_status === 'MEASURED' ? `${scr.systolic}/${scr.diastolic}` : 'N/A'}</span></div>
-                              <div>SpO2: <span className="text-slate-300">{scr.spo2_status === 'MEASURED' ? `${scr.spo2}%` : 'N/A'}</span></div>
-                              <div>Temp: <span className="text-slate-300">{scr.temperature_status === 'MEASURED' ? `${scr.temperature}°F` : 'N/A'}</span></div>
-                              <div>Glucose: <span className="text-slate-300">{scr.glucose_status === 'MEASURED' ? `${scr.glucose} mg/dL` : 'N/A'}</span></div>
+                              <div>BP: <span className="text-slate-700">{scr.systolic_status === 'MEASURED' ? `${scr.systolic}/${scr.diastolic}` : 'N/A'}</span></div>
+                              <div>SpO2: <span className="text-slate-700">{scr.spo2_status === 'MEASURED' ? `${scr.spo2}%` : 'N/A'}</span></div>
+                              <div>Temp: <span className="text-slate-700">{scr.temperature_status === 'MEASURED' ? `${scr.temperature}°F` : 'N/A'}</span></div>
+                              <div>Glucose: <span className="text-slate-700">{scr.glucose_status === 'MEASURED' ? `${scr.glucose} mg/dL` : 'N/A'}</span></div>
                             </div>
                             {scr.symptoms && JSON.parse(scr.symptoms).length > 0 && (
                               <div>
                                 <span className="text-[8px] text-slate-500 uppercase block">Symptoms</span>
-                                <span className="text-slate-400">{JSON.parse(scr.symptoms).join(', ')}</span>
+                                <span className="text-slate-600">{JSON.parse(scr.symptoms).join(', ')}</span>
                               </div>
                             )}
                             {scr.risk_flags && JSON.parse(scr.risk_flags).length > 0 && (
@@ -888,7 +888,7 @@ export default function DoctorDashboard() {
                 </div>
               </div>
             ) : (
-              <div className="h-64 flex flex-col items-center justify-center text-center p-8 text-slate-500 glass-panel rounded-2xl border border-slate-900 bg-slate-950/20">
+              <div className="h-64 flex flex-col items-center justify-center text-center p-8 text-slate-500 bg-white border border-slate-200 shadow-sm rounded-2xl border border-slate-200 bg-white">
                 <HeartPulse className="w-12 h-12 text-slate-700 mb-3 animate-pulse" />
                 <p className="text-xs">No active consultation running. Select a requested emergency from the requests queue tab.</p>
               </div>
@@ -897,45 +897,45 @@ export default function DoctorDashboard() {
         )}
 
         {activeTab === 'screenings' && (
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 bg-slate-950/20 space-y-4">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-900 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-4">
+            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-200 pb-2">
               ASHA Community Field Screenings
             </h3>
             {ashaScreenings && ashaScreenings.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {ashaScreenings.map((scr: any) => (
-                  <div key={scr.id} className="p-5 rounded-xl border border-slate-900 bg-slate-950/50 space-y-4 text-xs font-mono">
-                    <div className="flex justify-between items-center border-b border-slate-900 pb-2 text-[10px] text-slate-500 uppercase font-bold">
+                  <div key={scr.id} className="p-5 rounded-xl border border-slate-200 bg-white space-y-4 text-xs font-mono">
+                    <div className="flex justify-between items-center border-b border-slate-200 pb-2 text-[10px] text-slate-500 uppercase font-bold">
                       <span>Screening Date: {new Date(scr.screening_date).toLocaleString()}</span>
                       <span className={`px-2 py-0.5 rounded text-[9px] font-extrabold ${
-                        scr.risk_level === 'URGENT' || scr.risk_level === 'PRIORITY' ? 'bg-rose-500/20 text-rose-400' : 'bg-slate-900 text-slate-400'
+                        scr.risk_level === 'URGENT' || scr.risk_level === 'PRIORITY' ? 'bg-rose-500/20 text-rose-400' : 'bg-white text-slate-600'
                       }`}>
                         {scr.risk_level}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 text-slate-300">
-                      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-900">
+                    <div className="grid grid-cols-2 gap-3 text-slate-700">
+                      <div className="bg-white p-2.5 rounded-lg border border-slate-200">
                         <span className="text-[9px] text-slate-500 uppercase block mb-1">Blood Pressure</span>
                         <strong>{scr.systolic_status === 'MEASURED' ? `${scr.systolic}/${scr.diastolic} mmHg` : scr.systolic_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
                       </div>
-                      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-900">
+                      <div className="bg-white p-2.5 rounded-lg border border-slate-200">
                         <span className="text-[9px] text-slate-500 uppercase block mb-1">Pulse Rate</span>
                         <strong>{scr.pulse_status === 'MEASURED' ? `${scr.pulse} BPM` : scr.pulse_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
                       </div>
-                      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-900">
+                      <div className="bg-white p-2.5 rounded-lg border border-slate-200">
                         <span className="text-[9px] text-slate-500 uppercase block mb-1">SpO2 (Oxygen)</span>
                         <strong>{scr.spo2_status === 'MEASURED' ? `${scr.spo2}%` : scr.spo2_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
                       </div>
-                      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-900">
+                      <div className="bg-white p-2.5 rounded-lg border border-slate-200">
                         <span className="text-[9px] text-slate-500 uppercase block mb-1">Temperature</span>
                         <strong>{scr.temperature_status === 'MEASURED' ? `${scr.temperature}°F` : scr.temperature_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
                       </div>
-                      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-900">
+                      <div className="bg-white p-2.5 rounded-lg border border-slate-200">
                         <span className="text-[9px] text-slate-500 uppercase block mb-1">Random Glucose</span>
                         <strong>{scr.glucose_status === 'MEASURED' ? `${scr.glucose} mg/dL` : scr.glucose_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
                       </div>
-                      <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-900">
+                      <div className="bg-white p-2.5 rounded-lg border border-slate-200">
                         <span className="text-[9px] text-slate-500 uppercase block mb-1">Weight & Height</span>
                         <strong>
                           {scr.weight_status === 'MEASURED' ? `${scr.weight} kg` : 'N/A'} / {scr.height_status === 'MEASURED' ? `${scr.height} cm` : 'N/A'}
@@ -978,15 +978,15 @@ export default function DoctorDashboard() {
         )}
 
         {activeTab === 'history' && (
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 bg-slate-950/20 space-y-4">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-900 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-4">
+            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-200 pb-2">
               Consultation Archive
             </h3>
 
             <div className="overflow-x-auto text-[10px]">
               <table className="w-full text-left font-mono">
                 <thead>
-                  <tr className="border-b border-slate-900 text-slate-500 uppercase text-[9px]">
+                  <tr className="border-b border-slate-200 text-slate-500 uppercase text-[9px]">
                     <th className="pb-3">Emergency ID</th>
                     <th className="pb-3">Triage Category</th>
                     <th className="pb-3">Priority</th>
@@ -1001,12 +1001,12 @@ export default function DoctorDashboard() {
                     </tr>
                   ) : (
                     emergencyRequests.filter(r => r.status === 'CLOSED').map(req => (
-                      <tr key={req.requestId} className="text-slate-300">
+                      <tr key={req.requestId} className="text-slate-700">
                         <td className="py-3 font-bold">{req.emergencyId.substring(0, 14)}...</td>
                         <td className="py-3">{req.category}</td>
                         <td className="py-3">
                           <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold ${
-                            req.priority === 'HIGH' ? 'bg-rose-500/20 text-rose-400' : 'bg-slate-900 text-slate-400'
+                            req.priority === 'HIGH' ? 'bg-rose-500/20 text-rose-400' : 'bg-white text-slate-600'
                           }`}>
                             {req.priority}
                           </span>
@@ -1023,27 +1023,27 @@ export default function DoctorDashboard() {
         )}
 
         {activeTab === 'profile' && doctor && (
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 bg-slate-950/20 space-y-6 max-w-xl">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-900 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-6 max-w-xl">
+            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-200 pb-2">
               Medical Practitioner Profile
             </h3>
 
             <div className="space-y-4 font-mono text-[10px]">
-              <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-900 grid grid-cols-2 gap-4">
+              <div className="bg-white p-4 rounded-xl border border-slate-200 grid grid-cols-2 gap-4">
                 <div>
                   <span className="text-slate-550 block uppercase text-[8px]">Practitioner Name</span>
-                  <strong className="text-slate-200 text-sm font-bold">{doctor.name}</strong>
+                  <strong className="text-slate-800 text-sm font-bold">{doctor.name}</strong>
                 </div>
                 <div>
                   <span className="text-slate-550 block uppercase text-[8px]">Medical Specialty</span>
-                  <strong className="text-slate-200 font-bold">{doctor.specialty}</strong>
+                  <strong className="text-slate-800 font-bold">{doctor.specialty}</strong>
                 </div>
               </div>
 
-              <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-900 grid grid-cols-2 gap-4">
+              <div className="bg-white p-4 rounded-xl border border-slate-200 grid grid-cols-2 gap-4">
                 <div>
                   <span className="text-slate-550 block uppercase text-[8px]">Affiliation Hospital</span>
-                  <strong className="text-slate-200 font-bold">Government General Hospital</strong>
+                  <strong className="text-slate-800 font-bold">Government General Hospital</strong>
                 </div>
                 <div>
                   <span className="text-slate-550 block uppercase text-[8px]">Availability Triage Status</span>
@@ -1051,9 +1051,9 @@ export default function DoctorDashboard() {
                 </div>
               </div>
 
-              <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-900">
+              <div className="bg-white p-4 rounded-xl border border-slate-200">
                 <span className="text-slate-550 block uppercase text-[8px] mb-1">Doctor ID Identification</span>
-                <code className="text-slate-400 font-bold select-all bg-slate-950 px-2 py-1 rounded border border-slate-900">
+                <code className="text-slate-600 font-bold select-all bg-white px-2 py-1 rounded border border-slate-200">
                   {doctor.id}
                 </code>
               </div>

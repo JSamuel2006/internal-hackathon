@@ -133,25 +133,25 @@ export default function AppointmentBookingPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto p-4 md:p-6 text-slate-200">
+    <div className="space-y-6 max-w-4xl mx-auto p-4 md:p-6 text-slate-800">
       
       {/* Title Header */}
-      <div className="flex flex-col gap-2 border-b border-slate-900 pb-5">
+      <div className="flex flex-col gap-2 border-b border-slate-200 pb-5">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-slate-100 flex items-center gap-2.5">
+          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2.5">
             <HeartPulse className="w-6.5 h-6.5 text-rose-500 animate-pulse" />
             <span>{content.title}</span>
           </h2>
           <button 
             onClick={handleSpeakInstructions}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 border border-slate-800 hover:text-rose-400 rounded-lg text-slate-400 transition-colors text-[10px] uppercase font-mono font-bold cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:text-rose-400 rounded-lg text-slate-600 transition-colors text-[10px] uppercase font-mono font-bold cursor-pointer"
             title="Read out instructions"
           >
             <Volume2 className="w-3.5 h-3.5" />
             <span>📢 {I18nService.translate('talk_to_ai') || 'Listen'}</span>
           </button>
         </div>
-        <p className="text-xs md:text-sm text-slate-400 leading-relaxed">
+        <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
           {content.subtitle}
         </p>
       </div>
@@ -161,8 +161,8 @@ export default function AppointmentBookingPage() {
         <div className="p-4 bg-rose-950/40 border border-rose-900/60 text-rose-400 rounded-2xl flex items-start gap-3 shadow-md animate-fade-in font-mono text-xs">
           <ShieldAlert className="w-5 h-5 shrink-0 text-rose-500 mt-0.5" />
           <div className="space-y-1">
-            <p className="font-bold text-slate-100 uppercase tracking-wider">{content.offlineTitle}</p>
-            <p className="text-slate-400 leading-normal">{content.offlineDesc}</p>
+            <p className="font-bold text-slate-900 uppercase tracking-wider">{content.offlineTitle}</p>
+            <p className="text-slate-600 leading-normal">{content.offlineDesc}</p>
           </div>
         </div>
       ) : (
@@ -176,12 +176,12 @@ export default function AppointmentBookingPage() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
         
         {/* Left Side: Call to Action */}
-        <div className="md:col-span-6 glass-panel p-6 rounded-2xl border border-slate-900 space-y-6 flex flex-col justify-between">
+        <div className="md:col-span-6 bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-6 flex flex-col justify-between">
           <div className="space-y-4">
             <h3 className="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold">
               Government Telemedicine Portal
             </h3>
-            <p className="text-xs text-slate-400 leading-relaxed font-mono">
+            <p className="text-xs text-slate-600 leading-relaxed font-mono">
               Ready to connect? eSanjeevani access is integrated seamlessly. Press the button below to transfer securely.
             </p>
           </div>
@@ -193,7 +193,7 @@ export default function AppointmentBookingPage() {
               className={`w-full py-4 px-6 rounded-xl font-bold text-sm uppercase flex items-center justify-center gap-2.5 transition-all shadow-lg select-none cursor-pointer ${
                 isOnline 
                   ? 'bg-rose-500 hover:bg-rose-600 text-slate-950 hover:shadow-rose-950/20 scale-[1.01]' 
-                  : 'bg-slate-900 border border-slate-800 text-slate-600 cursor-not-allowed'
+                  : 'bg-white border border-slate-200 text-slate-600 cursor-not-allowed'
               }`}
             >
               <span>{content.buttonLabel}</span>
@@ -203,12 +203,12 @@ export default function AppointmentBookingPage() {
         </div>
 
         {/* Right Side: Instructions */}
-        <div className="md:col-span-6 glass-panel p-6 rounded-2xl border border-slate-900 space-y-5">
-          <h3 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold border-b border-slate-850 pb-2">
+        <div className="md:col-span-6 bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-5">
+          <h3 className="text-xs font-mono uppercase tracking-wider text-slate-600 font-bold border-b border-slate-200 pb-2">
             📋 {content.howItWorksTitle}
           </h3>
           
-          <ul className="space-y-3.5 text-xs text-slate-400 font-mono list-none">
+          <ul className="space-y-3.5 text-xs text-slate-600 font-mono list-none">
             <li className="flex items-start gap-2.5">
               <span className="text-rose-500 font-bold shrink-0">1.</span>
               <span>{content.step1}</span>
@@ -231,8 +231,8 @@ export default function AppointmentBookingPage() {
       </div>
 
       {/* Disclaimers & Official info */}
-      <div className="glass-panel p-6 rounded-2xl border border-slate-900/60 bg-slate-950/40 text-xs font-mono space-y-3">
-        <h4 className="font-bold text-slate-300 flex items-center gap-1.5 uppercase text-[10px]">
+      <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200/60 bg-white text-xs font-mono space-y-3">
+        <h4 className="font-bold text-slate-700 flex items-center gap-1.5 uppercase text-[10px]">
           <Info className="w-4 h-4 text-rose-500" />
           <span>{content.importantTitle}</span>
         </h4>
@@ -248,7 +248,7 @@ export default function AppointmentBookingPage() {
             <ShieldAlert className="w-5 h-5 text-rose-500" />
             <span>{content.emergencyTitle}</span>
           </h4>
-          <p className="text-xs text-slate-400 leading-relaxed font-mono">
+          <p className="text-xs text-slate-600 leading-relaxed font-mono">
             {content.emergencyDesc}
           </p>
         </div>

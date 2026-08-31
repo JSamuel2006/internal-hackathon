@@ -77,20 +77,20 @@ export default function FamilyDashboard() {
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-350">
-      <div className="flex justify-between items-center border-b border-slate-900 pb-4">
+      <div className="flex justify-between items-center border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-indigo-500/10 rounded-xl text-indigo-400 border border-indigo-500/20">
             <Users className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-slate-100 uppercase">Family Health Directory</h2>
+            <h2 className="text-sm font-bold text-slate-900 uppercase">Family Health Directory</h2>
             <p className="text-[10px] text-slate-500">Coordinate health timelines, ABHAs, and immunizations for all relatives</p>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <form onSubmit={handleAddMember} className="lg:col-span-5 bg-slate-950 p-6 rounded-2xl border border-slate-900 space-y-4">
+        <form onSubmit={handleAddMember} className="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 space-y-4">
           <span className="font-bold text-slate-205 uppercase block">Add Relative</span>
           <input
             type="text"
@@ -98,7 +98,7 @@ export default function FamilyDashboard() {
             value={name}
             aria-label="Relative Name"
             onChange={e => setName(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-slate-300 focus:outline-none"
+            className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-700 focus:outline-none"
           />
           <input
             type="text"
@@ -106,13 +106,13 @@ export default function FamilyDashboard() {
             value={abhaId}
             aria-label="ABHA ID"
             onChange={e => setAbhaId(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-slate-300 focus:outline-none"
+            className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-700 focus:outline-none"
           />
           <select
             value={relationship}
             aria-label="Relationship"
             onChange={e => setRelationship(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-slate-300 focus:outline-none"
+            className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-700 focus:outline-none"
           >
             <option value="Parent">Parent</option>
             <option value="Spouse">Spouse</option>
@@ -128,7 +128,7 @@ export default function FamilyDashboard() {
           <span className="font-bold text-slate-205 uppercase block">Registered Relatives</span>
           <div className="space-y-3">
             {members.map((m) => (
-              <div key={m.id} className="p-4 bg-slate-950 border border-slate-900 rounded-xl flex justify-between items-center">
+              <div key={m.id} className="p-4 bg-white border border-slate-200 rounded-xl flex justify-between items-center">
                 <div>
                   <strong className="text-slate-202 text-sm block">{m.member_name}</strong>
                   <span className="text-[10px] text-slate-500">{m.relationship} {m.abha_id ? `| ABHA: ${m.abha_id}` : ''}</span>

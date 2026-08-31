@@ -1,208 +1,116 @@
-import React, { useState, useEffect } from 'react';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { 
-  Activity, LayoutDashboard, ClipboardList, LogOut, ShieldAlert,
-  Wifi, WifiOff, RefreshCw
+  Users, Activity, ClipboardList, ShieldAlert, HeartPulse, 
+  Menu, X, LogOut, RefreshCw, ChevronRight, CheckCircle2
 } from 'lucide-react';
-import { authService, workerService } from '../services/api';
-import { offlineScreeningStorage } from '../services/offlineScreeningStorage';
+import { authService } from '../services/api';
+import { I18nService, t } from '../i18n';
+import { LanguageSelector } from '../components/voice/LanguageSelector';
 
 export default function WorkerLayout() {
   const navigate = useNavigate();
-  const [online, setOnline] = useState(navigator.onLine);
-  const [pendingCount, setPendingCount] = useState(0);
-  const [syncing, setSyncing] = useState(false);
-  const [syncMessage, setSyncMessage] = useState('');
-
-  // Track online/offline status
-  useEffect(() => {
-    const handleOnline = () => setOnline(true);
-    const handleOffline = () => setOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    // Sync queue status checker
-    const checkQueue = async () => {
-      const stats = await offlineScreeningStorage.getStats();
-      setPendingCount(stats.pending);
-    };
-
-    checkQueue();
-    const interval = setInterval(checkQueue, 4000);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-      clearInterval(interval);
-    };
-  }, []);
-
-  const handleSync = async () => {
-    if (!online || syncing) return;
-    setSyncing(true);
-    setSyncMessage('Synchronizing field screening records...');
-    try {
-      const activeQueue = await offlineScreeningStorage.getScreenings();
-      const screenings = activeQueue.filter(s => s.sync_status === 'PENDING' || s.sync_status === 'FAILED');
-      if (screenings.length === 0) {
-        setSyncMessage('No pending records to synchronize.');
-        setTimeout(() => setSyncMessage(''), 2000);
-        setSyncing(false);
-        return;
-      }
-
-      console.log('[OFFLINE SYNC] Pending records found (Auto):', screenings.length);
-      for (const scr of screenings) {
-        console.log('[OFFLINE SYNC] Attempting sync (Auto) for client_record_id:', scr.client_record_id);
-      }
-
-      console.log('[OFFLINE SYNC] POST /worker/screenings/sync (Auto)');
-      const res = await workerService.syncScreenings(screenings);
-      console.log('[OFFLINE SYNC] Response status (Auto):', res.success ? 'SUCCESS' : 'FAILED');
-
-      if (res.success && Array.isArray(res.data)) {
-        for (const item of res.data) {
-          if (item.status === 'SUCCESS') {
-            console.log('[OFFLINE SYNC] Marked SYNCED (Auto):', item.client_record_id);
-            await offlineScreeningStorage.updateSyncStatus(item.client_record_id, 'SYNCED');
-          } else {
-            console.error('[OFFLINE SYNC] Marked FAILED (Auto):', item.client_record_id, 'Error:', item.error);
-            await offlineScreeningStorage.updateSyncStatus(item.client_record_id, 'FAILED', item.error);
-          }
-        }
-        await offlineScreeningStorage.clearSynced();
-        const stats = await offlineScreeningStorage.getStats();
-        setPendingCount(stats.pending);
-        setSyncMessage(`Synchronization complete. Unsynced remaining: ${stats.pending}`);
-      } else {
-        setSyncMessage('Synchronization failed on backend.');
-      }
-    } catch (err: any) {
-      console.error('[OFFLINE SYNC] Auto sync error:', err.message || err);
-      setSyncMessage(`Error syncing: ${err.message || err}`);
-    } finally {
-      setSyncing(false);
-      setTimeout(() => setSyncMessage(''), 3000);
-    }
-  };
+  const location = useLocation();
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const userRaw = sessionStorage.getItem('user');
+  const user = userRaw ? JSON.parse(userRaw) : { name: 'Sunita Devi (ASHA)', role: 'ROLE_WORKER', jurisdiction: 'Haveli Village' };
 
   const handleLogout = () => {
     authService.logout();
     navigate('/login');
   };
 
-  const userRaw = sessionStorage.getItem('user');
-  const user = userRaw ? JSON.parse(userRaw) : { name: 'Sunita Devi (ASHA)', jurisdiction: 'Haveli Village' };
+  const [currentLang, setCurrentLang] = React.useState(I18nService.getLanguage());
+
+  React.useEffect(() => {
+    const unsub = I18nService.subscribe((lang) => {
+      setCurrentLang(lang);
+    });
+    return unsub;
+  }, []);
+
+  const navItems = [
+    { name: 'ASHA Dashboard', path: '/worker/dashboard', icon: Activity },
+    { name: 'Field Screening', path: '/worker/screening', icon: ClipboardList },
+  ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-mono text-xs">
-      {/* Top Banner Status Bar */}
-      <div className="bg-slate-900 border-b border-slate-800 px-4 py-2 flex justify-between items-center z-50">
-        <div className="flex items-center gap-3">
-          <div className="p-1 bg-emerald-500/10 rounded text-emerald-450 border border-emerald-500/20">
-            <Activity className="w-4 h-4 animate-pulse" />
+    <div className="h-screen bg-[#F5FAFC] text-slate-800 flex flex-col md:flex-row overflow-hidden font-sans">
+      <aside className="hidden md:flex flex-col w-72 h-full border-r border-slate-200 bg-white p-5 justify-between shrink-0 shadow-xs">
+        <div className="flex flex-col gap-5 overflow-y-auto flex-1 pr-1">
+          <Link to="/worker/dashboard" className="flex items-center gap-3 px-2 py-1">
+            <div className="p-2.5 bg-cyan-600 rounded-xl text-white shadow-md shadow-cyan-600/20">
+              <Users className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="font-extrabold text-xl tracking-tight text-slate-900">
+                Arogya<span className="text-cyan-600">Mitra</span>
+              </span>
+              <span className="text-[10px] block text-slate-500 font-bold uppercase tracking-wider font-sans -mt-1">
+                ASHA Worker Portal
+              </span>
+            </div>
+          </Link>
+
+          <div className="p-3.5 rounded-2xl bg-[#EEF7FA] border border-cyan-100 shadow-2xs">
+            <span className="text-[10px] font-bold tracking-wider text-cyan-700 uppercase">ASHA Jurisdiction</span>
+            <p className="text-xs font-bold text-slate-900 truncate mt-0.5">{user.name}</p>
+            <p className="text-[10px] font-mono text-slate-500 font-medium">{user.jurisdiction || 'Haveli Village'}</p>
           </div>
-          <div>
-            <span className="font-bold text-slate-202 text-[10px] block uppercase tracking-wider">ArogyaMitra Field Screen</span>
-            <span className="text-[9px] text-slate-500">{user.name} | {user.jurisdiction}</span>
-          </div>
+
+          <nav className="flex flex-col gap-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                    isActive
+                      ? 'bg-cyan-50 text-cyan-700 border border-cyan-200/80 shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
+                  }`}
+                >
+                  <span className="flex items-center gap-3">
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-600' : 'text-slate-400'}`} />
+                    <span>{item.name}</span>
+                  </span>
+                  {isActive && <ChevronRight className="w-3.5 h-3.5 text-cyan-600" />}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
 
-        {/* Connectivity and sync indicators */}
-        <div className="flex items-center gap-3">
-          {syncMessage && (
-            <span className="text-[9px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 animate-pulse">
-              {syncMessage}
-            </span>
-          )}
-
-          {pendingCount > 0 && (
-            <button
-              onClick={handleSync}
-              disabled={syncing || !online}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-[9px] font-bold border transition-all ${
-                online
-                  ? 'bg-amber-500 text-slate-950 border-amber-600 hover:bg-amber-400'
-                  : 'bg-slate-800 text-slate-500 border-slate-700 cursor-not-allowed'
-              }`}
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${syncing ? 'animate-spin' : ''}`} />
-              <span>{pendingCount} PENDING</span>
-            </button>
-          )}
-
-          <div className={`flex items-center gap-1 px-2 py-0.5 rounded text-[9px] border font-bold ${
-            online 
-              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
-              : 'bg-rose-500/10 text-rose-450 border-rose-500/20'
-          }`}>
-            {online ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
-            <span>{online ? 'ONLINE' : 'OFFLINE'}</span>
+        <div className="pt-4 border-t border-slate-100 space-y-3 shrink-0">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-500">Language</span>
+            <LanguageSelector />
           </div>
-        </div>
-      </div>
-
-      {/* Main Layout Area */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar Nav */}
-        <nav className="w-48 bg-slate-950 border-r border-slate-900 flex flex-col justify-between p-4 hidden md:flex">
-          <div className="space-y-4">
-            <Link
-              to="/worker/dashboard"
-              className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl text-slate-350 hover:bg-slate-900 hover:text-slate-100 transition-all font-semibold"
-            >
-              <LayoutDashboard className="w-4 h-4" />
-              <span>Field Board</span>
-            </Link>
-            <Link
-              to="/worker/screening"
-              className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl text-slate-350 hover:bg-slate-900 hover:text-slate-100 transition-all font-semibold"
-            >
-              <ClipboardList className="w-4 h-4" />
-              <span>New Screen</span>
-            </Link>
-            <Link
-              to="/worker/offline-health"
-              className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl text-slate-350 hover:bg-slate-900 hover:text-slate-100 transition-all font-semibold"
-            >
-              <Activity className="w-4 h-4" />
-              <span>Offline Care</span>
-            </Link>
-          </div>
-
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl text-rose-455 hover:bg-rose-500/10 transition-all font-semibold text-left w-full border border-transparent hover:border-rose-500/20"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-all cursor-pointer"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-4 h-4 text-rose-600" />
             <span>Sign Out</span>
           </button>
-        </nav>
+        </div>
+      </aside>
 
-        {/* Dynamic page content */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">
-          {/* Mobile navigation header */}
-          <div className="flex md:hidden justify-around border-b border-slate-900 pb-4 mb-6 text-center">
-            <Link to="/worker/dashboard" className="px-3 py-1.5 bg-slate-900 rounded-lg flex items-center gap-1.5 font-bold">
-              <LayoutDashboard className="w-3.5 h-3.5" />
-              <span>Board</span>
-            </Link>
-            <Link to="/worker/screening" className="px-3 py-1.5 bg-slate-900 rounded-lg flex items-center gap-1.5 font-bold">
-              <ClipboardList className="w-3.5 h-3.5" />
-              <span>Screen</span>
-            </Link>
-            <Link to="/worker/offline-health" className="px-3 py-1.5 bg-slate-900 rounded-lg flex items-center gap-1.5 font-bold">
-              <Activity className="w-3.5 h-3.5" />
-              <span>Care</span>
-            </Link>
-            <button onClick={handleLogout} className="px-3 py-1.5 bg-slate-900 text-rose-400 rounded-lg flex items-center gap-1.5 font-bold">
-              <LogOut className="w-3.5 h-3.5" />
-              <span>Exit</span>
+      <div className="flex-1 flex flex-col h-full overflow-hidden">
+        <header className="h-16 bg-white border-b border-slate-200 px-4 md:px-8 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3">
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
+            <h1 className="font-extrabold text-lg text-slate-900 tracking-tight">ASHA Field Work Center</h1>
           </div>
+          <LanguageSelector />
+        </header>
 
-          <Outlet />
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#F5FAFC]">
+          <Outlet key={currentLang} />
         </main>
       </div>
     </div>

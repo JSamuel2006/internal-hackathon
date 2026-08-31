@@ -4,22 +4,22 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 export default function DiseaseSurveillanceDashboard() {
   return (
-    <div className="space-y-6 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-300">
-      <div className="flex justify-between items-center border-b border-slate-900 pb-4">
+    <div className="space-y-6 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-700">
+      <div className="flex justify-between items-center border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20">
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-slate-100 uppercase">National Disease Surveillance</h2>
+            <h2 className="text-sm font-bold text-slate-900 uppercase">National Disease Surveillance</h2>
             <p className="text-[10px] text-slate-500">AI Cluster Outbreak Prediction GIS Heatmaps</p>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 glass-panel p-5 rounded-xl border border-slate-900 space-y-4">
-          <span className="font-bold text-slate-200 block uppercase">Outbreak Projection Trend (Next 30 Days)</span>
+        <div className="lg:col-span-2 bg-white border border-slate-200 shadow-sm p-5 rounded-xl border border-slate-200 space-y-4">
+          <span className="font-bold text-slate-800 block uppercase">Outbreak Projection Trend (Next 30 Days)</span>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={[
@@ -38,14 +38,14 @@ export default function DiseaseSurveillanceDashboard() {
           </div>
         </div>
 
-        <div className="glass-panel p-5 rounded-xl border border-slate-900 space-y-4">
-          <span className="font-bold text-slate-200 block uppercase">Active Hotspots</span>
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-xl border border-slate-200 space-y-4">
+          <span className="font-bold text-slate-800 block uppercase">Active Hotspots</span>
           <div className="space-y-3">
-            <div className="p-3 bg-slate-950 rounded border border-rose-500/20">
+            <div className="p-3 bg-white rounded border border-rose-500/20">
               <span className="text-rose-400 font-bold block">Pune Haveli Outbreak</span>
               <p className="text-[10px] text-slate-500 mt-0.5">Vector count elevated by 24%. Risk index: HIGH.</p>
             </div>
-            <div className="p-3 bg-slate-950 rounded border border-slate-900">
+            <div className="p-3 bg-white rounded border border-slate-200">
               <span className="text-amber-500 font-bold block">Kolkata Dengue Cluster</span>
               <p className="text-[10px] text-slate-500 mt-0.5">Localized reports of high fever spikes in Ward 4.</p>
             </div>

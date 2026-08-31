@@ -53,8 +53,8 @@ export default function TelemedicinePage() {
 
   return (
     <div className="space-y-8 max-w-4xl mx-auto px-4 font-mono text-xs text-slate-355 text-center">
-      <div className="border-b border-slate-900 pb-4">
-        <h2 className="text-xl font-bold text-slate-100 uppercase tracking-wider">Telemedicine Consultation Rooms</h2>
+      <div className="border-b border-slate-200 pb-4">
+        <h2 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Telemedicine Consultation Rooms</h2>
         <p className="text-[10px] text-slate-500 mt-1">Grounded virtual consulting queues linking patients to registered physicians</p>
       </div>
 
@@ -74,16 +74,16 @@ export default function TelemedicinePage() {
         )}
       </div>
 
-      <div className="glass-panel p-6 rounded-2xl border border-slate-900 text-left space-y-4">
+      <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 text-left space-y-4">
         <span className="font-bold text-slate-205 uppercase block">Previous consultations</span>
         <div className="space-y-2">
           {sessions.map((s) => (
-            <div key={s.id} className="p-3 bg-slate-950 rounded border border-slate-900 flex justify-between items-center">
+            <div key={s.id} className="p-3 bg-white rounded border border-slate-200 flex justify-between items-center">
               <div>
                 <span className="font-bold text-slate-202 block">Consultation ID: {s.id.slice(-6)}</span>
                 <span className="text-[10px] text-slate-550">Created at: {new Date(s.created_at).toLocaleString()}</span>
               </div>
-              <span className="px-2 py-0.5 bg-slate-900 text-slate-400 text-[9px] font-bold rounded uppercase">{s.session_status}</span>
+              <span className="px-2 py-0.5 bg-white text-slate-600 text-[9px] font-bold rounded uppercase">{s.session_status}</span>
             </div>
           ))}
           {sessions.length === 0 && (

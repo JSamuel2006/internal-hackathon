@@ -39,13 +39,13 @@ export default function SuperAdminDashboard() {
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-350">
-      <div className="flex justify-between items-center border-b border-slate-900 pb-4">
+      <div className="flex justify-between items-center border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20">
             <Shield className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-slate-100 uppercase">Super Admin Console</h2>
+            <h2 className="text-sm font-bold text-slate-900 uppercase">Super Admin Console</h2>
             <p className="text-[10px] text-slate-500">System health monitoring, audit trail inspectors, and database diagnostics</p>
           </div>
         </div>
@@ -60,32 +60,32 @@ export default function SuperAdminDashboard() {
 
       {health && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
-          <div className="glass-panel p-5 rounded-xl border border-slate-900">
+          <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-xl border border-slate-200">
             <span className="text-[10px] text-slate-500 block uppercase">CPU Load</span>
-            <strong className="text-xl text-slate-100 font-bold block mt-1">{health.cpuUsage}</strong>
+            <strong className="text-xl text-slate-900 font-bold block mt-1">{health.cpuUsage}</strong>
           </div>
-          <div className="glass-panel p-5 rounded-xl border border-slate-900">
+          <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-xl border border-slate-200">
             <span className="text-[10px] text-slate-500 block uppercase">Memory Usage</span>
-            <strong className="text-xl text-slate-100 font-bold block mt-1">{health.memoryUsage}</strong>
+            <strong className="text-xl text-slate-900 font-bold block mt-1">{health.memoryUsage}</strong>
           </div>
-          <div className="glass-panel p-5 rounded-xl border border-slate-900">
+          <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-xl border border-slate-200">
             <span className="text-[10px] text-slate-500 block uppercase">Storage Usage</span>
-            <strong className="text-xl text-slate-100 font-bold block mt-1">{health.storageUsage}</strong>
+            <strong className="text-xl text-slate-900 font-bold block mt-1">{health.storageUsage}</strong>
           </div>
-          <div className="glass-panel p-5 rounded-xl border border-slate-900">
+          <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-xl border border-slate-200">
             <span className="text-[10px] text-slate-500 block uppercase">API Latency</span>
             <strong className="text-xl text-emerald-400 font-bold block mt-1">{health.apiLatency}</strong>
           </div>
         </div>
       )}
 
-      <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
+      <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
         <span className="font-bold text-slate-205 uppercase block">Recent System Audit Trails</span>
         <div className="space-y-2 max-h-60 overflow-y-auto">
           {auditLogs.map((log) => (
-            <div key={log.id} className="p-3 bg-slate-950 rounded border border-slate-900 flex justify-between items-center text-[10px]">
+            <div key={log.id} className="p-3 bg-white rounded border border-slate-200 flex justify-between items-center text-[10px]">
               <div>
-                <strong className="text-slate-300 block">User: {log.user_id} | Module: {log.module}</strong>
+                <strong className="text-slate-700 block">User: {log.user_id} | Module: {log.module}</strong>
                 <span className="text-slate-500">{log.action}</span>
               </div>
               <span className="text-slate-600">{new Date(log.created_at).toLocaleString()}</span>

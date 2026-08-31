@@ -43,7 +43,7 @@ const STATUS_META: Record<string, { label: string; icon: React.ReactNode; color:
   ACKNOWLEDGED:     { label: 'Acknowledged',       icon: <CheckCircle className="w-4 h-4" />,     color: 'text-sky-400' },
   PREPARING:        { label: 'Preparing',          icon: <PackageOpen className="w-4 h-4" />,     color: 'text-violet-400' },
   ASSISTANCE_READY: { label: 'Ready',              icon: <CheckCircle className="w-4 h-4" />,     color: 'text-emerald-400' },
-  REJECTED:         { label: 'Rejected',           icon: <XCircle className="w-4 h-4" />,         color: 'text-slate-400' },
+  REJECTED:         { label: 'Rejected',           icon: <XCircle className="w-4 h-4" />,         color: 'text-slate-600' },
   ESCALATED:        { label: 'Escalated — Call 112', icon: <PhoneCall className="w-4 h-4" />,   color: 'text-rose-400' },
   RESOLVED:         { label: 'Resolved',           icon: <CheckCircle className="w-4 h-4" />,     color: 'text-slate-500' },
 };
@@ -79,7 +79,7 @@ function SafetyBanner() {
         <p className="text-amber-400 font-bold text-xs uppercase tracking-wider mb-1">
           Pharmacist Responsibility Notice
         </p>
-        <p className="text-slate-400 text-[11px] leading-relaxed">
+        <p className="text-slate-600 text-[11px] leading-relaxed">
           Each request requires your <strong className="text-amber-300">independent professional assessment</strong>. This
           system does <strong className="text-rose-400">NOT prescribe, recommend, or authorize any medication</strong>.
           AI summaries are context aids only — not diagnoses. Final decisions rest solely with the pharmacist.
@@ -91,14 +91,14 @@ function SafetyBanner() {
 
 function PriorityBadge({ priority }: { priority: string }) {
   return (
-    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase border ${PRIORITY_COLOR[priority] || 'text-slate-400 border-slate-700 bg-slate-800'}`}>
+    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase border ${PRIORITY_COLOR[priority] || 'text-slate-600 border-slate-700 bg-slate-800'}`}>
       {priority}
     </span>
   );
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const meta = STATUS_META[status] || { label: status, icon: <Clock className="w-3 h-3" />, color: 'text-slate-400' };
+  const meta = STATUS_META[status] || { label: status, icon: <Clock className="w-3 h-3" />, color: 'text-slate-600' };
   return (
     <span className={`flex items-center gap-1.5 text-[11px] font-semibold ${meta.color}`}>
       {meta.icon}
@@ -113,7 +113,7 @@ function TimeSince({ ts }: { ts: string }) {
   if (mins < 1) return <span className="text-rose-400 font-bold animate-pulse">Just now</span>;
   if (mins < 60) return <span className="text-amber-400">{mins}m ago</span>;
   const hrs = Math.floor(mins / 60);
-  return <span className="text-slate-400">{hrs}h {mins % 60}m ago</span>;
+  return <span className="text-slate-600">{hrs}h {mins % 60}m ago</span>;
 }
 
 // ─── Alert Card ───────────────────────────────────────────────
@@ -156,7 +156,7 @@ function AlertCard({ alert, onAction, loadingAlert }: AlertCardProps) {
   };
 
   return (
-    <div className={`rounded-xl border ${isHigh ? 'border-rose-500/40 bg-rose-500/5' : 'border-slate-800 bg-slate-900/60'} overflow-hidden transition-all`}>
+    <div className={`rounded-xl border ${isHigh ? 'border-rose-500/40 bg-rose-500/5' : 'border-slate-200 bg-white'} overflow-hidden transition-all`}>
       {/* HIGH priority sticky banner */}
       {isHigh && (
         <div className="flex items-center gap-2 px-4 py-2 bg-rose-500/20 border-b border-rose-500/30">
@@ -182,7 +182,7 @@ function AlertCard({ alert, onAction, loadingAlert }: AlertCardProps) {
 
             <div className="flex flex-wrap gap-1.5 mb-3">
               {(alert.symptoms || []).slice(0, 4).map((s, i) => (
-                <span key={i} className="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px] border border-slate-700">
+                <span key={i} className="px-2 py-0.5 rounded-full bg-slate-800 text-slate-700 text-[10px] border border-slate-700">
                   {s}
                 </span>
               ))}
@@ -198,7 +198,7 @@ function AlertCard({ alert, onAction, loadingAlert }: AlertCardProps) {
 
           <button
             onClick={() => setExpanded(!expanded)}
-            className="text-slate-500 hover:text-slate-300 transition-colors flex-shrink-0 mt-0.5"
+            className="text-slate-500 hover:text-slate-700 transition-colors flex-shrink-0 mt-0.5"
             aria-label="Toggle alert details"
           >
             {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -263,7 +263,7 @@ function AlertCard({ alert, onAction, loadingAlert }: AlertCardProps) {
               </>
             )}
             {isLoading && (
-              <span className="text-slate-400 text-[11px] flex items-center gap-1.5">
+              <span className="text-slate-600 text-[11px] flex items-center gap-1.5">
                 <RefreshCcw className="w-3 h-3 animate-spin" /> Updating…
               </span>
             )}
@@ -273,11 +273,11 @@ function AlertCard({ alert, onAction, loadingAlert }: AlertCardProps) {
 
       {/* Expanded panel */}
       {expanded && (
-        <div className="border-t border-slate-800 px-4 pb-4 pt-3 space-y-4">
+        <div className="border-t border-slate-200 px-4 pb-4 pt-3 space-y-4">
           {/* Assistance notes input (for preparing/ready states) */}
           {['ACKNOWLEDGED', 'PREPARING'].includes(alert.status) && (
             <div>
-              <label className="text-[10px] text-slate-400 uppercase tracking-wider block mb-1.5">
+              <label className="text-[10px] text-slate-600 uppercase tracking-wider block mb-1.5">
                 Pharmacist Notes <span className="text-slate-600">(optional, max 1000 chars — do NOT include medication instructions)</span>
               </label>
               <textarea
@@ -287,7 +287,7 @@ function AlertCard({ alert, onAction, loadingAlert }: AlertCardProps) {
                 maxLength={1000}
                 rows={3}
                 placeholder="e.g. First aid supplies ready. Patient should also be seen by physician."
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg text-slate-200 text-xs p-3 resize-none focus:outline-none focus:border-slate-500 placeholder:text-slate-600"
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg text-slate-800 text-xs p-3 resize-none focus:outline-none focus:border-slate-500 placeholder:text-slate-600"
               />
               {inputError && <p className="text-rose-400 text-[10px] mt-1">{inputError}</p>}
             </div>
@@ -296,7 +296,7 @@ function AlertCard({ alert, onAction, loadingAlert }: AlertCardProps) {
           {/* Alert details */}
           <div>
             <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1.5">Emergency Context</p>
-            <p className="text-slate-300 text-[11px] leading-relaxed whitespace-pre-wrap bg-slate-800/60 rounded-lg p-3 border border-slate-700/50">
+            <p className="text-slate-700 text-[11px] leading-relaxed whitespace-pre-wrap bg-slate-800/60 rounded-lg p-3 border border-slate-700/50">
               {alert.assistanceDetails}
             </p>
           </div>
@@ -337,7 +337,7 @@ function AlertCard({ alert, onAction, loadingAlert }: AlertCardProps) {
             </div>
             {aiSummary && (
               <div className="bg-violet-500/5 border border-violet-500/20 rounded-lg p-3">
-                <p className="text-slate-300 text-[11px] leading-relaxed whitespace-pre-wrap">{aiSummary}</p>
+                <p className="text-slate-700 text-[11px] leading-relaxed whitespace-pre-wrap">{aiSummary}</p>
                 <p className="text-violet-400/70 text-[10px] mt-2 italic">
                   AI context only. NOT a diagnosis. Independent pharmacist assessment required.
                 </p>
@@ -359,7 +359,7 @@ function AlertCard({ alert, onAction, loadingAlert }: AlertCardProps) {
           </div>
 
           {/* Safety notice */}
-          <p className="text-[10px] text-slate-600 leading-relaxed border-t border-slate-800 pt-3">
+          <p className="text-[10px] text-slate-600 leading-relaxed border-t border-slate-200 pt-3">
             {alert.safetyNotice}
           </p>
         </div>
@@ -372,7 +372,7 @@ function TimelineItem({ label, ts, color = 'amber' }: { label: string; ts: strin
   return (
     <div className="flex items-center gap-3 text-[11px]">
       <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 bg-${color}-400`} />
-      <span className="text-slate-400 w-32">{label}</span>
+      <span className="text-slate-600 w-32">{label}</span>
       <span className="text-slate-500">{new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
     </div>
   );
@@ -390,7 +390,7 @@ function ActionButton({ label, icon, color, onClick, disabled }: {
     violet:  'bg-violet-500/10 border-violet-500/30 text-violet-400 hover:bg-violet-500/20',
     emerald: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20',
     rose:    'bg-rose-500/10 border-rose-500/30 text-rose-400 hover:bg-rose-500/20',
-    slate:   'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700',
+    slate:   'bg-slate-800 border-slate-700 text-slate-600 hover:bg-slate-700',
   };
   return (
     <button
@@ -474,9 +474,9 @@ export default function PharmacyEmergencyPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 space-y-6 font-mono">
       {/* Header */}
-      <div className="border-b border-slate-900 pb-4 flex items-start justify-between flex-wrap gap-3">
+      <div className="border-b border-slate-200 pb-4 flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h2 className="text-lg font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
+          <h2 className="text-lg font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
             <PackageOpen className="w-5 h-5 text-violet-400" />
             Emergency Pharmacy Assistance
           </h2>
@@ -495,7 +495,7 @@ export default function PharmacyEmergencyPage() {
             id="refresh-pharmacy-queue"
             onClick={fetchAlerts}
             disabled={loading}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 text-[11px] hover:bg-slate-700 transition-colors disabled:opacity-40"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-600 text-[11px] hover:bg-slate-700 transition-colors disabled:opacity-40"
           >
             <RefreshCcw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Refresh
@@ -520,9 +520,9 @@ export default function PharmacyEmergencyPage() {
           { label: 'Active',     value: activeAlerts.length,                   color: 'text-amber-400' },
           { label: 'High',       value: highPriorityCount,                     color: 'text-rose-400' },
           { label: 'Ready',      value: alerts.filter((a) => a.status === 'ASSISTANCE_READY').length, color: 'text-emerald-400' },
-          { label: 'Resolved',   value: closedAlerts.filter((a) => a.status === 'RESOLVED').length,   color: 'text-slate-400' },
+          { label: 'Resolved',   value: closedAlerts.filter((a) => a.status === 'RESOLVED').length,   color: 'text-slate-600' },
         ].map((stat) => (
-          <div key={stat.label} className="bg-slate-900/60 border border-slate-800 rounded-xl p-3 text-center">
+          <div key={stat.label} className="bg-white border border-slate-200 rounded-xl p-3 text-center">
             <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
             <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">{stat.label}</p>
           </div>
@@ -582,7 +582,7 @@ export default function PharmacyEmergencyPage() {
             {closedAlerts.slice(0, 5).map((alert) => (
               <div
                 key={alert.id}
-                className="flex items-center justify-between px-4 py-3 rounded-xl bg-slate-900/40 border border-slate-800"
+                className="flex items-center justify-between px-4 py-3 rounded-xl bg-white border border-slate-200"
               >
                 <div className="flex items-center gap-3">
                   <PriorityBadge priority={alert.classification?.priority || 'LOW'} />
@@ -597,7 +597,7 @@ export default function PharmacyEmergencyPage() {
 
       {/* Toast */}
       {toastMsg && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 text-sm shadow-2xl flex items-center gap-2 animate-fade-in">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-xl bg-slate-800 border border-slate-700 text-slate-800 text-sm shadow-2xl flex items-center gap-2 animate-fade-in">
           <CheckCircle className="w-4 h-4 text-emerald-400" />
           {toastMsg}
         </div>

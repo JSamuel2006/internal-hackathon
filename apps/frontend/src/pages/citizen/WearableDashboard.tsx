@@ -56,13 +56,13 @@ export default function WearableDashboard() {
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-350">
-      <div className="flex justify-between items-center border-b border-slate-900 pb-4">
+      <div className="flex justify-between items-center border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-indigo-500/10 rounded-xl text-indigo-400 border border-indigo-500/20">
             <Activity className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-slate-100 uppercase">IoT Wearable & Smartwatch Sync</h2>
+            <h2 className="text-sm font-bold text-slate-900 uppercase">IoT Wearable & Smartwatch Sync</h2>
             <p className="text-[10px] text-slate-500">Synchronize steps, blood pressures, and blood oxygen levels from smart devices</p>
           </div>
         </div>
@@ -76,21 +76,21 @@ export default function WearableDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-center">
-        <div className="glass-panel p-5 rounded-xl border border-slate-900">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-xl border border-slate-200">
           <span className="text-[10px] text-slate-500 block uppercase">Heart Rate</span>
           <strong className="text-2xl text-rose-455 font-bold block mt-1">72 BPM</strong>
         </div>
-        <div className="glass-panel p-5 rounded-xl border border-slate-900">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-xl border border-slate-200">
           <span className="text-[10px] text-slate-500 block uppercase">Blood Oxygen (SpO₂)</span>
           <strong className="text-2xl text-emerald-400 font-bold block mt-1">98%</strong>
         </div>
-        <div className="glass-panel p-5 rounded-xl border border-slate-900">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-xl border border-slate-200">
           <span className="text-[10px] text-slate-500 block uppercase">Steps Plotted</span>
           <strong className="text-2xl text-indigo-450 font-bold block mt-1">8,420 / 10,000</strong>
         </div>
       </div>
 
-      <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
+      <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
         <span className="font-bold text-slate-205 uppercase block">Wearable Step Trends (Last 7 Days)</span>
         <div className="h-52">
           <ResponsiveContainer width="100%" height="100%">

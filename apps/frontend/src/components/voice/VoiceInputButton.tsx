@@ -90,7 +90,7 @@ export const VoiceInputButton: React.FC<VoiceInputButtonProps> = ({ onCapture, l
       )}
 
       {state === 'UNSUPPORTED' && (
-        <div className="flex items-center gap-2 px-3 py-2 bg-slate-900 border border-slate-800 text-slate-500 rounded-xl text-[10px]">
+        <div className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 text-slate-500 rounded-xl text-[10px]">
           <Info className="w-3.5 h-3.5" />
           <span>ℹ Voice input is not supported on this device.</span>
         </div>
@@ -102,15 +102,15 @@ export const VoiceInputButton: React.FC<VoiceInputButtonProps> = ({ onCapture, l
             <AlertTriangle className="w-3.5 h-3.5" />
             <span>⚠ Could not understand speech</span>
           </div>
-          <button onClick={handleStart} className="p-1.5 hover:bg-slate-900 border border-slate-800 text-slate-400 rounded-lg">
+          <button onClick={handleStart} className="p-1.5 hover:bg-white border border-slate-200 text-slate-600 rounded-lg">
             <RotateCw className="w-3.5 h-3.5" />
           </button>
         </div>
       )}
 
       {state === 'SUCCESS' && capturedText && (
-        <div className="p-3 bg-slate-950/80 border border-slate-900 rounded-xl space-y-2">
-          <p className="text-slate-300 italic text-xs">"{capturedText}"</p>
+        <div className="p-3 bg-white border border-slate-200 rounded-xl space-y-2">
+          <p className="text-slate-700 italic text-xs">"{capturedText}"</p>
           <div className="flex gap-2">
             <button
               type="button"
@@ -123,7 +123,7 @@ export const VoiceInputButton: React.FC<VoiceInputButtonProps> = ({ onCapture, l
             <button
               type="button"
               onClick={handleReset}
-              className="flex items-center gap-1 px-3 py-1 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-400 rounded-lg text-[9px] font-bold uppercase tracking-wider cursor-pointer"
+              className="flex items-center gap-1 px-3 py-1 bg-white hover:bg-slate-850 border border-slate-200 text-slate-600 rounded-lg text-[9px] font-bold uppercase tracking-wider cursor-pointer"
             >
               <span>✎ Edit</span>
             </button>

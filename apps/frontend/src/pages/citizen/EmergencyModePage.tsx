@@ -134,8 +134,8 @@ export default function EmergencyModePage() {
   return (
     <div className="space-y-8 max-w-4xl mx-auto px-4 font-mono text-xs text-slate-350">
       {/* Header */}
-      <div className="border-b border-slate-900 pb-4 text-center">
-        <h2 className="text-xl font-bold text-slate-100 uppercase tracking-wider flex items-center justify-center gap-2">
+      <div className="border-b border-slate-200 pb-4 text-center">
+        <h2 className="text-xl font-bold text-slate-900 uppercase tracking-wider flex items-center justify-center gap-2">
           <ShieldAlert className="w-6 h-6 text-rose-500" />
           🚨 Emergency Response
         </h2>
@@ -143,7 +143,7 @@ export default function EmergencyModePage() {
       </div>
 
       {/* SOS Trigger Panel */}
-      <div className="py-6 flex flex-col items-center justify-center space-y-4 bg-slate-950/40 border border-slate-900 rounded-2xl p-6">
+      <div className="py-6 flex flex-col items-center justify-center space-y-4 bg-white border border-slate-200 rounded-2xl p-6">
         <button
           onClick={triggerSOS}
           disabled={sosActivated || loading}
@@ -162,8 +162,8 @@ export default function EmergencyModePage() {
               <ShieldAlert className="w-4 h-4 text-rose-455" />
               Incoming patient pre-arrival alert sent!
             </span>
-            <p className="text-slate-400">Status: {alertStatus}</p>
-            <p className="text-slate-400">Ambulance ETA: <strong className="text-rose-400">{eta}</strong></p>
+            <p className="text-slate-600">Status: {alertStatus}</p>
+            <p className="text-slate-600">Ambulance ETA: <strong className="text-rose-400">{eta}</strong></p>
           </div>
         ) : (
           <p className="text-slate-555 text-center max-w-md">
@@ -176,24 +176,24 @@ export default function EmergencyModePage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
         
         {/* OPTION 1: Hospital Pre-Alert */}
-        <div className="glass-panel p-5 rounded-2xl border border-slate-800 bg-slate-900/40 flex flex-col justify-between space-y-4">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white flex flex-col justify-between space-y-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-rose-400">
               <span className="text-xl">🚑</span>
-              <h3 className="font-bold uppercase tracking-wider text-slate-100">Hospital Pre-Alert</h3>
+              <h3 className="font-bold uppercase tracking-wider text-slate-900">Hospital Pre-Alert</h3>
             </div>
-            <p className="text-slate-400 leading-relaxed text-[11px]">
+            <p className="text-slate-600 leading-relaxed text-[11px]">
               Alert nearby hospital about your arrival so they can prepare the trauma team.
             </p>
 
             {/* Selection Form */}
             {!preAlertSent ? (
-              <div className="space-y-2 pt-2 border-t border-slate-900">
+              <div className="space-y-2 pt-2 border-t border-slate-200">
                 <label className="text-[9px] uppercase tracking-wider text-slate-500 block">Select Hospital</label>
                 <select
                   value={selectedHospitalId}
                   onChange={(e) => setSelectedHospitalId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1.5 text-[10px] text-slate-300 font-mono focus:outline-none"
+                  className="w-full bg-white border border-slate-200 rounded px-2 py-1.5 text-[10px] text-slate-700 font-mono focus:outline-none"
                 >
                   {hospitals.length === 0 ? (
                     <option value="">No Hospitals Found</option>
@@ -208,7 +208,7 @@ export default function EmergencyModePage() {
                 <select
                   value={selectedEta}
                   onChange={(e) => setSelectedEta(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1.5 text-[10px] text-slate-300 font-mono focus:outline-none"
+                  className="w-full bg-white border border-slate-200 rounded px-2 py-1.5 text-[10px] text-slate-700 font-mono focus:outline-none"
                 >
                   <option value="5 Minutes">5 Minutes</option>
                   <option value="10 Minutes">10 Minutes</option>
@@ -218,11 +218,11 @@ export default function EmergencyModePage() {
                 </select>
               </div>
             ) : (
-              <div className="pt-2 border-t border-slate-900 flex items-start gap-1.5 text-emerald-450 text-[10px]">
+              <div className="pt-2 border-t border-slate-200 flex items-start gap-1.5 text-emerald-450 text-[10px]">
                 <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <div>
                   <p className="font-bold">Pre-Alert Transmitted!</p>
-                  <p className="text-slate-450 text-[9px] mt-0.5">Hospital: {hospitals.find(h => h.id === selectedHospitalId)?.name}</p>
+                  <p className="text-slate-500 text-[9px] mt-0.5">Hospital: {hospitals.find(h => h.id === selectedHospitalId)?.name}</p>
                   <p className="text-slate-455 text-[9px]">ETA: {selectedEta}</p>
                 </div>
               </div>
@@ -247,13 +247,13 @@ export default function EmergencyModePage() {
         </div>
 
         {/* OPTION 2: Doctor Assistance */}
-        <div className="glass-panel p-5 rounded-2xl border border-slate-800 bg-slate-900/40 flex flex-col justify-between space-y-4">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white flex flex-col justify-between space-y-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-amber-400">
               <span className="text-xl">👨‍⚕️</span>
-              <h3 className="font-bold uppercase tracking-wider text-slate-100">Doctor Assistance</h3>
+              <h3 className="font-bold uppercase tracking-wider text-slate-900">Doctor Assistance</h3>
             </div>
-            <p className="text-slate-400 leading-relaxed text-[11px]">
+            <p className="text-slate-600 leading-relaxed text-[11px]">
               Chat with a qualified doctor for real-time emergency guidance while transit is active.
             </p>
           </div>
@@ -277,13 +277,13 @@ export default function EmergencyModePage() {
         </div>
 
         {/* OPTION 3: Pharmacy Assistance */}
-        <div className="glass-panel p-5 rounded-2xl border border-slate-800 bg-slate-900/40 flex flex-col justify-between space-y-4">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white flex flex-col justify-between space-y-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-violet-400">
               <span className="text-xl">💊</span>
-              <h3 className="font-bold uppercase tracking-wider text-slate-100">Pharmacy Assistance</h3>
+              <h3 className="font-bold uppercase tracking-wider text-slate-900">Pharmacy Assistance</h3>
             </div>
-            <p className="text-slate-400 leading-relaxed text-[11px]">
+            <p className="text-slate-600 leading-relaxed text-[11px]">
               Notify a nearby participating pharmacy so a pharmacist can review and prepare first aid assistance.
             </p>
           </div>
@@ -308,14 +308,14 @@ export default function EmergencyModePage() {
 
       {/* Info Footers */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left pt-4">
-        <div className="glass-panel p-5 rounded-xl border border-slate-900 space-y-2">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-xl border border-slate-200 space-y-2">
           <span className="text-[10px] text-slate-550 block uppercase">Nearest Trauma Center</span>
-          <strong className="text-slate-200 text-sm block">Sassoon General Hospital Pune</strong>
+          <strong className="text-slate-800 text-sm block">Sassoon General Hospital Pune</strong>
           <span className="text-[10px] text-emerald-400">Distance: 1.4 KM | Route: Traffic Clear</span>
         </div>
-        <div className="glass-panel p-5 rounded-xl border border-slate-900 space-y-2">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-xl border border-slate-200 space-y-2">
           <span className="text-[10px] text-slate-550 block uppercase">Emergency Health Passport</span>
-          <p className="text-slate-400 leading-relaxed">
+          <p className="text-slate-600 leading-relaxed">
             ABHA card details, allergy summaries, and digital twin health telemetry metrics are automatically pre-shared with responding trauma centers once SOS is activated.
           </p>
         </div>

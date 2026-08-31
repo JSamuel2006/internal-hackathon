@@ -230,17 +230,17 @@ export default function AshaDashboard() {
     <div className="space-y-6">
       {/* Dashboard Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="glass-panel p-4 rounded-xl border border-slate-900 flex justify-between items-center">
+        <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 flex justify-between items-center">
           <div>
             <span className="text-[10px] text-slate-500 uppercase font-mono block">Today's Screens</span>
-            <span className="text-xl font-bold font-mono text-slate-100">{stats.screenedToday}</span>
+            <span className="text-xl font-bold font-mono text-slate-900">{stats.screenedToday}</span>
           </div>
           <ClipboardList className="w-8 h-8 text-indigo-400" />
         </div>
 
         <div 
           onClick={handleSyncClick}
-          className={`glass-panel p-4 rounded-xl border border-slate-900 flex justify-between items-center cursor-pointer hover:border-amber-500/30 transition-all ${
+          className={`bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 flex justify-between items-center cursor-pointer hover:border-amber-500/30 transition-all ${
             stats.pendingSync > 0 ? 'bg-amber-500/5 animate-pulse' : ''
           }`}
         >
@@ -251,7 +251,7 @@ export default function AshaDashboard() {
           <Clock className="w-8 h-8 text-amber-500" />
         </div>
 
-        <div className="glass-panel p-4 rounded-xl border border-slate-900 flex justify-between items-center">
+        <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 flex justify-between items-center">
           <div>
             <span className="text-[10px] text-slate-500 uppercase font-mono block">Synced Records</span>
             <span className="text-xl font-bold font-mono text-emerald-450">{stats.synced}</span>
@@ -259,7 +259,7 @@ export default function AshaDashboard() {
           <CheckCircle className="w-8 h-8 text-emerald-500" />
         </div>
 
-        <div className="glass-panel p-4 rounded-xl border border-slate-900 flex justify-between items-center">
+        <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 flex justify-between items-center">
           <div>
             <span className="text-[10px] text-slate-500 uppercase font-mono block">Priority Alerts</span>
             <span className="text-xl font-bold font-mono text-rose-455">{stats.priorityCases}</span>
@@ -277,12 +277,12 @@ export default function AshaDashboard() {
       {/* Citizen Search & Register Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-7 space-y-4">
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
             <div className="flex justify-between items-center">
               <span className="font-bold text-slate-205 uppercase block">Village Resident Registry</span>
               <button
                 onClick={() => setRegistering(!registering)}
-                className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-bold text-slate-202 flex items-center gap-1 hover:bg-slate-850"
+                className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-[10px] font-bold text-slate-202 flex items-center gap-1 hover:bg-slate-850"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>{registering ? 'Cancel' : 'New Citizen'}</span>
@@ -291,8 +291,8 @@ export default function AshaDashboard() {
 
             {/* Quick Register Citizen Form */}
             {registering ? (
-              <form onSubmit={handleRegisterCitizen} className="p-4 bg-slate-950/80 rounded-xl border border-slate-900 space-y-4">
-                <span className="text-[10px] text-slate-500 uppercase font-mono block border-b border-slate-900 pb-1.5">Add Rural Citizen</span>
+              <form onSubmit={handleRegisterCitizen} className="p-4 bg-white rounded-xl border border-slate-200 space-y-4">
+                <span className="text-[10px] text-slate-500 uppercase font-mono block border-b border-slate-200 pb-1.5">Add Rural Citizen</span>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[9px] font-mono text-slate-500 uppercase mb-1">Citizen Name *</label>
@@ -301,7 +301,7 @@ export default function AshaDashboard() {
                       required
                       value={newName}
                       onChange={e => setNewName(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-slate-100"
+                      className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-900"
                       placeholder="e.g. Kavita Patil"
                     />
                   </div>
@@ -312,7 +312,7 @@ export default function AshaDashboard() {
                       required
                       value={newAge}
                       onChange={e => setNewAge(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-slate-100"
+                      className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-900"
                       placeholder="e.g. 28"
                     />
                   </div>
@@ -324,7 +324,7 @@ export default function AshaDashboard() {
                     <select
                       value={newGender}
                       onChange={e => setNewGender(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-slate-100"
+                      className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-900"
                     >
                       <option>Male</option>
                       <option>Female</option>
@@ -338,7 +338,7 @@ export default function AshaDashboard() {
                       required
                       value={newVillage}
                       onChange={e => setNewVillage(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-slate-100"
+                      className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-900"
                     />
                   </div>
                 </div>
@@ -350,7 +350,7 @@ export default function AshaDashboard() {
                       type="text"
                       value={newPhone}
                       onChange={e => setNewPhone(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-slate-100"
+                      className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-900"
                       placeholder="e.g. 9876543210"
                     />
                   </div>
@@ -360,7 +360,7 @@ export default function AshaDashboard() {
                       type="text"
                       value={newContact}
                       onChange={e => setNewContact(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-slate-100"
+                      className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-900"
                       placeholder="e.g. 9876543211"
                     />
                   </div>
@@ -382,18 +382,18 @@ export default function AshaDashboard() {
                       value={query}
                       onChange={e => setQuery(e.target.value)}
                       placeholder="Search resident by name or ABHA..."
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl py-2.5 pl-8 pr-4 text-slate-100 outline-none"
+                      className="w-full bg-white border border-slate-200 rounded-xl py-2.5 pl-8 pr-4 text-slate-900 outline-none"
                     />
                     <Search className="w-4 h-4 text-slate-600 absolute left-2.5 top-3" />
                   </div>
-                  <button type="submit" className="px-4 bg-slate-900 border border-slate-800 rounded-xl hover:bg-slate-850">
+                  <button type="submit" className="px-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-850">
                     Find
                   </button>
                 </form>
 
                 <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
                   {citizens.map((c) => (
-                    <div key={c.id} className="p-4 bg-slate-950/60 rounded-xl border border-slate-900 flex justify-between items-center">
+                    <div key={c.id} className="p-4 bg-white rounded-xl border border-slate-200 flex justify-between items-center">
                       <div>
                         <div className="flex items-center gap-1.5">
                           <span className="font-bold text-slate-202 text-sm">{c.name}</span>
@@ -422,12 +422,12 @@ export default function AshaDashboard() {
 
         {/* Sync Queue Logs */}
         <div className="lg:col-span-5">
-          <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
+          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
             <span className="font-bold text-slate-205 uppercase block">Recent Field Screenings</span>
             <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
               {history.map((h) => (
-                <div key={h.client_record_id} className="p-3 bg-slate-950 rounded-xl border border-slate-900 space-y-2">
-                  <div className="flex justify-between items-center border-b border-slate-900 pb-1.5">
+                <div key={h.client_record_id} className="p-3 bg-white rounded-xl border border-slate-200 space-y-2">
+                  <div className="flex justify-between items-center border-b border-slate-200 pb-1.5">
                     <div>
                       <span className="font-bold text-slate-202 block text-xs">{h.citizen_name}</span>
                       <span className="text-[9px] text-slate-500">{h.village} | {new Date(h.screening_date).toLocaleDateString()}</span>
@@ -444,10 +444,10 @@ export default function AshaDashboard() {
                   </div>
                   
                   {/* Screening clinical stats */}
-                  <div className="grid grid-cols-3 gap-2 text-[9px] font-mono text-slate-400">
-                    <div>BP: <strong className="text-slate-300">{h.systolic_status === 'MEASURED' ? `${h.systolic}/${h.diastolic}` : 'N/A'}</strong></div>
-                    <div>SpO2: <strong className="text-slate-300">{h.spo2_status === 'MEASURED' ? `${h.spo2}%` : 'N/A'}</strong></div>
-                    <div>Temp: <strong className="text-slate-300">{h.temperature_status === 'MEASURED' ? `${h.temperature}°F` : 'N/A'}</strong></div>
+                  <div className="grid grid-cols-3 gap-2 text-[9px] font-mono text-slate-600">
+                    <div>BP: <strong className="text-slate-700">{h.systolic_status === 'MEASURED' ? `${h.systolic}/${h.diastolic}` : 'N/A'}</strong></div>
+                    <div>SpO2: <strong className="text-slate-700">{h.spo2_status === 'MEASURED' ? `${h.spo2}%` : 'N/A'}</strong></div>
+                    <div>Temp: <strong className="text-slate-700">{h.temperature_status === 'MEASURED' ? `${h.temperature}°F` : 'N/A'}</strong></div>
                   </div>
 
                   {h.risk_level !== 'NORMAL' && (

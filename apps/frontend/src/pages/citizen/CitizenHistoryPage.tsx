@@ -37,11 +37,11 @@ export default function CitizenHistoryPage() {
             <History className="w-5 h-5 glow-pill" />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-100">Medical History Timeline</h2>
+            <h2 className="text-xl font-bold tracking-tight text-slate-900">Medical History Timeline</h2>
             <p className="text-xs text-slate-455 mt-0.5">Historical consultations, prescriptions scans, and synced lab reports</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 border-l border-slate-800 pl-4">
+        <div className="flex items-center gap-2 border-l border-slate-200 pl-4">
           <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
           <span className="text-[10px] font-mono text-emerald-450 uppercase">ABHA Synchronized</span>
         </div>
@@ -49,7 +49,7 @@ export default function CitizenHistoryPage() {
 
       <div className="space-y-4">
         {HISTORICAL_ENTRIES.map((entry) => (
-          <div key={entry.id} className="glass-panel p-5 rounded-2xl border border-slate-900 flex flex-col md:flex-row md:items-start justify-between gap-4">
+          <div key={entry.id} className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div className="space-y-2">
               <div className="flex items-center gap-3">
                 <span className="text-[10px] font-mono text-slate-500">{entry.date}</span>
@@ -63,10 +63,10 @@ export default function CitizenHistoryPage() {
                   {entry.type}
                 </span>
               </div>
-              <h3 className="text-sm font-bold text-slate-200">{entry.title}</h3>
-              <p className="text-xs text-slate-450 leading-relaxed">{entry.details}</p>
+              <h3 className="text-sm font-bold text-slate-800">{entry.title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">{entry.details}</p>
             </div>
-            <div className="text-[10px] font-mono text-slate-500 border-t md:border-t-0 md:border-l border-slate-850 pt-2.5 md:pt-0 md:pl-4 min-w-[150px]">
+            <div className="text-[10px] font-mono text-slate-500 border-t md:border-t-0 md:border-l border-slate-200 pt-2.5 md:pt-0 md:pl-4 min-w-[150px]">
               <span className="block uppercase text-[9px] text-slate-550 mb-0.5">Facility/Provider</span>
               <span className="text-slate-350 font-semibold">{entry.provider}</span>
             </div>

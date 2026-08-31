@@ -162,10 +162,10 @@ export default function AshaDashboard() {
   const totalPages = Math.ceil(totalScreeningsCount / pageSize) || 1;
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto px-2 sm:px-4 text-slate-100 font-sans pb-16">
+    <div className="space-y-8 max-w-7xl mx-auto px-2 sm:px-4 text-slate-900 font-sans pb-16">
       
       {/* ── Top Command Bar ────────────────────────────────────────────── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-teal-500/10 rounded-xl text-teal-400 border border-teal-500/20">
@@ -175,7 +175,7 @@ export default function AshaDashboard() {
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-r from-teal-400 via-teal-200 to-indigo-300 bg-clip-text text-transparent">
                 ASHA Field Monitoring & Operations
               </h1>
-              <p className="text-xs text-slate-400 font-mono mt-0.5">
+              <p className="text-xs text-slate-600 font-mono mt-0.5">
                 Community Health Worker Surveillance • Jurisdiction: <span className="text-teal-400 font-semibold">{user.jurisdiction || 'State Health Authority'}</span>
               </p>
             </div>
@@ -191,7 +191,7 @@ export default function AshaDashboard() {
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="flex items-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-750 hover:border-teal-500/40 text-slate-200 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-800 border border-slate-750 hover:border-teal-500/40 text-slate-800 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer shadow-sm"
             title="Fetch latest database records"
           >
             <RefreshCw className={`w-3.5 h-3.5 text-teal-400 ${refreshing ? 'animate-spin' : ''}`} />
@@ -219,18 +219,18 @@ export default function AshaDashboard() {
       {/* ── Top 4 KPI Cards (Real Database Values) ─────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: ASHA Workers */}
-        <div className="glass-panel p-5 rounded-2xl border border-slate-800 bg-slate-950/60 shadow-lg relative overflow-hidden group">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white shadow-lg relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold">ASHA Workers</span>
+            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-600 font-bold">ASHA Workers</span>
             <div className="p-2 rounded-lg bg-teal-500/10 text-teal-400">
               <Users className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-3xl font-extrabold font-mono text-slate-100">
+            <span className="text-3xl font-extrabold font-mono text-slate-900">
               {loading ? '—' : overview?.totalWorkers || workers.length || 0}
             </span>
-            <span className="text-xs text-slate-400 block mt-1">Active Community Cadre</span>
+            <span className="text-xs text-slate-600 block mt-1">Active Community Cadre</span>
           </div>
           <div className="w-full bg-slate-850 h-1 rounded-full mt-3 overflow-hidden">
             <div className="bg-teal-400 h-full rounded-full" style={{ width: '100%' }}></div>
@@ -238,9 +238,9 @@ export default function AshaDashboard() {
         </div>
 
         {/* Card 2: Total Screenings */}
-        <div className="glass-panel p-5 rounded-2xl border border-slate-800 bg-slate-950/60 shadow-lg relative overflow-hidden group">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white shadow-lg relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold">Total Screenings</span>
+            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-600 font-bold">Total Screenings</span>
             <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
               <ClipboardList className="w-5 h-5" />
             </div>
@@ -249,7 +249,7 @@ export default function AshaDashboard() {
             <span className="text-3xl font-extrabold font-mono text-indigo-300">
               {loading ? '—' : overview?.totalScreenings ?? 0}
             </span>
-            <span className="text-xs text-slate-400 block mt-1">Field Health Assessments</span>
+            <span className="text-xs text-slate-600 block mt-1">Field Health Assessments</span>
           </div>
           <div className="w-full bg-slate-850 h-1 rounded-full mt-3 overflow-hidden">
             <div className="bg-indigo-400 h-full rounded-full" style={{ width: '100%' }}></div>
@@ -257,9 +257,9 @@ export default function AshaDashboard() {
         </div>
 
         {/* Card 3: Today's Screenings */}
-        <div className="glass-panel p-5 rounded-2xl border border-slate-800 bg-slate-950/60 shadow-lg relative overflow-hidden group">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white shadow-lg relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold">Today's Screenings</span>
+            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-600 font-bold">Today's Screenings</span>
             <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400">
               <Activity className="w-5 h-5" />
             </div>
@@ -268,7 +268,7 @@ export default function AshaDashboard() {
             <span className="text-3xl font-extrabold font-mono text-amber-300">
               {loading ? '—' : overview?.todayScreenings ?? 0}
             </span>
-            <span className="text-xs text-slate-400 block mt-1">Evaluated in last 24h</span>
+            <span className="text-xs text-slate-600 block mt-1">Evaluated in last 24h</span>
           </div>
           <div className="w-full bg-slate-850 h-1 rounded-full mt-3 overflow-hidden">
             <div className="bg-amber-400 h-full rounded-full" style={{ width: '100%' }}></div>
@@ -276,9 +276,9 @@ export default function AshaDashboard() {
         </div>
 
         {/* Card 4: Referrals */}
-        <div className="glass-panel p-5 rounded-2xl border border-slate-800 bg-slate-950/60 shadow-lg relative overflow-hidden group">
+        <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white shadow-lg relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold">Referral Cases</span>
+            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-600 font-bold">Referral Cases</span>
             <div className="p-2 rounded-lg bg-rose-500/10 text-rose-400">
               <ShieldAlert className="w-5 h-5" />
             </div>
@@ -296,14 +296,14 @@ export default function AshaDashboard() {
       </div>
 
       {/* ── Screening Referral Distribution & Status Section ────────────── */}
-      <div className="glass-panel p-6 rounded-2xl border border-slate-800/80 bg-slate-950/40 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-850 pb-3">
+      <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200 font-mono flex items-center gap-2">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-800 font-mono flex items-center gap-2">
               <HeartPulse className="w-4 h-4 text-teal-400" />
               Screening Referral Status
             </h3>
-            <p className="text-[11px] text-slate-400 mt-0.5">
+            <p className="text-[11px] text-slate-600 mt-0.5">
               Automated community triage distribution categorized by the clinical screening engine.
             </p>
           </div>
@@ -319,7 +319,7 @@ export default function AshaDashboard() {
             className={`p-4 rounded-xl border transition-all cursor-pointer ${
               selectedRiskLevel === 'URGENT' 
                 ? 'bg-rose-500/20 border-rose-500 ring-1 ring-rose-500' 
-                : 'bg-slate-900/60 border-slate-800 hover:border-rose-500/40 hover:bg-slate-900'
+                : 'bg-white border-slate-200 hover:border-rose-500/40 hover:bg-white'
             }`}
           >
             <div className="flex items-center justify-between">
@@ -329,7 +329,7 @@ export default function AshaDashboard() {
             <span className="text-2xl font-bold font-mono text-rose-300 block mt-2">
               {loading ? '—' : overview?.referrals.urgent || 0}
             </span>
-            <span className="text-[10px] text-slate-400 block mt-1">Requires immediate PHC care</span>
+            <span className="text-[10px] text-slate-600 block mt-1">Requires immediate PHC care</span>
           </div>
 
           {/* Priority */}
@@ -338,7 +338,7 @@ export default function AshaDashboard() {
             className={`p-4 rounded-xl border transition-all cursor-pointer ${
               selectedRiskLevel === 'PRIORITY' 
                 ? 'bg-amber-500/20 border-amber-500 ring-1 ring-amber-500' 
-                : 'bg-slate-900/60 border-slate-800 hover:border-amber-500/40 hover:bg-slate-900'
+                : 'bg-white border-slate-200 hover:border-amber-500/40 hover:bg-white'
             }`}
           >
             <div className="flex items-center justify-between">
@@ -348,7 +348,7 @@ export default function AshaDashboard() {
             <span className="text-2xl font-bold font-mono text-amber-300 block mt-2">
               {loading ? '—' : overview?.referrals.priority || 0}
             </span>
-            <span className="text-[10px] text-slate-400 block mt-1">High risk (Pregnancy/BP)</span>
+            <span className="text-[10px] text-slate-600 block mt-1">High risk (Pregnancy/BP)</span>
           </div>
 
           {/* Needs Review */}
@@ -357,7 +357,7 @@ export default function AshaDashboard() {
             className={`p-4 rounded-xl border transition-all cursor-pointer ${
               selectedRiskLevel === 'NEEDS_REVIEW' 
                 ? 'bg-yellow-500/20 border-yellow-500 ring-1 ring-yellow-500' 
-                : 'bg-slate-900/60 border-slate-800 hover:border-yellow-500/40 hover:bg-slate-900'
+                : 'bg-white border-slate-200 hover:border-yellow-500/40 hover:bg-white'
             }`}
           >
             <div className="flex items-center justify-between">
@@ -367,7 +367,7 @@ export default function AshaDashboard() {
             <span className="text-2xl font-bold font-mono text-yellow-300 block mt-2">
               {loading ? '—' : overview?.referrals.needsReview || 0}
             </span>
-            <span className="text-[10px] text-slate-400 block mt-1">Mild elevated vitals</span>
+            <span className="text-[10px] text-slate-600 block mt-1">Mild elevated vitals</span>
           </div>
 
           {/* Normal */}
@@ -376,7 +376,7 @@ export default function AshaDashboard() {
             className={`p-4 rounded-xl border transition-all cursor-pointer ${
               selectedRiskLevel === 'NORMAL' 
                 ? 'bg-emerald-500/20 border-emerald-500 ring-1 ring-emerald-500' 
-                : 'bg-slate-900/60 border-slate-800 hover:border-emerald-500/40 hover:bg-slate-900'
+                : 'bg-white border-slate-200 hover:border-emerald-500/40 hover:bg-white'
             }`}
           >
             <div className="flex items-center justify-between">
@@ -386,19 +386,19 @@ export default function AshaDashboard() {
             <span className="text-2xl font-bold font-mono text-emerald-300 block mt-2">
               {loading ? '—' : overview?.referrals.normal || 0}
             </span>
-            <span className="text-[10px] text-slate-400 block mt-1">All parameters stable</span>
+            <span className="text-[10px] text-slate-600 block mt-1">All parameters stable</span>
           </div>
         </div>
       </div>
 
       {/* ── ASHA Workers Roster Section ────────────────────────────────── */}
-      <div className="glass-panel p-6 rounded-2xl border border-slate-800 bg-slate-950/50 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-850 pb-3">
+      <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
           <div className="flex items-center gap-2.5">
             <Users className="w-5 h-5 text-indigo-400" />
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200 font-mono">ASHA Worker Roster & Performance</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-800 font-mono">ASHA Worker Roster & Performance</h3>
           </div>
-          <span className="text-xs text-slate-400 font-mono">
+          <span className="text-xs text-slate-600 font-mono">
             {workers.length} Community Workers Registered
           </span>
         </div>
@@ -406,7 +406,7 @@ export default function AshaDashboard() {
         <div className="overflow-x-auto">
           <table className="w-full text-left font-mono text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-[10px] text-slate-400 uppercase">
+              <tr className="border-b border-slate-200 text-[10px] text-slate-600 uppercase">
                 <th className="pb-3 px-3 font-semibold">ASHA Worker</th>
                 <th className="pb-3 px-3 font-semibold">Jurisdiction / Village</th>
                 <th className="pb-3 px-3 font-semibold text-center">Total Screenings</th>
@@ -425,12 +425,12 @@ export default function AshaDashboard() {
                 </tr>
               ) : (
                 workers.map((w) => (
-                  <tr key={w.workerId} className="hover:bg-slate-900/60 transition-colors">
+                  <tr key={w.workerId} className="hover:bg-white transition-colors">
                     <td className="py-3.5 px-3">
-                      <span className="font-bold text-slate-100 block">{w.name}</span>
+                      <span className="font-bold text-slate-900 block">{w.name}</span>
                       <span className="text-[10px] text-slate-500 font-normal">{w.email}</span>
                     </td>
-                    <td className="py-3.5 px-3 text-slate-300">
+                    <td className="py-3.5 px-3 text-slate-700">
                       <div className="flex items-center gap-1.5">
                         <MapPin className="w-3.5 h-3.5 text-teal-400 shrink-0" />
                         <span>{w.village || w.jurisdiction}</span>
@@ -442,7 +442,7 @@ export default function AshaDashboard() {
                     <td className="py-3.5 px-3 text-center font-bold text-amber-400">
                       {w.todayScreenings}
                     </td>
-                    <td className="py-3.5 px-3 text-slate-400 text-[11px]">
+                    <td className="py-3.5 px-3 text-slate-600 text-[11px]">
                       {w.lastActivityDate 
                         ? new Date(w.lastActivityDate).toLocaleString() 
                         : 'No activity recorded'}
@@ -451,7 +451,7 @@ export default function AshaDashboard() {
                       <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase ${
                         w.status === 'Active' 
                           ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
-                          : 'bg-slate-800 text-slate-400 border border-slate-700'
+                          : 'bg-slate-800 text-slate-600 border border-slate-700'
                       }`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${w.status === 'Active' ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`}></span>
                         {w.status}
@@ -464,7 +464,7 @@ export default function AshaDashboard() {
                           setInspectedWorker(w);
                           setPage(1);
                         }}
-                        className="px-2.5 py-1 bg-slate-850 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-teal-300 rounded text-[10px] font-bold uppercase transition-colors cursor-pointer"
+                        className="px-2.5 py-1 bg-slate-850 hover:bg-slate-800 border border-slate-700 text-slate-700 hover:text-teal-300 rounded text-[10px] font-bold uppercase transition-colors cursor-pointer"
                       >
                         Filter Logs
                       </button>
@@ -478,17 +478,17 @@ export default function AshaDashboard() {
       </div>
 
       {/* ── Recent Field Screenings Table ──────────────────────────────── */}
-      <div className="glass-panel p-6 rounded-2xl border border-slate-800 bg-slate-950/60 space-y-4">
+      <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-4">
         
         {/* Table Header & Controls */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-850 pb-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-4">
           <div className="flex items-center gap-2.5">
             <ClipboardList className="w-5 h-5 text-teal-400" />
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200 font-mono">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-800 font-mono">
                 Recent Field Screenings
               </h3>
-              <span className="text-[11px] text-slate-400 font-mono">
+              <span className="text-[11px] text-slate-600 font-mono">
                 Showing {screenings.length} of {totalScreeningsCount} database records
               </span>
             </div>
@@ -497,7 +497,7 @@ export default function AshaDashboard() {
           {/* Active Filter Badges */}
           {(selectedWorkerId !== 'ALL' || selectedRiskLevel !== 'ALL' || searchQuery) && (
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-mono text-slate-400 uppercase font-bold">Active Filters:</span>
+              <span className="text-[10px] font-mono text-slate-600 uppercase font-bold">Active Filters:</span>
               {selectedWorkerId !== 'ALL' && (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-mono rounded">
                   Worker: {workers.find(w => w.workerId === selectedWorkerId)?.name || selectedWorkerId}
@@ -524,7 +524,7 @@ export default function AshaDashboard() {
                   setSearchQuery('');
                   setPage(1);
                 }}
-                className="text-[10px] text-slate-400 hover:text-rose-400 underline ml-1 cursor-pointer font-mono"
+                className="text-[10px] text-slate-600 hover:text-rose-400 underline ml-1 cursor-pointer font-mono"
               >
                 Clear All
               </button>
@@ -542,7 +542,7 @@ export default function AshaDashboard() {
               placeholder="Search Citizen / Village..."
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
-              className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs font-mono text-slate-200 placeholder-slate-500 focus:outline-none focus:border-teal-500"
+              className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs font-mono text-slate-800 placeholder-slate-500 focus:outline-none focus:border-teal-500"
             />
           </div>
 
@@ -550,7 +550,7 @@ export default function AshaDashboard() {
           <select
             value={selectedWorkerId}
             onChange={(e) => { setSelectedWorkerId(e.target.value); setPage(1); }}
-            className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-200 focus:outline-none focus:border-teal-500 cursor-pointer"
+            className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:border-teal-500 cursor-pointer"
           >
             <option value="ALL">All ASHA Workers</option>
             {workers.map(w => (
@@ -562,7 +562,7 @@ export default function AshaDashboard() {
           <select
             value={selectedRiskLevel}
             onChange={(e) => { setSelectedRiskLevel(e.target.value); setPage(1); }}
-            className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-200 focus:outline-none focus:border-teal-500 cursor-pointer"
+            className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:border-teal-500 cursor-pointer"
           >
             <option value="ALL">All Referral Statuses</option>
             <option value="URGENT">🔴 URGENT Referral</option>
@@ -575,7 +575,7 @@ export default function AshaDashboard() {
           <select
             value={selectedDateRange}
             onChange={(e) => { setSelectedDateRange(e.target.value); setPage(1); }}
-            className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-200 focus:outline-none focus:border-teal-500 cursor-pointer"
+            className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:border-teal-500 cursor-pointer"
           >
             <option value="all">All Dates</option>
             <option value="today">Today Only</option>
@@ -588,7 +588,7 @@ export default function AshaDashboard() {
         <div className="overflow-x-auto min-h-[220px]">
           <table className="w-full text-left font-mono text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-[10px] text-slate-400 uppercase">
+              <tr className="border-b border-slate-200 text-[10px] text-slate-600 uppercase">
                 <th className="pb-3 px-3 font-semibold">Citizen</th>
                 <th className="pb-3 px-3 font-semibold">ASHA Worker</th>
                 <th className="pb-3 px-3 font-semibold">Village</th>
@@ -616,7 +616,7 @@ export default function AshaDashboard() {
                 </tr>
               ) : (
                 screenings.map((s) => {
-                  let badgeColor = 'bg-slate-800 text-slate-300 border-slate-700';
+                  let badgeColor = 'bg-slate-800 text-slate-700 border-slate-700';
                   let dotColor = 'bg-slate-400';
                   if (s.riskLevel === 'URGENT') {
                     badgeColor = 'bg-rose-500/10 text-rose-400 border-rose-500/20';
@@ -633,17 +633,17 @@ export default function AshaDashboard() {
                   }
 
                   return (
-                    <tr key={s.id} className="hover:bg-slate-900/60 transition-colors">
-                      <td className="py-3 px-3 font-semibold text-slate-100">
+                    <tr key={s.id} className="hover:bg-white transition-colors">
+                      <td className="py-3 px-3 font-semibold text-slate-900">
                         {s.citizenName}
                       </td>
-                      <td className="py-3 px-3 text-slate-300">
+                      <td className="py-3 px-3 text-slate-700">
                         {s.workerName}
                       </td>
-                      <td className="py-3 px-3 text-slate-400">
+                      <td className="py-3 px-3 text-slate-600">
                         {s.village}
                       </td>
-                      <td className="py-3 px-3 text-slate-400 text-[11px]">
+                      <td className="py-3 px-3 text-slate-600 text-[11px]">
                         {new Date(s.screeningDate).toLocaleString()}
                       </td>
                       <td className="py-3 px-3">
@@ -652,7 +652,7 @@ export default function AshaDashboard() {
                           {s.riskLevel}
                         </span>
                       </td>
-                      <td className="py-3 px-3 text-slate-400 text-[10px] max-w-xs truncate">
+                      <td className="py-3 px-3 text-slate-600 text-[10px] max-w-xs truncate">
                         {s.riskFlags.length > 0 ? (
                           <span title={s.riskFlags.join(', ')}>
                             {s.riskFlags[0]}
@@ -677,16 +677,16 @@ export default function AshaDashboard() {
         </div>
 
         {/* Pagination Footer */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-850 font-mono text-xs text-slate-400">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-200 font-mono text-xs text-slate-600">
           <div>
-            Showing Page <span className="text-slate-200 font-bold">{page}</span> of <span className="text-slate-200 font-bold">{totalPages}</span>
+            Showing Page <span className="text-slate-800 font-bold">{page}</span> of <span className="text-slate-800 font-bold">{totalPages}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={() => setPage(p => Math.max(p - 1, 1))}
               disabled={page <= 1}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 disabled:opacity-40 disabled:cursor-not-allowed hover:border-slate-700 text-slate-200 transition-colors"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white border border-slate-200 disabled:opacity-40 disabled:cursor-not-allowed hover:border-slate-700 text-slate-800 transition-colors"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
               <span>Prev</span>
@@ -694,7 +694,7 @@ export default function AshaDashboard() {
             <button
               onClick={() => setPage(p => Math.min(p + 1, totalPages))}
               disabled={page >= totalPages}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 disabled:opacity-40 disabled:cursor-not-allowed hover:border-slate-700 text-slate-200 transition-colors"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white border border-slate-200 disabled:opacity-40 disabled:cursor-not-allowed hover:border-slate-700 text-slate-800 transition-colors"
             >
               <span>Next</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -704,8 +704,8 @@ export default function AshaDashboard() {
       </div>
 
       {/* ── Offline/Sync Architecture Disclosure Notice ───────────────── */}
-      <div className="p-4 rounded-xl border border-slate-800 bg-slate-950/40 text-slate-400 text-[11px] font-mono leading-relaxed space-y-1">
-        <p className="text-slate-300 font-bold flex items-center gap-2">
+      <div className="p-4 rounded-xl border border-slate-200 bg-white text-slate-600 text-[11px] font-mono leading-relaxed space-y-1">
+        <p className="text-slate-700 font-bold flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-teal-400" />
           Field Offline Synchronization &amp; Data Integrity Architecture:
         </p>

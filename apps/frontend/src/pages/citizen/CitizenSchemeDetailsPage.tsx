@@ -268,10 +268,10 @@ export default function CitizenSchemeDetailsPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto px-4 font-mono text-xs">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-900 pb-4">
+      <div className="flex items-center justify-between border-b border-slate-200 pb-4">
         <button
           onClick={() => navigate('/citizen/schemes')}
-          className="flex items-center gap-2 py-1.5 px-3 bg-slate-900 border border-slate-800 rounded-xl hover:bg-slate-850 transition-colors text-slate-300"
+          className="flex items-center gap-2 py-1.5 px-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-850 transition-colors text-slate-700"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Schemes</span>
@@ -291,14 +291,14 @@ export default function CitizenSchemeDetailsPage() {
       </div>
 
       {/* Scheme Title Banner */}
-      <div className="glass-panel p-5 rounded-2xl border border-slate-900 flex items-start justify-between gap-4">
+      <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 flex items-start justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Award className="w-5 h-5 text-rose-400" />
-            <h2 className="text-sm font-bold text-slate-100">{scheme.name}</h2>
+            <h2 className="text-sm font-bold text-slate-900">{scheme.name}</h2>
           </div>
-          <p className="text-[10px] text-slate-400">{scheme.ministry}</p>
-          <p className="text-xs text-slate-400 leading-relaxed max-w-2xl">{scheme.description}</p>
+          <p className="text-[10px] text-slate-600">{scheme.ministry}</p>
+          <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">{scheme.description}</p>
         </div>
         <div className="flex flex-col gap-2 shrink-0">
           <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] rounded font-bold uppercase text-center">ABHA Ready</span>
@@ -306,7 +306,7 @@ export default function CitizenSchemeDetailsPage() {
             href={scheme.website}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 py-1.5 px-3 bg-slate-900 border border-slate-800 text-slate-300 rounded-xl hover:bg-slate-850 transition-colors text-[10px]"
+            className="flex items-center gap-1 py-1.5 px-3 bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-slate-850 transition-colors text-[10px]"
           >
             <ExternalLink className="w-3 h-3" />
             Official Portal
@@ -316,7 +316,7 @@ export default function CitizenSchemeDetailsPage() {
 
       {/* Location denied — manual input */}
       {locationDenied && (
-        <div className="glass-panel p-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 space-y-3">
+        <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 space-y-3">
           <p className="text-amber-400 text-[10px] flex items-center gap-1">
             <AlertCircle className="w-3.5 h-3.5" />
             Location access denied. Enter your city to see hospitals accepting this scheme near you.
@@ -328,12 +328,12 @@ export default function CitizenSchemeDetailsPage() {
               value={manualCity}
               onChange={e => setManualCity(e.target.value)}
               aria-label="City for scheme hospital search"
-              className="flex-1 bg-slate-950 border border-slate-850 rounded-xl p-2 text-slate-202 focus:outline-none"
+              className="flex-1 bg-white border border-slate-200 rounded-xl p-2 text-slate-202 focus:outline-none"
             />
             <select
               value={manualState}
               onChange={e => setManualState(e.target.value)}
-              className="bg-slate-950 border border-slate-850 rounded-xl p-2 text-slate-202 focus:outline-none"
+              className="bg-white border border-slate-200 rounded-xl p-2 text-slate-202 focus:outline-none"
               aria-label="Select state"
             >
               <option value="">Select State</option>
@@ -347,7 +347,7 @@ export default function CitizenSchemeDetailsPage() {
       )}
 
       {/* Tab Navigation */}
-      <div className="flex flex-wrap gap-2 border-b border-slate-900 pb-3">
+      <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
         {TABS.map(tab => (
           <button
             key={tab.id}
@@ -355,7 +355,7 @@ export default function CitizenSchemeDetailsPage() {
             className={`py-1.5 px-3 rounded-lg text-[10px] font-bold transition-all ${
               activeTab === tab.id
                 ? 'bg-rose-500/10 border border-rose-500/20 text-rose-400'
-                : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+                : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-800'
             }`}
           >
             {tab.label}
@@ -368,24 +368,24 @@ export default function CitizenSchemeDetailsPage() {
         <div className="lg:col-span-8 space-y-5">
           {/* OVERVIEW TAB */}
           {activeTab === 'overview' && (
-            <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-              <span className="font-bold text-slate-205 uppercase block border-b border-slate-900 pb-2">Scheme Overview</span>
+            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+              <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Scheme Overview</span>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <span className="text-[9px] text-slate-500 uppercase block">Coverage Limit</span>
-                  <strong className="text-slate-200">{scheme.coverage}</strong>
+                  <strong className="text-slate-800">{scheme.coverage}</strong>
                 </div>
                 <div>
                   <span className="text-[9px] text-slate-500 uppercase block">Ministry</span>
-                  <strong className="text-slate-200">{scheme.ministry}</strong>
+                  <strong className="text-slate-800">{scheme.ministry}</strong>
                 </div>
                 <div>
                   <span className="text-[9px] text-slate-500 uppercase block">Eligibility</span>
-                  <span className="text-slate-400">{scheme.eligibility}</span>
+                  <span className="text-slate-600">{scheme.eligibility}</span>
                 </div>
                 <div>
                   <span className="text-[9px] text-slate-500 uppercase block">Benefits</span>
-                  <span className="text-slate-400">{scheme.benefits}</span>
+                  <span className="text-slate-600">{scheme.benefits}</span>
                 </div>
               </div>
             </div>
@@ -393,15 +393,15 @@ export default function CitizenSchemeDetailsPage() {
 
           {/* ELIGIBILITY TAB */}
           {activeTab === 'eligibility' && (
-            <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-              <span className="font-bold text-slate-205 uppercase block border-b border-slate-900 pb-2">Automatic Eligibility Checker</span>
+            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+              <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Automatic Eligibility Checker</span>
               <form onSubmit={handleCheckEligibility} className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-[10px] text-slate-500 block mb-1">Your Age</label>
                   <input
                     type="number" value={age} onChange={e => setAge(e.target.value)}
                     aria-label="Age input"
-                    className="w-full bg-slate-950 border border-slate-850 rounded-xl p-2 text-slate-202 focus:outline-none"
+                    className="w-full bg-white border border-slate-200 rounded-xl p-2 text-slate-202 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -409,7 +409,7 @@ export default function CitizenSchemeDetailsPage() {
                   <input
                     type="number" value={income} onChange={e => setIncome(e.target.value)}
                     aria-label="Annual income input"
-                    className="w-full bg-slate-950 border border-slate-850 rounded-xl p-2 text-slate-202 focus:outline-none"
+                    className="w-full bg-white border border-slate-200 rounded-xl p-2 text-slate-202 focus:outline-none"
                   />
                 </div>
                 <div className="col-span-2">
@@ -417,7 +417,7 @@ export default function CitizenSchemeDetailsPage() {
                   <select
                     value={selectedState} onChange={e => setSelectedState(e.target.value)}
                     aria-label="State selector"
-                    className="w-full bg-slate-950 border border-slate-850 rounded-xl p-2 text-slate-202 focus:outline-none"
+                    className="w-full bg-white border border-slate-200 rounded-xl p-2 text-slate-202 focus:outline-none"
                   >
                     {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
                   </select>
@@ -441,7 +441,7 @@ export default function CitizenSchemeDetailsPage() {
                     : eligibilityResult.status === 'possibly' ? '🟡 Possibly Eligible'
                     : '❌ May Not Qualify'}
                   </span>
-                  <p className="text-slate-300">{eligibilityResult.explanation}</p>
+                  <p className="text-slate-700">{eligibilityResult.explanation}</p>
                 </div>
               )}
             </div>
@@ -450,7 +450,7 @@ export default function CitizenSchemeDetailsPage() {
           {/* HOSPITALS TAB — Location-Aware */}
           {activeTab === 'hospitals' && (
             <div className="space-y-4">
-              <div className="glass-panel p-5 rounded-2xl border border-slate-900">
+              <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200">
                 <div className="flex items-center justify-between mb-3">
                   <span className="font-bold text-slate-205 uppercase">
                     Empanelled Hospitals {cityLabel ? `— ${cityLabel}` : ''}
@@ -468,14 +468,14 @@ export default function CitizenSchemeDetailsPage() {
                       className={`w-full text-left p-3 rounded-xl border transition-all ${
                         selectedHospital?.id === h.id
                           ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
-                          : 'bg-slate-900/50 border-slate-900 hover:border-slate-800'
+                          : 'bg-white border-slate-200 hover:border-slate-200'
                       }`}
                     >
                       <div className="flex justify-between items-start">
-                        <span className="font-bold text-slate-200">{h.name}</span>
-                        <span className="text-[9px] bg-slate-950 border border-slate-850 px-1.5 py-0.5 rounded text-rose-400">{h.type}</span>
+                        <span className="font-bold text-slate-800">{h.name}</span>
+                        <span className="text-[9px] bg-white border border-slate-200 px-1.5 py-0.5 rounded text-rose-400">{h.type}</span>
                       </div>
-                      <div className="mt-1 flex gap-3 text-[10px] text-slate-450">
+                      <div className="mt-1 flex gap-3 text-[10px] text-slate-500">
                         <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{h.phone}</span>
                         <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{h.distance}</span>
                       </div>
@@ -484,7 +484,7 @@ export default function CitizenSchemeDetailsPage() {
                 </div>
               </div>
               {hospitals.length > 0 && (
-                <div className="h-56 rounded-2xl overflow-hidden border border-slate-900">
+                <div className="h-56 rounded-2xl overflow-hidden border border-slate-200">
                   <MapContainer center={[centerLat, centerLng]} zoom={13} style={{ height: '100%', width: '100%' }}>
                     <MapRecenter lat={centerLat} lng={centerLng} />
                     <TileLayer
@@ -512,13 +512,13 @@ export default function CitizenSchemeDetailsPage() {
 
           {/* DOCUMENTS TAB */}
           {activeTab === 'documents' && (
-            <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-              <span className="font-bold text-slate-205 uppercase block border-b border-slate-900 pb-2">Required Documents Checklist</span>
+            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+              <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Required Documents Checklist</span>
               <div className="space-y-2">
                 {scheme.documents.split(',').map((doc: string, i: number) => (
-                  <div key={i} className="flex justify-between items-center p-2.5 bg-slate-950 rounded border border-slate-900">
+                  <div key={i} className="flex justify-between items-center p-2.5 bg-white rounded border border-slate-200">
                     <span className="flex items-center gap-2">
-                      <FileText className="w-3.5 h-3.5 text-slate-400" />
+                      <FileText className="w-3.5 h-3.5 text-slate-600" />
                       {doc.trim()}
                     </span>
                     <span className={i === 0 ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
@@ -536,23 +536,23 @@ export default function CitizenSchemeDetailsPage() {
 
           {/* APPLICATION STEPS TAB */}
           {activeTab === 'apply' && (
-            <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-              <span className="font-bold text-slate-205 uppercase block border-b border-slate-900 pb-2">Application Process</span>
+            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+              <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Application Process</span>
               <div className="space-y-4">
                 {scheme.applicationSteps?.map((s: any) => (
-                  <div key={s.step} className="flex gap-4 p-3 bg-slate-950 rounded-xl border border-slate-900">
+                  <div key={s.step} className="flex gap-4 p-3 bg-white rounded-xl border border-slate-200">
                     <div className="w-8 h-8 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center font-bold shrink-0">
                       {s.step}
                     </div>
                     <div>
-                      <p className="font-bold text-slate-200">{s.title}</p>
-                      <p className="text-slate-400 mt-0.5">{s.desc}</p>
+                      <p className="font-bold text-slate-800">{s.title}</p>
+                      <p className="text-slate-600 mt-0.5">{s.desc}</p>
                     </div>
                   </div>
                 ))}
-                <div className="flex items-center gap-2 text-[10px] text-slate-400 pt-2">
+                <div className="flex items-center gap-2 text-[10px] text-slate-600 pt-2">
                   <Clock className="w-3.5 h-3.5 text-indigo-400" />
-                  Estimated Processing Time: <strong className="text-slate-200">{scheme.processingTime}</strong>
+                  Estimated Processing Time: <strong className="text-slate-800">{scheme.processingTime}</strong>
                 </div>
               </div>
             </div>
@@ -560,16 +560,16 @@ export default function CitizenSchemeDetailsPage() {
 
           {/* FAQ TAB */}
           {activeTab === 'faq' && (
-            <div className="glass-panel p-6 rounded-2xl border border-slate-900 space-y-4">
-              <span className="font-bold text-slate-205 uppercase block border-b border-slate-900 pb-2">Frequently Asked Questions</span>
+            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+              <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Frequently Asked Questions</span>
               <div className="space-y-3">
                 {scheme.faqs?.map((f: any, i: number) => (
-                  <div key={i} className="p-3 bg-slate-950 rounded-xl border border-slate-900 space-y-1">
-                    <p className="font-bold text-slate-200 flex items-start gap-1.5">
+                  <div key={i} className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
+                    <p className="font-bold text-slate-800 flex items-start gap-1.5">
                       <HelpCircle className="w-3.5 h-3.5 text-indigo-400 shrink-0 mt-0.5" />
                       {f.q}
                     </p>
-                    <p className="text-slate-400 pl-5">{f.a}</p>
+                    <p className="text-slate-600 pl-5">{f.a}</p>
                   </div>
                 ))}
               </div>
@@ -579,20 +579,20 @@ export default function CitizenSchemeDetailsPage() {
 
         {/* Right Sidebar: ArogyaMitra Chat */}
         <div className="lg:col-span-4 space-y-4">
-          <div className="glass-panel p-5 rounded-2xl border border-slate-900 flex flex-col h-96">
-            <div className="flex items-center gap-2 border-b border-slate-900 pb-3 mb-3">
+          <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 flex flex-col h-96">
+            <div className="flex items-center gap-2 border-b border-slate-200 pb-3 mb-3">
               <Bot className="w-4 h-4 text-rose-400" />
               <span className="font-bold text-slate-205 text-xs uppercase">Ask ArogyaMitra</span>
               <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse ml-auto"></span>
             </div>
             <div className="flex-1 overflow-y-auto space-y-2 text-[10px] mb-3">
               {chatLog.map((c, i) => (
-                <div key={i} className={`p-2 rounded-lg ${c.role === 'user' ? 'bg-rose-500/10 text-rose-200 text-right' : 'bg-slate-950 text-slate-300'}`}>
+                <div key={i} className={`p-2 rounded-lg ${c.role === 'user' ? 'bg-rose-500/10 text-rose-200 text-right' : 'bg-white text-slate-700'}`}>
                   {c.content}
                 </div>
               ))}
               {chatLoading && (
-                <div className="bg-slate-950 text-slate-400 p-2 rounded-lg flex items-center gap-1 animate-pulse">
+                <div className="bg-white text-slate-600 p-2 rounded-lg flex items-center gap-1 animate-pulse">
                   <span className="w-1.5 h-1.5 bg-rose-500 rounded-full animate-ping"></span>
                   ArogyaMitra is thinking…
                 </div>
@@ -603,7 +603,7 @@ export default function CitizenSchemeDetailsPage() {
                 type="text" placeholder="Ask about this scheme..."
                 value={chatInput} onChange={e => setChatInput(e.target.value)}
                 aria-label="Chat with ArogyaMitra"
-                className="flex-1 bg-slate-950 border border-slate-850 rounded-xl p-2 text-slate-202 focus:outline-none text-xs"
+                className="flex-1 bg-white border border-slate-200 rounded-xl p-2 text-slate-202 focus:outline-none text-xs"
               />
               <button type="submit" disabled={chatLoading}
                 className="px-3 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl uppercase disabled:opacity-50 transition-colors">
@@ -613,13 +613,13 @@ export default function CitizenSchemeDetailsPage() {
           </div>
 
           {/* Quick Suggestions */}
-          <div className="glass-panel p-4 rounded-2xl border border-slate-900 space-y-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-2xl border border-slate-200 space-y-2">
             <span className="text-[10px] text-slate-500 uppercase font-bold block">Quick Questions</span>
             {['Am I eligible?', 'What documents do I need?', `Which hospitals accept ${scheme.name.split(' ')[0]}?`, 'How do I apply?'].map(q => (
               <button
                 key={q}
                 onClick={() => { setChatInput(q); }}
-                className="w-full text-left py-1.5 px-3 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 rounded-lg hover:text-slate-200 hover:bg-slate-850 transition-colors"
+                className="w-full text-left py-1.5 px-3 bg-white border border-slate-200 text-[10px] text-slate-600 rounded-lg hover:text-slate-800 hover:bg-slate-850 transition-colors"
               >
                 {q}
               </button>

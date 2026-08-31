@@ -291,7 +291,7 @@ export default function EmergencyDoctorChatPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] font-mono text-xs text-slate-400 space-y-4">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] font-mono text-xs text-slate-600 space-y-4">
         <RefreshCw className="w-8 h-8 text-rose-455 animate-spin" />
         <span>Securing emergency communication channel...</span>
       </div>
@@ -302,12 +302,12 @@ export default function EmergencyDoctorChatPage() {
   const category = session?.classification?.category || 'GENERAL';
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto px-4 font-mono text-xs text-slate-300">
+    <div className="space-y-6 max-w-4xl mx-auto px-4 font-mono text-xs text-slate-700">
       {/* Header bar */}
-      <div className="flex items-center justify-between border-b border-slate-900 pb-4">
+      <div className="flex items-center justify-between border-b border-slate-200 pb-4">
         <button 
           onClick={() => navigate('/citizen/emergency')}
-          className="flex items-center gap-2 text-slate-500 hover:text-slate-200 transition-colors"
+          className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to ERN Dashboard</span>
@@ -324,7 +324,7 @@ export default function EmergencyDoctorChatPage() {
             <AlertTriangle className="w-5 h-5 text-rose-400 animate-pulse" />
             <span>🚨 CRITICAL SAFETY WARNING — SEEK IMMEDIATE OFFLINE CARE</span>
           </div>
-          <p className="text-slate-400 leading-relaxed">
+          <p className="text-slate-600 leading-relaxed">
             Your emergency has been classified as <strong className="text-rose-400">{priority} PRIORITY ({category})</strong>. 
             Do not wait for doctor responses if symptoms are worsening. Dial <strong className="text-rose-400">112 / 108</strong> immediately, or proceed to the nearest emergency room.
           </p>
@@ -336,15 +336,15 @@ export default function EmergencyDoctorChatPage() {
         
         {/* Left Column: Connection Info & Consent Gating */}
         <div className="md:col-span-4 space-y-6">
-          <div className="glass-panel p-5 rounded-2xl border border-slate-900 space-y-4">
-            <h3 className="text-slate-202 font-bold border-b border-slate-850 pb-2 uppercase tracking-wide">
+          <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4">
+            <h3 className="text-slate-202 font-bold border-b border-slate-200 pb-2 uppercase tracking-wide">
               ERN Active Session
             </h3>
             
             <div className="space-y-2">
               <div>
                 <span className="text-[10px] text-slate-500 block uppercase">Session ID</span>
-                <span className="text-slate-300 font-bold">{sessionId}</span>
+                <span className="text-slate-700 font-bold">{sessionId}</span>
               </div>
               <div>
                 <span className="text-[10px] text-slate-500 block uppercase">Priority / Category</span>
@@ -375,13 +375,13 @@ export default function EmergencyDoctorChatPage() {
           </div>
 
           {/* Consent card */}
-          <div className="glass-panel p-5 rounded-2xl border border-slate-900 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-850 pb-2">
+          <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2">
               <h3 className="text-slate-202 font-bold uppercase tracking-wide">EHR History Share</h3>
               <ShieldCheck className={`w-4 h-4 ${consentGranted ? 'text-teal-400' : 'text-slate-650'}`} />
             </div>
             
-            <p className="text-slate-450 leading-relaxed text-[10px]">
+            <p className="text-slate-500 leading-relaxed text-[10px]">
               Authorize the doctor to view your allergies, medications, and digital twin score to prevent adverse drug reactions.
             </p>
 
@@ -390,7 +390,7 @@ export default function EmergencyDoctorChatPage() {
               className={`w-full py-2.5 rounded-xl font-bold border transition-all flex items-center justify-center gap-2 ${
                 consentGranted 
                   ? 'bg-teal-500/10 border-teal-500/30 text-teal-400 hover:bg-teal-500/20'
-                  : 'bg-slate-900 border-slate-800 text-slate-350 hover:bg-slate-855'
+                  : 'bg-white border-slate-200 text-slate-350 hover:bg-slate-855'
               }`}
             >
               <span>{consentGranted ? 'Revoke EHR Access' : 'Authorize EHR Share'}</span>
@@ -399,7 +399,7 @@ export default function EmergencyDoctorChatPage() {
 
           {/* AI Summarizer Panel */}
           {messages.length > 2 && (
-            <div className="glass-panel p-5 rounded-2xl border border-slate-900 space-y-3">
+            <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-3">
               <button
                 onClick={fetchAISummary}
                 className="w-full py-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 rounded-xl font-bold flex items-center justify-center gap-2"
@@ -408,7 +408,7 @@ export default function EmergencyDoctorChatPage() {
                 <span>Generate AI Handoff</span>
               </button>
               {aiSummary && (
-                <div className="p-3 bg-slate-950/70 border border-slate-850 rounded-xl max-h-48 overflow-y-auto text-[10px] text-slate-400 space-y-2 whitespace-pre-line">
+                <div className="p-3 bg-white border border-slate-200 rounded-xl max-h-48 overflow-y-auto text-[10px] text-slate-600 space-y-2 whitespace-pre-line">
                   {aiSummary}
                 </div>
               )}
@@ -417,11 +417,11 @@ export default function EmergencyDoctorChatPage() {
         </div>
 
         {/* Right Column: Secure Chat Window */}
-        <div className="md:col-span-8 flex flex-col h-[500px] glass-panel rounded-2xl border border-slate-900 overflow-hidden">
+        <div className="md:col-span-8 flex flex-col h-[500px] bg-white border border-slate-200 shadow-sm rounded-2xl border border-slate-200 overflow-hidden">
           
           {/* Chat Header */}
-          <div className="p-4 bg-slate-950 border-b border-slate-900 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center border border-slate-800 text-rose-455 font-bold">
+          <div className="p-4 bg-white border-b border-slate-200 flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-slate-200 text-rose-455 font-bold">
               Doc
             </div>
             <div>
@@ -447,7 +447,7 @@ export default function EmergencyDoctorChatPage() {
 
                 if (isSystem) {
                   return (
-                    <div key={m.id} className="p-3 bg-slate-950/80 border border-slate-900 rounded-xl text-[10px] text-slate-500 leading-relaxed">
+                    <div key={m.id} className="p-3 bg-white border border-slate-200 rounded-xl text-[10px] text-slate-500 leading-relaxed">
                       {m.message}
                     </div>
                   );
@@ -457,8 +457,8 @@ export default function EmergencyDoctorChatPage() {
                   <div key={m.id} className={`flex ${isCitizen ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-[75%] p-3.5 rounded-2xl space-y-1.5 leading-relaxed text-xs border ${
                       isCitizen 
-                        ? 'bg-rose-500/10 border-rose-500/20 text-slate-200' 
-                        : 'bg-slate-900 border-slate-800 text-slate-200'
+                        ? 'bg-rose-500/10 border-rose-500/20 text-slate-800' 
+                        : 'bg-white border-slate-200 text-slate-800'
                     }`}>
                       <p>{m.message}</p>
                       <span className="text-[8px] text-slate-500 block text-right font-mono">
@@ -473,14 +473,14 @@ export default function EmergencyDoctorChatPage() {
           </div>
 
           {/* Message input */}
-          <form onSubmit={handleSendMessage} className="p-3 bg-slate-950 border-t border-slate-900 flex gap-2">
+          <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-slate-200 flex gap-2">
             <input 
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               disabled={requestStatus === 'CLOSED' || sending}
               placeholder={requestStatus === 'CLOSED' ? 'This conversation is closed.' : 'Type your message...'}
-              className="flex-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-250 text-xs focus:outline-none focus:border-rose-500/50 disabled:opacity-50"
+              className="flex-1 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-250 text-xs focus:outline-none focus:border-rose-500/50 disabled:opacity-50"
             />
             <button 
               type="submit"
