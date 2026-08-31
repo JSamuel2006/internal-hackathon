@@ -78,7 +78,7 @@ export default function LoginPage() {
             <Activity className="w-8 h-8 glow-pill" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-teal-450 to-indigo-400 bg-clip-text text-transparent">
-            ArogyaVerse Command Center
+            ArogyaMitra Command Center
           </h2>
           <p className="text-xs text-slate-400 mt-1 font-mono">SECURE MULTI-ROLE FEDERATED LOG-IN</p>
         </div>
