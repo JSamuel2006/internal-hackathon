@@ -43,15 +43,15 @@ export default function PublicLayout() {
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5 text-teal-700 font-semibold">
               <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
-              National Digital Healthcare Platform
+              {t('top_platform_title')}
             </span>
             <span className="hidden sm:inline text-teal-200">|</span>
-            <span className="hidden sm:inline text-slate-600 font-medium">Grounded in ICMR Guidelines &amp; ABHA Standards</span>
+            <span className="hidden sm:inline text-slate-600 font-medium">{t('top_standards_info')}</span>
           </div>
           <div className="flex items-center gap-4 ml-auto">
             <a href="tel:108" className="hidden sm:flex items-center gap-1 text-teal-800 font-bold hover:text-teal-900 transition-colors">
               <PhoneCall className="w-3.5 h-3.5 text-rose-500" />
-              <span>National Emergency: 108</span>
+              <span>{t('top_emergency')}</span>
             </a>
             <LanguageSelector />
           </div>
