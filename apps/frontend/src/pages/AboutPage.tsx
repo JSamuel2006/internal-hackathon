@@ -5,9 +5,18 @@ import {
   Target, Eye, Users, WifiOff, Globe, Lock, ArrowRight,
   Stethoscope, Map, CheckCircle2, Award, Zap, ChevronRight, UserCheck
 } from 'lucide-react';
+import { I18nService, t } from '../i18n';
 import heroImage from '../assets/hero.png';
 
 export default function AboutPage() {
+  const [lang, setLang] = React.useState(I18nService.getLanguage());
+
+  React.useEffect(() => {
+    const unsub = I18nService.subscribe((newLang) => {
+      setLang(newLang);
+    });
+    return unsub;
+  }, []);
   return (
     <div className="flex-1 bg-white text-slate-800 font-sans selection:bg-teal-500 selection:text-white">
       

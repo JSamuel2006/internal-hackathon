@@ -7,9 +7,18 @@ import {
   CheckCircle2, Award, Heart, ExternalLink, HelpCircle, 
   UserCheck, LogIn, Cpu, PhoneCall, Sparkles, MessageSquare
 } from 'lucide-react';
+import { I18nService, t } from '../i18n';
 import heroImage from '../assets/hero.png';
 
 export default function LandingPage() {
+  const [lang, setLang] = React.useState(I18nService.getLanguage());
+
+  React.useEffect(() => {
+    const unsub = I18nService.subscribe((newLang) => {
+      setLang(newLang);
+    });
+    return unsub;
+  }, []);
   const portals = [
     {
       role: 'ROLE_CITIZEN',
@@ -133,30 +142,30 @@ export default function LandingPage() {
             {/* Small Eyebrow */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200/80 text-teal-700 text-xs font-bold font-sans tracking-wide">
               <Sparkles className="w-3.5 h-3.5 text-teal-600" />
-              <span>AI-POWERED DIGITAL HEALTHCARE</span>
+              <span>{t('hero_eyebrow')}</span>
             </div>
 
             {/* Large Professional Headline */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
-              Healthcare that reaches you,{' '}
+              {t('hero_title_1')}{' '}
               <span className="bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 bg-clip-text text-transparent block sm:inline">
-                wherever you are.
+                {t('hero_title_2')}
               </span>
             </h1>
 
             {/* Supporting Message */}
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
-              <strong className="text-slate-800 font-semibold">ArogyaMitra</strong> connects citizens, community health workers, doctors, and public health teams through accessible, offline-first, and multilingual healthcare technology.
+              {t('hero_desc')}
             </p>
 
             {/* Action Buttons */}
             <div className="pt-2 flex flex-wrap gap-4 items-center">
               <Link
-                to="/login"
+                to="/signup"
                 className="flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white shadow-lg shadow-teal-500/25 transition-all transform hover:-translate-y-0.5 cursor-pointer uppercase tracking-wider"
               >
                 <UserCheck className="w-4 h-4" />
-                <span>Get Started</span>
+                <span>{t('btn_get_started')}</span>
               </Link>
 
               <Link
@@ -164,7 +173,7 @@ export default function LandingPage() {
                 className="flex items-center gap-2 px-6 py-3.5 rounded-full font-bold text-sm bg-white hover:bg-slate-50 text-slate-700 hover:text-teal-700 border border-slate-200 shadow-sm transition-all cursor-pointer"
               >
                 <LogIn className="w-4 h-4 text-slate-500" />
-                <span>Sign In</span>
+                <span>{t('btn_sign_in')}</span>
               </Link>
 
               <Link
@@ -172,7 +181,7 @@ export default function LandingPage() {
                 className="flex items-center gap-2 px-6 py-3.5 rounded-full font-bold text-sm bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-all cursor-pointer"
               >
                 <ShieldAlert className="w-4 h-4 text-rose-600" />
-                <span>Emergency SOS</span>
+                <span>{t('btn_emergency_sos')}</span>
               </Link>
             </div>
           </div>

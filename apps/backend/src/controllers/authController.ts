@@ -51,3 +51,36 @@ export async function getCurrentUser(req: Request, res: Response, next: NextFunc
     next(error);
   }
 }
+
+
+export async function handleRegister(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { name, email, role = 'ROLE_CITIZEN', jurisdiction, abhaId } = req.body;
+    if (!name || !email) {
+      return res.status(400).json({ success: false, error: 'Name and email are required for registration.' });
+    }
+    const existingUser = await userRepository.findByEmail(email);
+    if (existingUser) {
+      return res.status(409).json({ success: false, error: 'A user with this email address is already registered.' });
+    }
+    const user = await userRepository.createUser({
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      role: role || 'ROLE_CITIZEN',
+      jurisdiction: jurisdiction ? jurisdiction.trim() : undefined,
+      abhaId: abhaId ? abhaId.trim() : 'ABHA-91-' + Math.floor(1000 + Math.random() * 9000) + '-' + Math.floor(1000 + Math.random() * 9000),
+    });
+    const token = jwt.sign(
+      { sub: user.id, name: user.name, email: user.email, role: user.role },
+      env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+    return res.status(201).json({
+      success: true,
+      message: 'Account registered successfully.',
+      data: { token, user: { id: user.id, name: user.name, email: user.email, role: user.role, jurisdiction: user.jurisdiction, abhaId: user.abhaId } }
+    });
+  } catch (error) {
+    next(error);
+  }
+}

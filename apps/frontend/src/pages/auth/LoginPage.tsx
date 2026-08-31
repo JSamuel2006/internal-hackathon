@@ -1,161 +1,242 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Activity, ShieldCheck, Lock, User, AlertCircle, Stethoscope } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { Activity, ShieldCheck, Lock, User, AlertCircle, Stethoscope, UserPlus, CheckCircle2 } from 'lucide-react';
 import { authService } from '../../services/api';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = React.useState('');
-  const [name, setName] = React.useState('');
-  const [role, setRole] = React.useState('ROLE_OFFICER'); // Default role
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState('');
+  const [searchParams] = useSearchParams();
+  const isSignUpMode = searchParams.get('mode') === 'signup' || window.location.pathname === '/signup';
+
+  const [mode, setMode] = useState<'login' | 'signup'>(isSignUpMode ? 'signup' : 'login');
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [role, setRole] = useState('ROLE_CITIZEN');
+  const [jurisdiction, setJurisdiction] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+
+  useEffect(() => {
+    if (isSignUpMode) {
+      setMode('signup');
+    }
+  }, [isSignUpMode]);
 
   const handleRoleSelect = (selectedRole: string) => {
     setRole(selectedRole);
-    // Pre-populate with typical credentials for demo / finale presentation
-    if (selectedRole === 'ROLE_OFFICER') {
-      setEmail('officer.pune@mohfw.gov.in');
-      setName('Pune Health Officer');
-    } else if (selectedRole === 'ROLE_ADMIN') {
-      setEmail('admin.root@arogyaverse.gov.in');
-      setName('System Root Admin');
-    } else if (selectedRole === 'ROLE_DOCTOR') {
-      setEmail('doctor@arogyamitra.demo');
-      setName('Dr. Rajesh Sharma');
-    } else if (selectedRole === 'ROLE_WORKER') {
-      setEmail('asha.haveli@arogyamitra.gov.in');
-      setName('Sunita Devi (ASHA)');
-    } else {
-      setEmail('citizen.rahul@gmail.com');
-      setName('Rahul Verma');
+    if (mode === 'login') {
+      if (selectedRole === 'ROLE_OFFICER') {
+        setEmail('officer.pune@mohfw.gov.in');
+        setName('Pune Health Officer');
+      } else if (selectedRole === 'ROLE_ADMIN') {
+        setEmail('admin.root@arogyaverse.gov.in');
+        setName('System Root Admin');
+      } else if (selectedRole === 'ROLE_DOCTOR') {
+        setEmail('doctor@arogyamitra.demo');
+        setName('Dr. Rajesh Sharma');
+      } else if (selectedRole === 'ROLE_WORKER') {
+        setEmail('asha.haveli@arogyamitra.gov.in');
+        setName('Sunita Devi (ASHA)');
+      } else {
+        setEmail('citizen.rahul@gmail.com');
+        setName('Rahul Verma');
+      }
     }
   };
 
-  React.useEffect(() => {
-    // Initial populate
-    handleRoleSelect('ROLE_OFFICER');
-  }, []);
-
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccessMsg('');
 
     try {
-      const res = await authService.login(email, role, name);
-      if (res.success) {
-        if (role === 'ROLE_ADMIN') {
-          navigate('/admin/dashboard');
-        } else if (role === 'ROLE_OFFICER') {
-          navigate('/officer/dashboard');
-        } else if (role === 'ROLE_DOCTOR') {
-          navigate('/doctor/dashboard');
-        } else if (role === 'ROLE_WORKER') {
-          navigate('/worker/dashboard');
+      if (mode === 'signup') {
+        const res = await authService.register({
+          name: name.trim(),
+          email: email.trim(),
+          role,
+          jurisdiction: jurisdiction.trim() || undefined,
+        });
+
+        if (res.success) {
+          setSuccessMsg('Registration successful! Redirecting to your dashboard...');
+          setTimeout(() => {
+            if (role === 'ROLE_ADMIN') navigate('/admin/dashboard');
+            else if (role === 'ROLE_OFFICER') navigate('/officer/dashboard');
+            else if (role === 'ROLE_DOCTOR') navigate('/doctor/dashboard');
+            else if (role === 'ROLE_WORKER') navigate('/worker/dashboard');
+            else navigate('/citizen/dashboard');
+          }, 1000);
         } else {
-          navigate('/citizen/dashboard');
+          setError(res.error || res.message || 'Registration failed. Please check details.');
         }
       } else {
-        setError(res.message || 'Login failed. Please check credentials.');
+        const res = await authService.login(email, role, name);
+        if (res.success) {
+          if (role === 'ROLE_ADMIN') navigate('/admin/dashboard');
+          else if (role === 'ROLE_OFFICER') navigate('/officer/dashboard');
+          else if (role === 'ROLE_DOCTOR') navigate('/doctor/dashboard');
+          else if (role === 'ROLE_WORKER') navigate('/worker/dashboard');
+          else navigate('/citizen/dashboard');
+        } else {
+          setError(res.message || 'Login failed. Please check credentials.');
+        }
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Unable to connect to the backend server.');
+      setError(err.response?.data?.error || err.response?.data?.message || 'Unable to connect to the backend server.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center p-6 bg-slate-950">
-      <div className="w-full max-w-lg glass-panel rounded-2xl p-8 border border-slate-800/80 shadow-2xl relative overflow-hidden">
-        {/* Glowing Background Blob */}
-        <div className="absolute -top-24 -left-24 w-48 h-48 bg-teal-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl"></div>
-
-        <div className="text-center mb-8 relative z-10">
-          <div className="inline-flex p-3 bg-teal-500/10 rounded-xl text-teal-400 border border-teal-500/20 mb-3">
-            <Activity className="w-8 h-8 glow-pill" />
+    <div className="flex-1 flex items-center justify-center p-6 bg-[#F5FAFC]">
+      <div className="w-full max-w-lg bg-white rounded-3xl p-8 border border-slate-200 shadow-xl relative overflow-hidden">
+        
+        {/* Header Branding */}
+        <div className="text-center mb-6">
+          <div className="inline-flex p-3 bg-teal-50 rounded-2xl text-teal-600 border border-teal-100 mb-3 shadow-sm">
+            <Activity className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-teal-450 to-indigo-400 bg-clip-text text-transparent">
-            ArogyaMitra Command Center
+          <h2 className="text-2xl font-extrabold tracking-tight text-slate-900">
+            Arogya<span className="text-teal-600">Mitra</span> Portal
           </h2>
-          <p className="text-xs text-slate-400 mt-1 font-mono">SECURE MULTI-ROLE FEDERATED LOG-IN</p>
+          <p className="text-xs text-slate-500 mt-1 font-semibold uppercase tracking-wider">
+            National Digital Healthcare Gateway
+          </p>
         </div>
 
-        {/* Role Switcher */}
-        <div className="grid grid-cols-5 gap-1 p-1 bg-slate-900/60 rounded-xl border border-slate-800/80 mb-6 relative z-10">
-          {[
-            { id: 'ROLE_CITIZEN', name: 'Citizen', icon: User, color: 'text-rose-400' },
-            { id: 'ROLE_DOCTOR', name: 'Doctor', icon: Stethoscope, color: 'text-amber-405' },
-            { id: 'ROLE_WORKER', name: 'ASHA', icon: Activity, color: 'text-emerald-400' },
-            { id: 'ROLE_OFFICER', name: 'Officer', icon: ShieldCheck, color: 'text-teal-400' },
-            { id: 'ROLE_ADMIN', name: 'Admin', icon: Lock, color: 'text-indigo-400' },
-          ].map((r) => {
-            const Icon = r.icon;
-            const isSelected = role === r.id;
-            return (
-              <button
-                key={r.id}
-                type="button"
-                onClick={() => handleRoleSelect(r.id)}
-                className={`flex flex-col items-center gap-1.5 py-2.5 rounded-lg text-[9px] font-semibold tracking-wide transition-all ${
-                  isSelected
-                    ? 'bg-slate-950 text-white shadow-md border border-slate-800/40'
-                    : 'text-slate-450 hover:text-slate-200'
-                }`}
-              >
-                <Icon className={`w-3.5 h-3.5 ${isSelected ? r.color : 'text-slate-500'}`} />
-                {r.name}
-              </button>
-            );
-          })}
+        {/* Mode Toggle (Sign In vs Sign Up) */}
+        <div className="flex p-1 bg-slate-100 rounded-2xl mb-6">
+          <button
+            type="button"
+            onClick={() => { setMode('login'); setError(''); setSuccessMsg(''); }}
+            className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              mode === 'login' 
+                ? 'bg-white text-teal-700 shadow-sm' 
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Sign In
+          </button>
+          <button
+            type="button"
+            onClick={() => { setMode('signup'); setError(''); setSuccessMsg(''); setEmail(''); setName(''); }}
+            className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              mode === 'signup' 
+                ? 'bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-md' 
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Sign Up (New Account)
+          </button>
         </div>
 
+        {/* Role Selector Grid */}
+        <div className="mb-6">
+          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Select User Role</label>
+          <div className="grid grid-cols-5 gap-1.5 p-1.5 bg-[#F8FBFD] rounded-2xl border border-slate-100">
+            {[
+              { id: 'ROLE_CITIZEN', name: 'Citizen', icon: User, color: 'text-rose-600' },
+              { id: 'ROLE_DOCTOR', name: 'Doctor', icon: Stethoscope, color: 'text-teal-600' },
+              { id: 'ROLE_WORKER', name: 'ASHA', icon: Activity, color: 'text-amber-600' },
+              { id: 'ROLE_OFFICER', name: 'Officer', icon: ShieldCheck, color: 'text-indigo-600' },
+              { id: 'ROLE_ADMIN', name: 'Admin', icon: Lock, color: 'text-slate-700' },
+            ].map((r) => {
+              const Icon = r.icon;
+              const isSelected = role === r.id;
+              return (
+                <button
+                  key={r.id}
+                  type="button"
+                  onClick={() => handleRoleSelect(r.id)}
+                  className={`flex flex-col items-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold transition-all ${
+                    isSelected
+                      ? 'bg-white text-slate-900 shadow-sm border border-slate-200'
+                      : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 ${isSelected ? r.color : 'text-slate-400'}`} />
+                  <span>{r.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Error Alert */}
         {error && (
-          <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-455 text-xs flex items-center gap-3 relative z-10 animate-shake">
-            <AlertCircle className="w-5 h-5 shrink-0 text-rose-400" />
+          <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 shrink-0 text-rose-600" />
             <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-5 relative z-10">
+        {/* Success Alert */}
+        {successMsg && (
+          <div className="mb-6 p-4 rounded-2xl bg-teal-50 border border-teal-200 text-teal-800 text-xs flex items-center gap-3">
+            <CheckCircle2 className="w-5 h-5 shrink-0 text-teal-600" />
+            <span>{successMsg}</span>
+          </div>
+        )}
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-mono tracking-wider text-slate-400 uppercase mb-2">Full Name</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Full Name</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-slate-900/50 border border-slate-800 focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 text-slate-100 text-sm outline-none transition-all placeholder:text-slate-600"
-              placeholder="e.g. Rahul Verma"
+              className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-teal-500 focus:bg-white text-slate-900 text-sm outline-none transition-all placeholder:text-slate-400 font-medium"
+              placeholder="e.g. Ananya Sharma"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono tracking-wider text-slate-400 uppercase mb-2">Email Address</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Email Address</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-slate-900/50 border border-slate-800 focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 text-slate-100 text-sm outline-none transition-all placeholder:text-slate-600"
-              placeholder="name@health.gov.in"
+              className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-teal-500 focus:bg-white text-slate-900 text-sm outline-none transition-all placeholder:text-slate-400 font-medium"
+              placeholder="name@example.com"
             />
           </div>
+
+          {mode === 'signup' && (role === 'ROLE_WORKER' || role === 'ROLE_OFFICER') && (
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Jurisdiction / District</label>
+              <input
+                type="text"
+                value={jurisdiction}
+                onChange={(e) => setJurisdiction(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-teal-500 focus:bg-white text-slate-900 text-sm outline-none transition-all placeholder:text-slate-400 font-medium"
+                placeholder="e.g. Haveli Village / Pune District"
+              />
+            </div>
+          )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-500 text-slate-950 font-bold hover:from-teal-400 hover:to-indigo-400 transition-all shadow-lg shadow-teal-500/10 disabled:opacity-50 text-sm"
+            className="w-full py-3.5 rounded-full bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-teal-500/20 transition-all disabled:opacity-50 mt-2 cursor-pointer"
           >
-            {loading ? 'Authenticating credentials...' : 'Enter Platform Command'}
+            {loading 
+              ? (mode === 'signup' ? 'Registering Account...' : 'Authenticating...') 
+              : (mode === 'signup' ? 'Create ArogyaMitra Account' : 'Sign In to Portal')
+            }
           </button>
         </form>
 
-        <div className="mt-6 text-center text-xs text-slate-550 font-mono">
-          <p>Secure login session expires automatically in 24 hours.</p>
+        <div className="mt-6 text-center text-xs text-slate-500 font-medium">
+          <p>Protected by ABHA Interoperability &amp; 256-bit Security Encryption.</p>
         </div>
+
       </div>
     </div>
   );

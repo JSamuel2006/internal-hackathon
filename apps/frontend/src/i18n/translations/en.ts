@@ -166,4 +166,19 @@ export const en = {
   "first_aid_dehydration_warn1": "Do NOT give fluids too quickly, as this can trigger vomiting.",
   "first_aid_dehydration_warn2": "Do NOT give drinks containing caffeine or high sugar content.",
   "first_aid_dehydration_warn3": "Seek emergency medical help immediately if the person is confused, loses consciousness, or has hot, dry skin.",
+
+  // Public Website Keys
+  "nav_home": "HOME",
+  "nav_about": "ABOUT US",
+  "nav_services": "SERVICES",
+  "nav_how_it_works": "HOW IT WORKS",
+  "nav_sign_in": "SIGN IN",
+  "nav_sign_up": "SIGN UP",
+  "hero_eyebrow": "AI-POWERED DIGITAL HEALTHCARE",
+  "hero_title_1": "Healthcare that reaches you, ",
+  "hero_title_2": "wherever you are.",
+  "hero_desc": "ArogyaMitra connects citizens, community health workers, doctors and public health teams through accessible, offline-first and multilingual healthcare technology.",
+  "btn_get_started": "GET STARTED",
+  "btn_sign_in": "SIGN IN",
+  "btn_emergency_sos": "EMERGENCY SOS",
 };
