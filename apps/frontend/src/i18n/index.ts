@@ -11,7 +11,7 @@ export const LanguageCode = {
   mr: 'mr',
 } as const;
 export type LanguageCode = keyof typeof LanguageCode;
-export type TranslationKey = keyof typeof en;
+export type TranslationKey = (keyof typeof en) | (string & {});
 
 export const translations: Record<LanguageCode, typeof en> = {
   en,

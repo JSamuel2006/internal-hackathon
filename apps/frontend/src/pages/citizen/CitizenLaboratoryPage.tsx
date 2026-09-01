@@ -42,7 +42,7 @@ export default function CitizenLaboratoryPage() {
       const res = await api.get('/labs/orders');
       if (res.data?.success) setOrders(res.data.data || []);
     } catch (err) {
-      setError('Could not retrieve laboratory records.');
+      setError(t('could_not_retrieve_laboratory_records'));
     } finally {
       setLoading(false);
     }
@@ -54,7 +54,7 @@ export default function CitizenLaboratoryPage() {
 
   const handleDiagnose = async (orderId: string) => {
     if (!manualResult) {
-      setError('Please input lab results for verification.');
+      setError(t('please_input_lab_results_for'));
       return;
     }
     setLoading(true);
@@ -63,13 +63,13 @@ export default function CitizenLaboratoryPage() {
       const res = await api.post('/labs/results', { orderId, result: manualResult });
       if (res.data?.success) {
         setAiReport(res.data.data);
-        setSuccessMsg('AI Laboratory interpretation completed!');
+        setSuccessMsg(t('ai_laboratory_interpretation_completed'));
         setManualResult('');
         fetchLabs();
         setTimeout(() => setSuccessMsg(''), 4000);
       }
     } catch (err) {
-      setError('Failed to analyze lab order results.');
+      setError(t('failed_to_analyze_lab_order'));
     } finally {
       setLoading(false);
     }
@@ -143,7 +143,7 @@ export default function CitizenLaboratoryPage() {
                     ord.status === '{t("completed")}' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'
                   }`}>{ord.status}</span>
                 </div>
-                <p className="text-[10px] text-slate-500">Laboratory: {ord.labName || 'Pune Central Diagnostics'}</p>
+                <p className="text-[10px] text-slate-500">{t('facility_provider')}: {ord.labName || 'Pune Central Diagnostics'}</p>
                 {ord.result && (
                   <p className="text-[10px] text-slate-600 bg-white p-2 rounded border border-slate-200 leading-normal">{ord.result}</p>
                 )}
@@ -160,7 +160,7 @@ export default function CitizenLaboratoryPage() {
               {selectedOrder.status !== '{t("completed")}' && (
                 <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
                   <h4 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-2">
-                    Enter Laboratory Result Values (Demo Simulation)
+                    {t('enter_laboratory_result_values_demo')}
                   </h4>
                   <div className="space-y-3">
                     <input
@@ -175,7 +175,7 @@ export default function CitizenLaboratoryPage() {
                       className="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-slate-950 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1.5 font-mono"
                     >
                       <Play className="w-3.5 h-3.5" />
-                      <span>Validate & Query Clinical AI</span>
+                      <span>{t('validate_query_clinical_ai')}</span>
                     </button>
                   </div>
                 </div>
@@ -185,9 +185,9 @@ export default function CitizenLaboratoryPage() {
               {aiReport && (
                 <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono animate-fade-in">
                   <div className="border-b border-slate-200 pb-2 flex justify-between items-center">
-                    <h4 className="font-bold text-slate-205 text-xs uppercase">AI Laboratory Clinical Diagnostic Report</h4>
+                    <h4 className="font-bold text-slate-205 text-xs uppercase">{t('ai_laboratory_clinical_diagnostic_report')}</h4>
                     {aiReport.criticalFlag && (
-                      <span className="px-2 py-0.5 bg-rose-500/10 text-rose-455 border border-rose-500/20 text-[9px] rounded font-bold uppercase animate-pulse">Critical Alert</span>
+                      <span className="px-2 py-0.5 bg-rose-500/10 text-rose-455 border border-rose-500/20 text-[9px] rounded font-bold uppercase animate-pulse">{t('critical_alert')}</span>
                     )}
                   </div>
 
@@ -197,7 +197,7 @@ export default function CitizenLaboratoryPage() {
 
                   {aiReport.abnormalBiomarkers?.length > 0 && (
                     <div className="space-y-1.5">
-                      <span className="text-[9px] text-slate-500 uppercase font-bold block">Abnormal Biomarkers Flagged:</span>
+                      <span className="text-[9px] text-slate-500 uppercase font-bold block">{t('abnormal_biomarkers_flagged')}</span>
                       <div className="flex flex-wrap gap-2">
                         {aiReport.abnormalBiomarkers.map((bio: string, idx: number) => (
                           <span key={idx} className="px-2 py-0.5 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded text-[9px] uppercase">{bio}</span>
@@ -208,11 +208,11 @@ export default function CitizenLaboratoryPage() {
 
                   <div className="grid grid-cols-2 gap-4 pt-2">
                     <div className="bg-white p-3 rounded-xl border border-slate-200">
-                      <span className="text-slate-500 text-[9px] uppercase block">Repeat Checkup Recommended</span>
+                      <span className="text-slate-500 text-[9px] uppercase block">{t('repeat_checkup_recommended')}</span>
                       <strong className="text-slate-700 block mt-1">{aiReport.repeatInvestigationRecommended ? 'YES' : 'NO'}</strong>
                     </div>
                     <div className="bg-white p-3 rounded-xl border border-slate-200">
-                      <span className="text-slate-500 text-[9px] uppercase block">Next Steps</span>
+                      <span className="text-slate-500 text-[9px] uppercase block">{t('next_steps')}</span>
                       <strong className="text-slate-700 block mt-1">{aiReport.nextSteps}</strong>
                     </div>
                   </div>

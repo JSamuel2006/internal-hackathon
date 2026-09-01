@@ -38,6 +38,15 @@ interface TimelineEvent {
 
 export default function CitizenTimelinePage() {
   const { lang, t } = useI18n();
+
+  const localeMap: Record<string, string> = {
+    en: 'en-IN',
+    ta: 'ta-IN',
+    hi: 'hi-IN',
+    mr: 'mr-IN'
+  };
+  const currentLocale = localeMap[lang] || 'en-IN';
+
   const navigate = useNavigate();
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -123,8 +132,8 @@ export default function CitizenTimelinePage() {
                 id: scr.id,
                 type: 'ASHA_SCREENING',
                 displayType: 'ASHA FIELD SCREENING',
-                title: `Community Screening by ASHA`,
-                description: `Recorded by ASHA worker. Risk level warning status flag: ${scr.risk_level}.`,
+                title: t('community_screening_by_asha'),
+                description: `${t('recorded_by_asha_worker')} ${scr.risk_level}.`,
                 timestamp: scr.screening_date,
                 status: scr.risk_level === 'URGENT' || scr.risk_level === 'PRIORITY' ? 'warning' : 'completed',
                 metadata: {
@@ -166,7 +175,7 @@ export default function CitizenTimelinePage() {
           setTotalItems(mergedEvents.length);
         }
       } else {
-        throw new Error(response.data?.message || 'Unexpected response format');
+        throw new Error(response.data?.message || t('unexpected_response_format'));
       }
     } catch (err: any) {
       setError(err.response?.data?.message || '{t("unable_to_load_timeline")}.');
@@ -240,7 +249,7 @@ export default function CitizenTimelinePage() {
   const formatDateString = (timestamp: string) => {
     try {
       const d = new Date(timestamp);
-      return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      return d.toLocaleDateString(currentLocale, { month: 'long', day: 'numeric', year: 'numeric' });
     } catch (_) {
       return timestamp;
     }
@@ -249,7 +258,7 @@ export default function CitizenTimelinePage() {
   const formatTimeString = (timestamp: string) => {
     try {
       const d = new Date(timestamp);
-      return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      return d.toLocaleTimeString(currentLocale, { hour: '2-digit', minute: '2-digit' });
     } catch (_) {
       return '';
     }
@@ -258,10 +267,10 @@ export default function CitizenTimelinePage() {
   // Group events by date (e.g. TODAY, YESTERDAY, or date string)
   const groupEventsByDate = (eventsList: TimelineEvent[]) => {
     const groups: { [key: string]: TimelineEvent[] } = {};
-    const todayStr = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const todayStr = new Date().toLocaleDateString(currentLocale, { month: 'long', day: 'numeric', year: 'numeric' });
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const yesterdayStr = yesterday.toLocaleDateString(currentLocale, { month: 'long', day: 'numeric', year: 'numeric' });
 
     eventsList.forEach(e => {
       const dateStr = formatDateString(e.timestamp);
