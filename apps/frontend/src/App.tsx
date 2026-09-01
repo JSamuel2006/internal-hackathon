@@ -63,9 +63,11 @@ import EmergencyIntelligenceDashboard from './pages/officer/EmergencyIntelligenc
 import MinistryDashboard from './pages/officer/MinistryDashboard';
 import AshaDashboard from './pages/officer/AshaDashboard';
 
-// ASHA Worker Pages
+// ASHA / Health Worker Portal
 import AshaWorkerDashboard from './pages/worker/AshaDashboard';
 import AshaFieldScreeningPage from './pages/worker/AshaFieldScreeningPage';
+import AshaPatientsPage from './pages/worker/AshaPatientsPage';
+import AshaPatientDetailPage from './pages/worker/AshaPatientDetailPage';
 
 // Offline Health Page
 import OfflineHealthPage from './pages/citizen/OfflineHealthPage';
@@ -154,6 +156,8 @@ export default function App() {
         <Route path="/worker" element={<WorkerLayout />}>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<AshaWorkerDashboard />} />
+          <Route path="patients" element={<AshaPatientsPage />} />
+          <Route path="patients/:patientId" element={<AshaPatientDetailPage />} />
           <Route path="screening" element={<AshaFieldScreeningPage />} />
           <Route path="offline-health" element={<OfflineHealthPage />} />
         </Route>

@@ -11,7 +11,7 @@ export const LanguageCode = {
   mr: 'mr',
 } as const;
 export type LanguageCode = keyof typeof LanguageCode;
-export type TranslationKey = (keyof typeof en) | (string & {});
+export type TranslationKey = keyof typeof en;
 
 export const translations: Record<LanguageCode, typeof en> = {
   en,
@@ -52,7 +52,7 @@ export class I18nService {
 
   static translate(key: TranslationKey, params?: Record<string, string>): string {
     const dict = translations[this.currentLang] || translations['en'];
-    let text = dict[key] || translations['en'][key] || String(key);
+    let text = (dict as any)[key] || (translations['en'] as any)[key] || String(key);
     
     if (params) {
       Object.entries(params).forEach(([k, v]) => {

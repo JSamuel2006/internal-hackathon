@@ -5,10 +5,11 @@ import {
   Menu, X, LogOut, RefreshCw, ChevronRight, CheckCircle2
 } from 'lucide-react';
 import { authService } from '../services/api';
-import { I18nService, t } from '../i18n';
+import { useI18n } from '../i18n';
 import { LanguageSelector } from '../components/voice/LanguageSelector';
 
 export default function WorkerLayout() {
+  const { lang, t } = useI18n();
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -20,18 +21,10 @@ export default function WorkerLayout() {
     navigate('/login');
   };
 
-  const [currentLang, setCurrentLang] = React.useState(I18nService.getLanguage());
-
-  React.useEffect(() => {
-    const unsub = I18nService.subscribe((lang) => {
-      setCurrentLang(lang);
-    });
-    return unsub;
-  }, []);
-
   const navItems = [
-    { name: 'ASHA Dashboard', path: '/worker/dashboard', icon: Activity },
-    { name: 'Field Screening', path: '/worker/screening', icon: ClipboardList },
+    { name: t('asha_dashboard'), path: '/worker/dashboard', icon: Activity },
+    { name: t('my_patients'), path: '/worker/patients', icon: Users },
+    { name: t('field_screening'), path: '/worker/screening', icon: ClipboardList },
   ];
 
   return (
@@ -58,61 +51,96 @@ export default function WorkerLayout() {
             <p className="text-[10px] font-mono text-slate-500 font-medium">{user.jurisdiction || 'Haveli Village'}</p>
           </div>
 
-          <nav className="flex flex-col gap-1">
+          <nav className="space-y-1">
             {navItems.map((item) => {
+              const active = location.pathname === item.path || (item.path !== '/worker/dashboard' && location.pathname.startsWith(item.path));
               const Icon = item.icon;
-              const isActive = location.pathname === item.path;
               return (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                    isActive
-                      ? 'bg-cyan-50 text-cyan-700 border border-cyan-200/80 shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                    active
+                      ? 'bg-cyan-50 text-cyan-800 font-bold border border-cyan-200'
+                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
-                  <span className="flex items-center gap-3">
-                    <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-600' : 'text-slate-400'}`} />
+                  <div className="flex items-center gap-3">
+                    <Icon className={`w-4 h-4 ${active ? 'text-cyan-600' : 'text-slate-400'}`} />
                     <span>{item.name}</span>
-                  </span>
-                  {isActive && <ChevronRight className="w-3.5 h-3.5 text-cyan-600" />}
+                  </div>
+                  {active && <ChevronRight className="w-3.5 h-3.5 text-cyan-600" />}
                 </Link>
               );
             })}
           </nav>
         </div>
 
-        <div className="pt-4 border-t border-slate-100 space-y-3 shrink-0">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500">Language</span>
-            <LanguageSelector />
-          </div>
+        <div className="pt-4 border-t border-slate-100 space-y-3">
+          <LanguageSelector />
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-all cursor-pointer"
+            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 border border-rose-100 transition-all cursor-pointer"
           >
-            <LogOut className="w-4 h-4 text-rose-600" />
+            <LogOut className="w-4 h-4" />
             <span>Sign Out</span>
           </button>
         </div>
       </aside>
 
-      <div className="flex-1 flex flex-col h-full overflow-hidden">
-        <header className="h-16 bg-white border-b border-slate-200 px-4 md:px-8 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-3">
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-            <h1 className="font-extrabold text-lg text-slate-900 tracking-tight">ASHA Field Work Center</h1>
+      {/* Mobile Top Nav */}
+      <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 shadow-xs">
+        <Link to="/worker/dashboard" className="flex items-center gap-2">
+          <div className="p-2 bg-cyan-600 rounded-lg text-white">
+            <Users className="w-4 h-4" />
           </div>
-          <LanguageSelector />
-        </header>
+          <span className="font-bold text-slate-900">ArogyaMitra ASHA</span>
+        </Link>
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#F5FAFC]">
-          <Outlet key={currentLang} />
-        </main>
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg"
+        >
+          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
       </div>
+
+      {mobileOpen && (
+        <div className="md:hidden bg-white border-b border-slate-200 p-4 space-y-2">
+          {navItems.map((item) => {
+            const active = location.pathname === item.path;
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => setMobileOpen(false)}
+                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold ${
+                  active ? 'bg-cyan-50 text-cyan-800 font-bold border border-cyan-200' : 'text-slate-600'
+                }`}
+              >
+                <Icon className="w-4 h-4 text-cyan-600" />
+                <span>{item.name}</span>
+              </Link>
+            );
+          })}
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+            <LanguageSelector />
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content Area */}
+      <main key={lang} className="flex-1 overflow-y-auto p-4 md:p-8">
+        <Outlet />
+      </main>
     </div>
   );
 }

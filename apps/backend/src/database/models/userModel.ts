@@ -7,8 +7,14 @@ export interface UserEntity {
   passwordHash?: string;
   role: UserRole;
   jurisdiction?: string;
+  village?: string;
+  assignedAshaId?: string;
   abhaId?: string;
   professionalId?: string;
+  age?: number;
+  gender?: string;
+  phone?: string;
+  emergency_contact?: string;
   createdAt: Date;
   updatedAt: Date;
 }
