@@ -5,7 +5,7 @@ import {
   Menu, X, LogOut, ChevronRight, Activity, Zap, Sparkles, Cpu
 } from 'lucide-react';
 import { authService } from '../services/api';
-import { I18nService, t } from '../i18n';
+import { useI18n } from '../i18n';
 import { LanguageSelector } from '../components/voice/LanguageSelector';
 
 export default function OfficerLayout() {
@@ -20,37 +20,30 @@ export default function OfficerLayout() {
     navigate('/login');
   };
 
-  const [currentLang, setCurrentLang] = React.useState(I18nService.getLanguage());
-
-  React.useEffect(() => {
-    const unsub = I18nService.subscribe((lang) => {
-      setCurrentLang(lang);
-    });
-    return unsub;
-  }, []);
+  const { lang, t } = useI18n();
 
   const navGroups = [
     {
       group: 'MAIN',
       items: [
-        { name: 'Surveillance Command', path: '/officer/dashboard', icon: ShieldCheck }
+        { name: t('officer_dashboard_title'), path: '/officer/dashboard', icon: ShieldCheck }
       ]
     },
     {
       group: 'SURVEILLANCE & FIELD',
       items: [
-        { name: 'ASHA Field Monitoring', path: '/officer/asha-monitoring', icon: Activity },
-        { name: 'Disease Surveillance', path: '/officer/surveillance', icon: BarChart3 },
-        { name: 'Outbreak Heatmaps', path: '/officer/heatmaps', icon: Map },
-        { name: 'Reports & Analytics', path: '/officer/reports', icon: FileText }
+        { name: t('asha_field_monitoring'), path: '/officer/asha-monitoring', icon: Activity },
+        { name: t('disease_surveillance'), path: '/officer/surveillance', icon: BarChart3 },
+        { name: t('outbreak_heatmaps'), path: '/officer/heatmaps', icon: Map },
+        { name: t('reports_analytics'), path: '/officer/reports', icon: FileText }
       ]
     },
     {
       group: 'ANALYTICS & SIMULATION',
       items: [
-        { name: 'IEC Campaigns', path: '/officer/campaigns', icon: Zap },
-        { name: 'Population Digital Twin', path: '/officer/digital-twin', icon: Sparkles },
-        { name: 'Outbreak Simulator', path: '/officer/simulator', icon: Cpu }
+        { name: t('health_campaigns'), path: '/officer/campaigns', icon: Zap },
+        { name: t('ai_health_twin'), path: '/officer/digital-twin', icon: Sparkles },
+        { name: t('preventive_health_simulator'), path: '/officer/simulator', icon: Cpu }
       ]
     }
   ];
@@ -179,7 +172,7 @@ export default function OfficerLayout() {
         )}
 
         <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#F5FAFC]">
-          <Outlet key={currentLang} />
+          <Outlet key={lang} />
         </main>
       </div>
     </div>

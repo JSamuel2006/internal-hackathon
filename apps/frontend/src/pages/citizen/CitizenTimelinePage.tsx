@@ -1,3 +1,4 @@
+import { useI18n } from '../../i18n';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -36,6 +37,7 @@ interface TimelineEvent {
 }
 
 export default function CitizenTimelinePage() {
+  const { lang, t } = useI18n();
   const navigate = useNavigate();
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -167,7 +169,7 @@ export default function CitizenTimelinePage() {
         throw new Error(response.data?.message || 'Unexpected response format');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Unable to load your health timeline.');
+      setError(err.response?.data?.message || '{t("unable_to_load_timeline")}.');
     } finally {
       setLoading(false);
     }
@@ -206,7 +208,7 @@ export default function CitizenTimelinePage() {
       return (
         <span className="text-[10px] font-semibold text-emerald-450 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded flex items-center gap-1 shrink-0">
           <CheckCircle className="w-3 h-3" />
-          <span>✓ Completed</span>
+          <span>✓ {t("completed")}</span>
         </span>
       );
     }
@@ -214,7 +216,7 @@ export default function CitizenTimelinePage() {
       return (
         <span className="text-[10px] font-semibold text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded flex items-center gap-1 shrink-0">
           <Clock className="w-3 h-3 animate-spin" />
-          <span>⌛ Processing</span>
+          <span>⌛ {t("processing")}</span>
         </span>
       );
     }
@@ -222,14 +224,14 @@ export default function CitizenTimelinePage() {
       return (
         <span className="text-[10px] font-semibold text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2 py-0.5 rounded flex items-center gap-1 shrink-0">
           <AlertTriangle className="w-3 h-3" />
-          <span>⚠ Warning</span>
+          <span>⚠ {t("warning")}</span>
         </span>
       );
     }
     return (
       <span className="text-[10px] font-semibold text-rose-455 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded flex items-center gap-1 shrink-0">
         <XCircle className="w-3 h-3" />
-        <span>✕ Failed</span>
+        <span>✕ {t("failed")}</span>
       </span>
     );
   };
@@ -265,9 +267,9 @@ export default function CitizenTimelinePage() {
       const dateStr = formatDateString(e.timestamp);
       let label = dateStr;
       if (dateStr === todayStr) {
-        label = 'TODAY';
+        label = t("today_upper");
       } else if (dateStr === yesterdayStr) {
-        label = 'YESTERDAY';
+        label = t("yesterday_upper");
       }
       if (!groups[label]) {
         groups[label] = [];
@@ -286,39 +288,39 @@ export default function CitizenTimelinePage() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
             <Clock className="w-6 h-6 text-rose-500" />
-            <span>Health Timeline</span>
+            <span>{t("health_timeline_title")}</span>
           </h2>
-          <p className="text-xs text-slate-600 mt-1">Your complete chronological healthcare activity history</p>
+          <p className="text-xs text-slate-600 mt-1">{t("health_timeline_desc")}</p>
         </div>
         <button 
           onClick={fetchTimeline} 
           className="self-start px-3.5 py-1.5 bg-white hover:bg-slate-800 text-slate-700 rounded-lg text-xs font-mono flex items-center gap-1.5 border border-slate-200 transition-colors"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-          <span>Sync Data</span>
+          <span>{t("sync_data")}</span>
         </button>
       </div>
 
       {/* Summary Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 bg-white">
-          <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">Total Activity</span>
+          <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">{t("total_activity")}</span>
           <p className="text-2xl font-bold font-mono text-slate-900 mt-1">{loading ? '...' : totalItems}</p>
         </div>
         <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 bg-white">
-          <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">Medicine Scans</span>
+          <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">{t("medicine_scans")}</span>
           <p className="text-2xl font-bold font-mono text-amber-400 mt-1">
             {loading ? '...' : events.filter(e => e.type === 'MEDICINE_SCAN').length}
           </p>
         </div>
         <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 bg-white">
-          <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">Assessments</span>
+          <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">{t("assessments")}</span>
           <p className="text-2xl font-bold font-mono text-rose-400 mt-1">
             {loading ? '...' : events.filter(e => e.type === 'DISEASE_PREDICTION' || e.type === 'HEALTH_SIMULATION').length}
           </p>
         </div>
         <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 bg-white">
-          <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">Reports</span>
+          <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">{t("reports")}</span>
           <p className="text-2xl font-bold font-mono text-sky-400 mt-1">
             {loading ? '...' : events.filter(e => e.type === 'MEDICAL_REPORT' || e.source === 'medical_reports').length}
           </p>
@@ -332,7 +334,7 @@ export default function CitizenTimelinePage() {
             <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-500" />
             <input 
               type="text" 
-              placeholder="Search medicine name, doctor, hospital, or keywords..."
+              placeholder={t("search_timeline_placeholder")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-white border border-slate-200 focus:border-rose-500/50 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-800 outline-none transition-all placeholder:text-slate-500"
@@ -344,42 +346,42 @@ export default function CitizenTimelinePage() {
               onChange={(e) => { setFilterType(e.target.value); setPage(1); }}
               className="bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-350 outline-none focus:border-rose-500/50"
             >
-              <option value="All">All Types</option>
-              <option value="Medicine Scans">Medicine Scans</option>
-              <option value="Disease Predictions">Disease Predictions</option>
-              <option value="Health Assessments">Health Assessments</option>
-              <option value="Reports">Reports</option>
-              <option value="Appointments">Appointments</option>
+              <option value="All">{t("all_types")}</option>
+              <option value="Medicine Scans">{t("medicine_scans")}</option>
+              <option value="Disease Predictions">{t("disease_predictions")}</option>
+              <option value="Health Assessments">{t("health_assessments")}</option>
+              <option value="Reports">{t("reports")}</option>
+              <option value="Appointments">{t("appointments")}</option>
             </select>
             <select 
               value={filterStatus}
               onChange={(e) => { setFilterStatus(e.target.value); setPage(1); }}
               className="bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-350 outline-none focus:border-rose-500/50"
             >
-              <option value="All">All Status</option>
-              <option value="completed">Completed</option>
-              <option value="processing">Processing</option>
-              <option value="warning">Warning</option>
-              <option value="failed">Failed</option>
+              <option value="All">{t("all_status")}</option>
+              <option value="completed">{t("completed")}</option>
+              <option value="processing">{t("processing")}</option>
+              <option value="warning">{t("warning")}</option>
+              <option value="failed">{t("failed")}</option>
             </select>
             <select 
               value={filterDate}
               onChange={(e) => { setFilterDate(e.target.value); setPage(1); }}
               className="bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-350 outline-none focus:border-rose-500/50"
             >
-              <option value="All">All Time</option>
-              <option value="Today">Today</option>
-              <option value="7days">Last 7 Days</option>
-              <option value="30days">Last 30 Days</option>
-              <option value="3months">Last 3 Months</option>
+              <option value="All">{t("all_time")}</option>
+              <option value="Today">{t("today")}</option>
+              <option value="7days">{t("last_7_days")}</option>
+              <option value="30days">{t("last_30_days")}</option>
+              <option value="3months">{t("last_3_months")}</option>
             </select>
             <select 
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
               className="bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-350 outline-none focus:border-rose-500/50"
             >
-              <option value="newest">Newest First</option>
-              <option value="oldest">Oldest First</option>
+              <option value="newest">{t("newest_first")}</option>
+              <option value="oldest">{t("oldest_first")}</option>
             </select>
           </div>
         </div>
@@ -408,26 +410,26 @@ export default function CitizenTimelinePage() {
         // Error State
         <div className="bg-white border border-slate-200 shadow-sm p-8 rounded-2xl border border-slate-200 text-center space-y-4 bg-rose-950/5">
           <AlertCircle className="w-12 h-12 text-rose-500 mx-auto" />
-          <h3 className="text-base font-bold text-slate-800">Unable to load your health timeline</h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto">Your existing health records are safe. Please check your connection or try again.</p>
+          <h3 className="text-base font-bold text-slate-800">{t("unable_to_load_timeline")}</h3>
+          <p className="text-xs text-slate-500 max-w-sm mx-auto">{t("unable_to_load_timeline_desc")}</p>
           <button 
             onClick={fetchTimeline} 
             className="px-5 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 rounded-xl text-xs font-semibold transition-colors"
           >
-            Retry Connection
+            {t("retry_connection")}
           </button>
         </div>
       ) : events.length === 0 ? (
         // Empty State
         <div className="bg-white border border-slate-200 shadow-sm p-12 rounded-2xl border border-slate-200 text-center space-y-4 bg-white">
           <Clock className="w-12 h-12 text-slate-600 mx-auto" />
-          <h3 className="text-base font-bold text-slate-350">No health activities yet</h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto">Your healthcare activities, scanned medicines, and clinical diagnostics will appear here chronologically as you use ArogyaMitra AI.</p>
+          <h3 className="text-base font-bold text-slate-350">{t("no_health_activities")}</h3>
+          <p className="text-xs text-slate-500 max-w-sm mx-auto">{t("no_health_activities_desc")}</p>
           <button 
             onClick={() => navigate('/citizen/dashboard')} 
             className="px-6 py-2 bg-white hover:bg-slate-850 text-slate-800 border border-slate-200 rounded-xl text-xs font-semibold transition-colors"
           >
-            Explore Healthcare Services
+            {t("explore_services")}
           </button>
         </div>
       ) : (

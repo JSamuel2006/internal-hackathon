@@ -1,3 +1,4 @@
+import { useI18n } from '../../i18n';
 import React, { useState, useEffect } from 'react';
 import { 
   Activity, Shield, Award, Calendar, Clock, RefreshCw, Send, CheckCircle2, AlertCircle, HeartPulse, User, MapPin, FileText, Download, Play
@@ -22,6 +23,7 @@ api.interceptors.request.use((config) => {
 });
 
 export default function CitizenLaboratoryPage() {
+  const { lang, t } = useI18n();
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
@@ -83,10 +85,10 @@ export default function CitizenLaboratoryPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
-              Laboratory Diagnostics & Results
+              {t("lab_diagnostics_title")}
               <span className="text-[10px] bg-rose-500/15 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded font-mono uppercase">LIS Node</span>
             </h2>
-            <p className="text-xs text-slate-600 mt-0.5">Track sample collections, view completed reports, and read AI critical result alerts</p>
+            <p className="text-xs text-slate-600 mt-0.5">{t("lab_diagnostics_desc")}</p>
           </div>
         </div>
 
@@ -96,7 +98,7 @@ export default function CitizenLaboratoryPage() {
           className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-855 text-slate-355 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-          <span>Refresh Queue</span>
+          <span>{t("refresh_queue")}</span>
         </button>
       </div>
 
@@ -118,7 +120,7 @@ export default function CitizenLaboratoryPage() {
         {/* Left Column (Lab Orders Queue list) */}
         <div className="lg:col-span-5 bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 self-start">
           <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2">
-            My Laboratory Orders
+            {t("my_lab_orders")}
           </h3>
 
           <div className="space-y-3">
@@ -138,7 +140,7 @@ export default function CitizenLaboratoryPage() {
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-slate-205 text-xs">{ord.testName}</span>
                   <span className={`px-2 py-0.5 rounded text-[8px] font-bold uppercase ${
-                    ord.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'
+                    ord.status === '{t("completed")}' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'
                   }`}>{ord.status}</span>
                 </div>
                 <p className="text-[10px] text-slate-500">Laboratory: {ord.labName || 'Pune Central Diagnostics'}</p>
@@ -155,7 +157,7 @@ export default function CitizenLaboratoryPage() {
           {selectedOrder ? (
             <div className="space-y-6 animate-fade-in">
               {/* Manual Result Input for demo simulation */}
-              {selectedOrder.status !== 'Completed' && (
+              {selectedOrder.status !== '{t("completed")}' && (
                 <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
                   <h4 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-2">
                     Enter Laboratory Result Values (Demo Simulation)
