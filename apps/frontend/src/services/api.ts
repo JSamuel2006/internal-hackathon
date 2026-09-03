@@ -29,8 +29,8 @@ api.interceptors.request.use(
 
 // Auth endpoints
 export const authService = {
-  login: async (email: string, role?: string, name?: string) => {
-    const response = await api.post('/auth/login', { email, role, name });
+  login: async (email: string, password?: string, role?: string, name?: string) => {
+    const response = await api.post('/auth/login', { email, password, role, name });
     if (response.data?.success && response.data?.data?.token) {
       sessionStorage.setItem('token', response.data.data.token);
       sessionStorage.setItem('user', JSON.stringify(response.data.data.user));

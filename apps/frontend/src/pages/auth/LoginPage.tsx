@@ -128,7 +128,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await authService.login(email.trim(), loginRole, name.trim() || undefined);
+      const res = await authService.login(email.trim(), password, loginRole, name.trim() || undefined);
       if (res.success) {
         if (loginRole === 'ROLE_ADMIN') navigate('/admin/dashboard');
         else if (loginRole === 'ROLE_OFFICER') navigate('/officer/dashboard');
