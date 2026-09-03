@@ -137,7 +137,7 @@ export default function AdminDashboard() {
         <button
           onClick={fetchAdminData}
           disabled={loading}
-          className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-855 text-slate-355 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all animate-fade-in"
+          className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-900 text-slate-500 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all animate-fade-in"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Refresh Operating Center</span>
@@ -182,7 +182,7 @@ export default function AdminDashboard() {
         </div>
       )}
       {error && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-455 text-xs flex items-center gap-2.5 shadow-lg">
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 text-xs flex items-center gap-2.5 shadow-lg">
           <AlertCircle className="w-4.5 h-4.5 text-rose-400 shrink-0" />
           <span className="font-semibold">{error}</span>
         </div>
@@ -195,12 +195,12 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200">
               <span className="text-[10px] text-slate-500 block uppercase font-mono tracking-wider">Total Citizens Monitored</span>
-              <span className="text-3xl font-extrabold text-slate-205 font-mono my-3 block">{overview?.totalCitizens || 1250}</span>
+              <span className="text-3xl font-extrabold text-slate-800 font-mono my-3 block">{overview?.totalCitizens || 1250}</span>
               <p className="text-[9px] text-slate-550 font-mono">Linked Aadhar & ABHA datasets</p>
             </div>
             <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200">
               <span className="text-[10px] text-slate-500 block uppercase font-mono tracking-wider">Active Outbreak Cases</span>
-              <span className="text-3xl font-extrabold text-rose-455 font-mono my-3 block">{overview?.activeCases || 245}</span>
+              <span className="text-3xl font-extrabold text-rose-600 font-mono my-3 block">{overview?.activeCases || 245}</span>
               <p className="text-[9px] text-slate-550 font-mono">Clinically quarantined</p>
             </div>
             <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200">
@@ -229,7 +229,7 @@ export default function AdminDashboard() {
                 ].map((dist) => (
                   <div key={dist.rank} className="flex justify-between items-center bg-white p-3 rounded border border-slate-200">
                     <span>{dist.rank}. {dist.district} district ({dist.cases} cases)</span>
-                    <strong className="text-rose-455">{dist.riskScore} risk index</strong>
+                    <strong className="text-rose-600">{dist.riskScore} risk index</strong>
                   </div>
                 ))}
               </div>
@@ -297,10 +297,10 @@ export default function AdminDashboard() {
             <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-5">
               <div className="border-b border-slate-200 pb-3 flex justify-between items-center">
                 <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 text-rose-455" />
+                  <ShieldAlert className="w-4 h-4 text-rose-600" />
                   MoH AI Executive Briefing Insights
                 </h3>
-                <span className="text-xs bg-rose-500/10 text-rose-455 px-2.5 py-0.5 rounded font-mono font-bold uppercase">{insights.nationalRiskLevel} Risk Level</span>
+                <span className="text-xs bg-rose-500/10 text-rose-600 px-2.5 py-0.5 rounded font-mono font-bold uppercase">{insights.nationalRiskLevel} Risk Level</span>
               </div>
 
               <div className="bg-white p-4 rounded-xl border border-slate-200 text-xs leading-relaxed font-mono text-slate-700">
@@ -313,7 +313,7 @@ export default function AdminDashboard() {
                   <div key={i} className="p-4 bg-white rounded-xl border border-slate-200 text-xs font-mono space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="font-bold text-slate-800">{risk.risk}</span>
-                      <span className="text-[10px] text-rose-455">Severity: {risk.severity} (Confidence: {risk.confidence}%)</span>
+                      <span className="text-[10px] text-rose-600">Severity: {risk.severity} (Confidence: {risk.confidence}%)</span>
                     </div>
                     <p className="text-slate-600">Why: {risk.why}</p>
                     <span className="text-[10px] text-slate-500">Evidence: {risk.evidence}</span>
@@ -328,7 +328,7 @@ export default function AdminDashboard() {
       {/* TAB 4: RESOURCE PLANNER */}
       {activeTab === 'planner' && (
         <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-6 animate-fade-in">
-          <h3 className="text-sm font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-3">
+          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-3">
             National Resource Redistribution Planner
           </h3>
           <div className="space-y-4 text-xs font-mono">
@@ -355,11 +355,11 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 text-center">
               <span className="text-[10px] text-slate-500 uppercase font-mono block">AI Diagnosis Latency</span>
-              <span className="text-2xl font-bold text-slate-205 font-mono my-2 block">1,240 ms</span>
+              <span className="text-2xl font-bold text-slate-800 font-mono my-2 block">1,240 ms</span>
             </div>
             <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 text-center">
               <span className="text-[10px] text-slate-500 uppercase font-mono block">Gemini API Success</span>
-              <span className="text-2xl font-bold text-emerald-450 font-mono my-2 block">99.1%</span>
+              <span className="text-2xl font-bold text-emerald-600 font-mono my-2 block">99.1%</span>
             </div>
             <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 text-center">
               <span className="text-[10px] text-slate-500 uppercase font-mono block">Tesseract OCR Accuracy</span>
@@ -374,13 +374,13 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
           {/* Left configuration */}
           <div className="lg:col-span-4 bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4 self-start">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2">
               Select Policy Scenario
             </h3>
             <select
               value={policyInput}
               onChange={e => setPolicyInput(e.target.value)}
-              className="bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 w-full text-xs focus:outline-none"
+              className="bg-white border border-slate-200 rounded-xl p-2.5 text-slate-500 w-full text-xs focus:outline-none"
             >
               <option>Vaccination Campaign Expansion</option>
               <option>ORS Kits Stock balancing</option>
@@ -402,12 +402,12 @@ export default function AdminDashboard() {
             {policyResult ? (
               <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono animate-fade-in">
                 <div className="border-b border-slate-200 pb-2">
-                  <h4 className="font-bold text-slate-205 text-sm uppercase">{policyResult.scenarioName}</h4>
+                  <h4 className="font-bold text-slate-800 text-sm uppercase">{policyResult.scenarioName}</h4>
                 </div>
                 <div className="grid grid-cols-3 gap-4 text-center my-3">
                   <div className="bg-white p-3 rounded border border-slate-200">
                     <span className="text-[9px] text-slate-500 uppercase block">Risk Reduction</span>
-                    <span className="font-bold text-emerald-450 text-sm">-{policyResult.riskReductionPct}%</span>
+                    <span className="font-bold text-emerald-600 text-sm">-{policyResult.riskReductionPct}%</span>
                   </div>
                   <div className="bg-white p-3 rounded border border-slate-200">
                     <span className="text-[9px] text-slate-500 uppercase block">Recovery Improvement</span>
@@ -436,7 +436,7 @@ export default function AdminDashboard() {
       {/* TAB 7: AUDIT LOGS */}
       {activeTab === 'audit' && (
         <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-5 animate-fade-in">
-          <h3 className="text-sm font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-3">
+          <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-3">
             System Request & Event Audit Trail
           </h3>
           <div className="space-y-2 text-xs font-mono">
@@ -461,15 +461,15 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-mono">
                 <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
                   <span className="text-indigo-400 uppercase text-[9px] block">PostgreSQL Database</span>
-                  <p>Status: <strong className="text-emerald-450">{systemHealth.database?.connected ? 'Online' : 'Offline'}</strong></p>
+                  <p>Status: <strong className="text-emerald-600">{systemHealth.database?.connected ? 'Online' : 'Offline'}</strong></p>
                   <p>Latency: {systemHealth.database?.latency}</p>
                   <p>Total Records: {systemHealth.database?.totalRecords}</p>
                 </div>
                 <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
                   <span className="text-indigo-400 uppercase text-[9px] block">Server Nodes</span>
                   <p>API Latency: {systemHealth.apiLatencyMs}ms</p>
-                  <p>Gemini Gateway: <strong className="text-emerald-450">{systemHealth.services?.geminiNode}</strong></p>
-                  <p>OCR Node: <strong className="text-emerald-450">{systemHealth.services?.ocrNode}</strong></p>
+                  <p>Gemini Gateway: <strong className="text-emerald-600">{systemHealth.services?.geminiNode}</strong></p>
+                  <p>OCR Node: <strong className="text-emerald-600">{systemHealth.services?.ocrNode}</strong></p>
                 </div>
                 <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
                   <span className="text-indigo-400 uppercase text-[9px] block">Resource utilization</span>
@@ -490,14 +490,14 @@ export default function AdminDashboard() {
             <div className="flex gap-2">
               <button
                 onClick={() => handleExportData('json')}
-                className="px-4 py-2 bg-white hover:bg-slate-850 border border-slate-200 text-slate-700 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1.5"
+                className="px-4 py-2 bg-white hover:bg-slate-900 border border-slate-200 text-slate-700 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1.5"
               >
                 <Download className="w-3.5 h-3.5" />
                 JSON
               </button>
               <button
                 onClick={() => handleExportData('csv')}
-                className="px-4 py-2 bg-white hover:bg-slate-850 border border-slate-200 text-slate-700 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1.5"
+                className="px-4 py-2 bg-white hover:bg-slate-900 border border-slate-200 text-slate-700 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1.5"
               >
                 <Download className="w-3.5 h-3.5" />
                 CSV

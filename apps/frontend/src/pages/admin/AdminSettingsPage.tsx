@@ -20,7 +20,7 @@ export default function AdminSettingsPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold tracking-tight text-slate-900">Console Settings</h2>
-            <p className="text-xs text-slate-455 mt-0.5">Configure platform parameters, security policies, and API limits</p>
+            <p className="text-xs text-slate-600 mt-0.5">Configure platform parameters, security policies, and API limits</p>
           </div>
         </div>
       </div>
@@ -41,7 +41,7 @@ export default function AdminSettingsPage() {
           </div>
 
           {saved && (
-            <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 rounded-lg flex items-center gap-2">
+            <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 rounded-lg flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span>Global parameters updated successfully.</span>
             </div>

@@ -38,10 +38,10 @@ export default function SuperAdminDashboard() {
   }, []);
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-350">
+    <div className="space-y-8 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-500">
       <div className="flex justify-between items-center border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20">
+          <div className="p-2 bg-rose-500/10 rounded-xl text-rose-600 border border-rose-500/20">
             <Shield className="w-5 h-5" />
           </div>
           <div>
@@ -80,7 +80,7 @@ export default function SuperAdminDashboard() {
       )}
 
       <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-        <span className="font-bold text-slate-205 uppercase block">Recent System Audit Trails</span>
+        <span className="font-bold text-slate-800 uppercase block">Recent System Audit Trails</span>
         <div className="space-y-2 max-h-60 overflow-y-auto">
           {auditLogs.map((log) => (
             <div key={log.id} className="p-3 bg-white rounded border border-slate-200 flex justify-between items-center text-[10px]">

@@ -14,11 +14,9 @@ const SUGGESTED_PROMPTS = [
 
 const LANGUAGES = [
   { code: 'en', name: 'English' },
-  { code: 'hi-IN', name: 'Hindi' },
-  { code: 'ta-IN', name: 'Tamil' },
-  { code: 'te-IN', name: 'Telugu' },
-  { code: 'mr-IN', name: 'Marathi' },
-  { code: 'bn-IN', name: 'Bengali' },
+  { code: 'ta', name: 'தமிழ் (Tamil)' },
+  { code: 'hi', name: 'हिंदी (Hindi)' },
+  { code: 'mr', name: 'मराठी (Marathi)' },
 ];
 
 export default function CitizenAssistantPage() {
@@ -331,7 +329,7 @@ export default function CitizenAssistantPage() {
         <div className="flex flex-col gap-4 overflow-y-auto">
           <button
             onClick={createNewSession}
-            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold bg-rose-500/10 hover:bg-rose-500/20 text-rose-455 border border-rose-500/25 transition-all cursor-pointer"
+            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 border border-rose-500/25 transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>New Conversation</span>
@@ -344,7 +342,7 @@ export default function CitizenAssistantPage() {
             value={searchQuery}
             aria-label="Search conversation history"
             onChange={e => setSearchQuery(e.target.value)}
-            className="bg-white border border-slate-200 rounded-xl p-2 text-slate-355 text-xs focus:outline-none"
+            className="bg-white border border-slate-200 rounded-xl p-2 text-slate-500 text-xs focus:outline-none"
           />
 
           <div className="space-y-1.5 mt-2">
@@ -367,7 +365,7 @@ export default function CitizenAssistantPage() {
                     <span className="truncate">{s.title || `Session ${s.id.slice(-4)}`}</span>
                   </button>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => renameSession(s.id)} className="text-slate-655 hover:text-slate-205">
+                    <button onClick={() => renameSession(s.id)} className="text-slate-655 hover:text-slate-800">
                       <Edit className="w-3 h-3" />
                     </button>
                     <button onClick={(e) => deleteSession(s.id, e)} className="text-slate-655 hover:text-rose-400">
@@ -402,7 +400,7 @@ export default function CitizenAssistantPage() {
         <div className="hidden lg:flex flex-col w-full lg:w-72 bg-white border border-slate-200 shadow-sm rounded-2xl border border-slate-200 shrink-0 p-5 bg-white text-xs font-mono space-y-4 overflow-y-auto min-w-0">
           <div className="border-b border-slate-200 pb-2 flex justify-between items-center">
             <span className="font-bold text-slate-800">Patient Context Used</span>
-            <button onClick={() => setShowContext(false)} className="text-slate-550 hover:text-slate-355">
+            <button onClick={() => setShowContext(false)} className="text-slate-550 hover:text-slate-500">
               <EyeOff className="w-4 h-4" />
             </button>
           </div>
@@ -410,19 +408,19 @@ export default function CitizenAssistantPage() {
           <div className="space-y-3">
             <div>
               <span className="text-[10px] text-rose-400 uppercase font-bold block">Documented Allergies</span>
-              <ul className="list-disc list-inside text-slate-350 mt-1">
+              <ul className="list-disc list-inside text-slate-500 mt-1">
                 {patientContext.allergies.map((a: string) => <li key={a} className="truncate">{a}</li>)}
               </ul>
             </div>
             <div>
               <span className="text-[10px] text-indigo-400 uppercase font-bold block">Chronic Conditions</span>
-              <ul className="list-disc list-inside text-slate-350 mt-1">
+              <ul className="list-disc list-inside text-slate-500 mt-1">
                 {patientContext.chronicDiseases.map((c: string) => <li key={c} className="truncate">{c}</li>)}
               </ul>
             </div>
             <div>
               <span className="text-[10px] text-emerald-400 uppercase font-bold block">Active Prescriptions</span>
-              <ul className="list-disc list-inside text-slate-350 mt-1">
+              <ul className="list-disc list-inside text-slate-500 mt-1">
                 {patientContext.medications.map((m: string) => <li key={m} className="whitespace-normal break-words">{m}</li>)}
               </ul>
             </div>
@@ -459,7 +457,7 @@ export default function CitizenAssistantPage() {
         {/* Chat Header */}
         <div className="px-6 py-4 border-b border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between bg-white gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20 shrink-0">
+            <div className="p-2 bg-rose-500/10 rounded-xl text-rose-600 border border-rose-500/20 shrink-0">
               <Bot className="w-5 h-5 glow-pill" />
             </div>
             <div className="min-w-0">
@@ -500,7 +498,7 @@ export default function CitizenAssistantPage() {
                   <button
                     key={prompt}
                     onClick={() => handleSend(prompt)}
-                    className="p-3 text-left rounded-xl bg-white hover:bg-white border border-slate-200 hover:border-slate-200 text-xs text-slate-355 transition-all"
+                    className="p-3 text-left rounded-xl bg-white hover:bg-white border border-slate-200 hover:border-slate-200 text-xs text-slate-500 transition-all"
                   >
                     {prompt}
                   </button>
@@ -560,7 +558,7 @@ export default function CitizenAssistantPage() {
 
                     {/* Disclaimers & Emergency Warnings */}
                     {!isUser && m.isEmergency && (
-                      <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-455 flex items-center gap-2">
+                      <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-600 flex items-center gap-2">
                         <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
                         <span className="font-bold">EMERGENCY ALERT: Visit nearest hospital or call 108 immediately.</span>
                       </div>
@@ -609,7 +607,7 @@ export default function CitizenAssistantPage() {
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="p-2 bg-rose-500/10 border border-rose-500/20 text-rose-455 rounded-lg hover:bg-rose-500/20 disabled:opacity-50 transition-colors"
+              className="p-2 bg-rose-500/10 border border-rose-500/20 text-rose-600 rounded-lg hover:bg-rose-500/20 disabled:opacity-50 transition-colors"
             >
               <Send className="w-4 h-4" />
             </button>

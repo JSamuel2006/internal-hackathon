@@ -37,7 +37,7 @@ export default function OfficerKnowledgeGraphPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold tracking-tight text-slate-900">Pathogen Knowledge Graph</h2>
-            <p className="text-xs text-slate-455 mt-0.5">Explore medical schema relations: symptoms, prevention, vaccines, and schemes</p>
+            <p className="text-xs text-slate-600 mt-0.5">Explore medical schema relations: symptoms, prevention, vaccines, and schemes</p>
           </div>
         </div>
       </div>
@@ -57,18 +57,18 @@ export default function OfficerKnowledgeGraphPage() {
                   className={`p-3.5 rounded-xl border text-left transition-all ${
                     selectedNode?.id === node.id
                       ? 'bg-teal-500/10 border-teal-500/30 text-teal-400'
-                      : 'bg-white border-slate-200 hover:border-slate-200 text-slate-350'
+                      : 'bg-white border-slate-200 hover:border-slate-200 text-slate-500'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs font-bold truncate">{node.label}</span>
                     <span className={`text-[8px] font-mono px-1 py-0.2 rounded border ${
                       node.type === 'DISEASE'
-                        ? 'bg-rose-500/10 text-rose-455 border-rose-500/20'
+                        ? 'bg-rose-500/10 text-rose-600 border-rose-500/20'
                         : node.type === 'SYMPTOM'
                         ? 'bg-amber-500/10 text-amber-450 border-amber-500/20'
                         : node.type === 'PREVENTION'
-                        ? 'bg-emerald-500/10 text-emerald-450 border-emerald-500/20'
+                        ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
                         : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'
                     }`}>
                       {node.type}
@@ -86,13 +86,13 @@ export default function OfficerKnowledgeGraphPage() {
             <div className="space-y-4">
               <div className="border-b border-slate-200 pb-3">
                 <span className="text-[9px] font-mono text-slate-500 uppercase">{selectedNode.type} Entity</span>
-                <h3 className="text-base font-bold text-slate-205 mt-1">{selectedNode.label}</h3>
+                <h3 className="text-base font-bold text-slate-800 mt-1">{selectedNode.label}</h3>
               </div>
 
               <div className="space-y-3.5 text-xs">
                 <div>
                   <span className="text-[10px] text-slate-500 font-mono uppercase block mb-1">Clinical Description</span>
-                  <p className="text-slate-350 leading-relaxed">{selectedNode.description}</p>
+                  <p className="text-slate-500 leading-relaxed">{selectedNode.description}</p>
                 </div>
 
                 {/* Relational links */}

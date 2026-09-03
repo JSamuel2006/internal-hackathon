@@ -96,7 +96,7 @@ export default function OfficerSimulatorPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold tracking-tight text-slate-900">Outbreak Scenario Simulator</h2>
-            <p className="text-xs text-slate-455 mt-0.5">Model interventions and forecast health system capacities</p>
+            <p className="text-xs text-slate-600 mt-0.5">Model interventions and forecast health system capacities</p>
           </div>
         </div>
       </div>
@@ -180,7 +180,7 @@ export default function OfficerSimulatorPage() {
                 <Sparkles className="w-4 h-4 text-teal-450 animate-pulse" />
                 <h4 className="font-bold text-xs text-slate-800">AI Mitigation Recommendations</h4>
               </div>
-              <ul className="text-xs space-y-2 text-slate-350 pl-1">
+              <ul className="text-xs space-y-2 text-slate-500 pl-1">
                 {results.aiRecommendations.map((rec: string, i: number) => (
                   <li key={i} className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-teal-450 shrink-0 mt-0.5" />

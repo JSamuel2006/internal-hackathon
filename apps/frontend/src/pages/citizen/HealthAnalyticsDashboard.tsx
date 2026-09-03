@@ -4,10 +4,10 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 export default function HealthAnalyticsDashboard() {
   return (
-    <div className="space-y-8 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-350">
+    <div className="space-y-8 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-500">
       <div className="flex justify-between items-center border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20">
+          <div className="p-2 bg-rose-500/10 rounded-xl text-rose-600 border border-rose-500/20">
             <Activity className="w-5 h-5" />
           </div>
           <div>
@@ -33,7 +33,7 @@ export default function HealthAnalyticsDashboard() {
       </div>
 
       <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-        <span className="font-bold text-slate-205 uppercase block">HbA1c Level Trend (Last 6 Months)</span>
+        <span className="font-bold text-slate-800 uppercase block">HbA1c Level Trend (Last 6 Months)</span>
         <div className="h-52">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={[

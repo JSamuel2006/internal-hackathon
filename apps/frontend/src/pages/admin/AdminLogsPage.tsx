@@ -21,7 +21,7 @@ export default function AdminLogsPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold tracking-tight text-slate-900">{t("audit_logs_console")}</h2>
-            <p className="text-xs text-slate-455 mt-0.5">{t("system_audit_trail_desc")}</p>
+            <p className="text-xs text-slate-600 mt-0.5">{t("system_audit_trail_desc")}</p>
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@ export default function AdminLogsPage() {
                 </div>
                 <p className="text-slate-600">Actor: {log.user} | IP: {log.ip}</p>
               </div>
-              <span className="text-[10px] text-emerald-450 bg-emerald-500/10 px-2.5 py-0.5 rounded border border-emerald-500/20 uppercase font-bold shrink-0 self-start sm:self-center">
+              <span className="text-[10px] text-emerald-600 bg-emerald-500/10 px-2.5 py-0.5 rounded border border-emerald-500/20 uppercase font-bold shrink-0 self-start sm:self-center">
                 {log.status}
               </span>
             </div>

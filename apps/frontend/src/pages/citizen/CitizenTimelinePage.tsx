@@ -204,7 +204,7 @@ export default function CitizenTimelinePage() {
       case 'APPOINTMENT':
         return <Calendar className="w-5 h-5 text-teal-400" />;
       case 'ASHA_SCREENING':
-        return <ClipboardList className="w-5 h-5 text-emerald-450" />;
+        return <ClipboardList className="w-5 h-5 text-emerald-600" />;
       default:
         return <FileText className="w-5 h-5 text-slate-600" />;
     }
@@ -215,7 +215,7 @@ export default function CitizenTimelinePage() {
     const cleanStatus = status?.toLowerCase();
     if (cleanStatus === 'completed' || cleanStatus === 'processed' || cleanStatus === 'success') {
       return (
-        <span className="text-[10px] font-semibold text-emerald-450 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded flex items-center gap-1 shrink-0">
+        <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded flex items-center gap-1 shrink-0">
           <CheckCircle className="w-3 h-3" />
           <span>✓ {t("completed")}</span>
         </span>
@@ -238,7 +238,7 @@ export default function CitizenTimelinePage() {
       );
     }
     return (
-      <span className="text-[10px] font-semibold text-rose-455 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded flex items-center gap-1 shrink-0">
+      <span className="text-[10px] font-semibold text-rose-600 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded flex items-center gap-1 shrink-0">
         <XCircle className="w-3 h-3" />
         <span>✕ {t("failed")}</span>
       </span>
@@ -353,7 +353,7 @@ export default function CitizenTimelinePage() {
             <select 
               value={filterType}
               onChange={(e) => { setFilterType(e.target.value); setPage(1); }}
-              className="bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-350 outline-none focus:border-rose-500/50"
+              className="bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-500 outline-none focus:border-rose-500/50"
             >
               <option value="All">{t("all_types")}</option>
               <option value="Medicine Scans">{t("medicine_scans")}</option>
@@ -365,7 +365,7 @@ export default function CitizenTimelinePage() {
             <select 
               value={filterStatus}
               onChange={(e) => { setFilterStatus(e.target.value); setPage(1); }}
-              className="bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-350 outline-none focus:border-rose-500/50"
+              className="bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-500 outline-none focus:border-rose-500/50"
             >
               <option value="All">{t("all_status")}</option>
               <option value="completed">{t("completed")}</option>
@@ -376,7 +376,7 @@ export default function CitizenTimelinePage() {
             <select 
               value={filterDate}
               onChange={(e) => { setFilterDate(e.target.value); setPage(1); }}
-              className="bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-350 outline-none focus:border-rose-500/50"
+              className="bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-500 outline-none focus:border-rose-500/50"
             >
               <option value="All">{t("all_time")}</option>
               <option value="Today">{t("today")}</option>
@@ -387,7 +387,7 @@ export default function CitizenTimelinePage() {
             <select 
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
-              className="bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-350 outline-none focus:border-rose-500/50"
+              className="bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-500 outline-none focus:border-rose-500/50"
             >
               <option value="newest">{t("newest_first")}</option>
               <option value="oldest">{t("oldest_first")}</option>
@@ -432,11 +432,11 @@ export default function CitizenTimelinePage() {
         // Empty State
         <div className="bg-white border border-slate-200 shadow-sm p-12 rounded-2xl border border-slate-200 text-center space-y-4 bg-white">
           <Clock className="w-12 h-12 text-slate-600 mx-auto" />
-          <h3 className="text-base font-bold text-slate-350">{t("no_health_activities")}</h3>
+          <h3 className="text-base font-bold text-slate-500">{t("no_health_activities")}</h3>
           <p className="text-xs text-slate-500 max-w-sm mx-auto">{t("no_health_activities_desc")}</p>
           <button 
             onClick={() => navigate('/citizen/dashboard')} 
-            className="px-6 py-2 bg-white hover:bg-slate-850 text-slate-800 border border-slate-200 rounded-xl text-xs font-semibold transition-colors"
+            className="px-6 py-2 bg-white hover:bg-slate-900 text-slate-800 border border-slate-200 rounded-xl text-xs font-semibold transition-colors"
           >
             {t("explore_services")}
           </button>
@@ -449,7 +449,7 @@ export default function CitizenTimelinePage() {
               {/* Date Group Heading */}
               <div className="relative -left-[32px] flex items-center gap-2">
                 <div className="w-3.5 h-3.5 rounded-full bg-white border-2 border-rose-500 glow-pill shrink-0"></div>
-                <span className="text-[10px] font-bold font-mono tracking-wider text-rose-455 bg-[#030712] px-2">
+                <span className="text-[10px] font-bold font-mono tracking-wider text-rose-600 bg-[#030712] px-2">
                   {dateLabel}
                 </span>
               </div>
@@ -472,7 +472,7 @@ export default function CitizenTimelinePage() {
                         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                           <div>Medicine: <span className="text-slate-800 font-semibold">{parsedJson?.medicineName || 'Not detected'}</span></div>
                           <div>Generic: <span className="text-slate-800 truncate block">{parsedJson?.genericName || 'Not detected'} • {parsedJson?.strength || 'Not detected'}</span></div>
-                          <div>Manufacturer: <span className="text-slate-350">{parsedJson?.manufacturer || 'Not detected'}</span></div>
+                          <div>Manufacturer: <span className="text-slate-500">{parsedJson?.manufacturer || 'Not detected'}</span></div>
                           <div>Quality: <span className="text-emerald-400 font-bold">🟢 Good</span></div>
                         </div>
                       </div>
@@ -480,13 +480,13 @@ export default function CitizenTimelinePage() {
                   } else if (e.type === 'DISEASE_PREDICTION') {
                     metadataExtra = (
                       <div className="text-[11px] font-mono text-slate-500 bg-white p-2.5 rounded-lg border border-slate-200">
-                        Risk Level Assessment: <span className={`font-semibold uppercase ${e.metadata.riskLevel === 'High' ? 'text-rose-400' : 'text-emerald-450'}`}>{e.metadata.riskLevel || 'Normal'}</span>
+                        Risk Level Assessment: <span className={`font-semibold uppercase ${e.metadata.riskLevel === 'High' ? 'text-rose-400' : 'text-emerald-600'}`}>{e.metadata.riskLevel || 'Normal'}</span>
                       </div>
                     );
                   } else if (e.type === 'APPOINTMENT') {
                     metadataExtra = (
                       <div className="text-[11px] font-mono text-slate-500 bg-white p-2.5 rounded-lg border border-slate-200">
-                        Facility: <span className="text-slate-350">{e.metadata.hospitalName}</span> • Time: <span className="text-slate-350">{e.metadata.time}</span>
+                        Facility: <span className="text-slate-500">{e.metadata.hospitalName}</span> • Time: <span className="text-slate-500">{e.metadata.time}</span>
                       </div>
                     );
                   } else if (e.type === 'ASHA_SCREENING') {
@@ -499,10 +499,10 @@ export default function CitizenTimelinePage() {
                           <div>Glucose: <span className="text-slate-800 font-semibold">{e.metadata.glucose_status === 'MEASURED' ? `${e.metadata.glucose} mg/dL` : 'N/A'}</span></div>
                         </div>
                         {e.metadata.symptoms && e.metadata.symptoms.length > 0 && (
-                          <div>Symptoms: <span className="text-slate-350">{e.metadata.symptoms.join(', ')}</span></div>
+                          <div>Symptoms: <span className="text-slate-500">{e.metadata.symptoms.join(', ')}</span></div>
                         )}
                         {e.metadata.riskFlags && e.metadata.riskFlags.length > 0 && (
-                          <div className="text-rose-455 font-bold">⚠ Referral: {e.metadata.riskFlags.join('; ')}</div>
+                          <div className="text-rose-600 font-bold">⚠ Referral: {e.metadata.riskFlags.join('; ')}</div>
                         )}
                       </div>
                     );
@@ -539,7 +539,7 @@ export default function CitizenTimelinePage() {
                           </span>
                           <button 
                             onClick={() => setSelectedEvent(e)}
-                            className="px-3 py-1 bg-white hover:bg-slate-850 hover:text-rose-400 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition-colors"
+                            className="px-3 py-1 bg-white hover:bg-slate-900 hover:text-rose-400 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-semibold transition-colors"
                           >
                             View Details
                           </button>
@@ -575,7 +575,7 @@ export default function CitizenTimelinePage() {
                 className={`w-7 h-7 rounded-lg text-xs font-mono font-bold transition-colors ${
                   page === i + 1 
                     ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' 
-                    : 'bg-white hover:bg-slate-850 text-slate-600 border border-slate-200'
+                    : 'bg-white hover:bg-slate-900 text-slate-600 border border-slate-200'
                 }`}
               >
                 {i + 1}
@@ -626,7 +626,7 @@ export default function CitizenTimelinePage() {
                   if (!val || val === 'Unable to Detect' || val === 'Unknown' || val === '') {
                     return { text: 'Not detected', badge: <span className="px-2 py-0.5 rounded text-[9px] font-mono bg-white text-slate-500 border border-slate-200">? Not Detected</span> };
                   }
-                  return { text: val, badge: <span className="px-2 py-0.5 rounded text-[9px] font-mono bg-emerald-500/10 text-emerald-450 border border-emerald-500/25">✓ Verified</span> };
+                  return { text: val, badge: <span className="px-2 py-0.5 rounded text-[9px] font-mono bg-emerald-500/10 text-emerald-600 border border-emerald-500/25">✓ Verified</span> };
                 };
 
                 const medName = getVal(pJson?.medicineName);
@@ -640,10 +640,10 @@ export default function CitizenTimelinePage() {
                 const mrp = getVal(pJson?.mrp);
 
                 return (
-                  <div className="space-y-5 text-xs text-slate-350">
+                  <div className="space-y-5 text-xs text-slate-500">
                     {/* SECTION 1: OVERVIEW */}
                     <div className="space-y-3">
-                      <h4 className="text-[10px] font-mono tracking-widest text-rose-455 font-bold uppercase border-b border-slate-200 pb-1">OVERVIEW</h4>
+                      <h4 className="text-[10px] font-mono tracking-widest text-rose-600 font-bold uppercase border-b border-slate-200 pb-1">OVERVIEW</h4>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="p-2.5 bg-white rounded-xl border border-slate-200 flex justify-between items-center col-span-2">
                           <div>
@@ -678,7 +678,7 @@ export default function CitizenTimelinePage() {
 
                     {/* SECTION 2: PACKAGING VALIDATION */}
                     <div className="space-y-3">
-                      <h4 className="text-[10px] font-mono tracking-widest text-rose-455 font-bold uppercase border-b border-slate-200 pb-1">PACKAGING VALIDATION</h4>
+                      <h4 className="text-[10px] font-mono tracking-widest text-rose-600 font-bold uppercase border-b border-slate-200 pb-1">PACKAGING VALIDATION</h4>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="p-2.5 bg-white rounded-xl border border-slate-200 flex justify-between items-center col-span-2">
                           <div>
@@ -720,7 +720,7 @@ export default function CitizenTimelinePage() {
 
                     {/* SECTION 3: OCR ANALYSIS */}
                     <div className="space-y-3">
-                      <h4 className="text-[10px] font-mono tracking-widest text-rose-455 font-bold uppercase border-b border-slate-200 pb-1">OCR ANALYSIS</h4>
+                      <h4 className="text-[10px] font-mono tracking-widest text-rose-600 font-bold uppercase border-b border-slate-200 pb-1">OCR ANALYSIS</h4>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="p-2.5 bg-white rounded-xl border border-slate-200">
                           <span className="text-[9px] text-slate-500 block font-mono">OCR ACCURACY</span>
@@ -747,11 +747,11 @@ export default function CitizenTimelinePage() {
 
                     {/* SECTION 4: VERIFICATION */}
                     <div className="space-y-3">
-                      <h4 className="text-[10px] font-mono tracking-widest text-rose-455 font-bold uppercase border-b border-slate-200 pb-1">VERIFICATION</h4>
+                      <h4 className="text-[10px] font-mono tracking-widest text-rose-600 font-bold uppercase border-b border-slate-200 pb-1">VERIFICATION</h4>
                       <div className="grid grid-cols-3 gap-2">
                         <div className="p-2 bg-white rounded-xl border border-slate-200 text-center space-y-1">
                           <span className="text-[8px] text-slate-500 block uppercase font-mono">DB Match</span>
-                          <span className="text-[10px] text-emerald-450 font-bold">✓ Matched</span>
+                          <span className="text-[10px] text-emerald-600 font-bold">✓ Matched</span>
                         </div>
                         <div className="p-2 bg-white rounded-xl border border-slate-200 text-center space-y-1">
                           <span className="text-[8px] text-slate-500 block uppercase font-mono">QR Code</span>
@@ -767,9 +767,9 @@ export default function CitizenTimelinePage() {
                     {/* SECTION 5: SAFETY */}
                     {selectedEvent.metadata.geminiAnalysis && (
                       <div className="space-y-3">
-                        <h4 className="text-[10px] font-mono tracking-widest text-rose-455 font-bold uppercase border-b border-slate-200 pb-1">SAFETY & CLINICAL ANALYSIS</h4>
+                        <h4 className="text-[10px] font-mono tracking-widest text-rose-600 font-bold uppercase border-b border-slate-200 pb-1">SAFETY & CLINICAL ANALYSIS</h4>
                         <div className="border border-slate-200 rounded-xl p-3 bg-white space-y-2">
-                          <div className="flex items-center gap-1.5 text-rose-455 font-semibold text-[10px] font-mono">
+                          <div className="flex items-center gap-1.5 text-rose-600 font-semibold text-[10px] font-mono">
                             <AlertTriangle className="w-3.5 h-3.5" />
                             <span>Clinical Patient Safety Warnings</span>
                           </div>
@@ -784,12 +784,12 @@ export default function CitizenTimelinePage() {
 
                     {/* SECTION 6: TRACEABILITY */}
                     <div className="space-y-3">
-                      <h4 className="text-[10px] font-mono tracking-widest text-rose-455 font-bold uppercase border-b border-slate-200 pb-1">TRACEABILITY</h4>
+                      <h4 className="text-[10px] font-mono tracking-widest text-rose-600 font-bold uppercase border-b border-slate-200 pb-1">TRACEABILITY</h4>
                       <div className="p-2.5 bg-white rounded-xl border border-slate-200 space-y-1 font-mono text-[9px] text-slate-500">
-                        <div>Scan ID: <span className="text-slate-350">{selectedEvent.id}</span></div>
-                        <div>Source: <span className="text-slate-350">{selectedEvent.source}</span></div>
-                        <div>Processing Time: <span className="text-slate-350 font-mono">120ms</span></div>
-                        <div>Date & Time: <span className="text-slate-350">{new Date(selectedEvent.timestamp).toLocaleString()}</span></div>
+                        <div>Scan ID: <span className="text-slate-500">{selectedEvent.id}</span></div>
+                        <div>Source: <span className="text-slate-500">{selectedEvent.source}</span></div>
+                        <div>Processing Time: <span className="text-slate-500 font-mono">120ms</span></div>
+                        <div>Date & Time: <span className="text-slate-500">{new Date(selectedEvent.timestamp).toLocaleString()}</span></div>
                       </div>
                     </div>
                   </div>
@@ -806,7 +806,7 @@ export default function CitizenTimelinePage() {
                     </div>
                     <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
                       <span className="text-[9px] text-slate-500 font-mono block">RISK LEVEL</span>
-                      <span className={`inline-block font-semibold uppercase ${selectedEvent.metadata.riskLevel === 'High' ? 'text-rose-400' : 'text-emerald-450'}`}>{selectedEvent.metadata.riskLevel || 'Normal'}</span>
+                      <span className={`inline-block font-semibold uppercase ${selectedEvent.metadata.riskLevel === 'High' ? 'text-rose-400' : 'text-emerald-600'}`}>{selectedEvent.metadata.riskLevel || 'Normal'}</span>
                     </div>
                   </div>
 
@@ -844,7 +844,7 @@ export default function CitizenTimelinePage() {
 
             <button 
               onClick={() => setSelectedEvent(null)}
-              className="w-full py-2.5 bg-white hover:bg-slate-850 text-slate-800 border border-slate-200 rounded-xl text-xs font-semibold transition-colors"
+              className="w-full py-2.5 bg-white hover:bg-slate-900 text-slate-800 border border-slate-200 rounded-xl text-xs font-semibold transition-colors"
             >
               Close Details View
             </button>

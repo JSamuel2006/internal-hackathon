@@ -31,7 +31,7 @@ export default function HospitalIntelligenceDashboard() {
         </div>
         <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200">
           <span className="text-[10px] text-slate-500 block uppercase">Emergency Volume</span>
-          <strong className="text-xl text-rose-455 font-bold block mt-1">Moderate</strong>
+          <strong className="text-xl text-rose-600 font-bold block mt-1">Moderate</strong>
         </div>
       </div>
 
@@ -40,11 +40,11 @@ export default function HospitalIntelligenceDashboard() {
         <div className="space-y-2">
           <div className="p-3 bg-white rounded border border-slate-200 flex justify-between items-center">
             <span>Sassoon General Hospital Pune</span>
-            <span className="text-emerald-450 font-bold">12 ICU Open</span>
+            <span className="text-emerald-600 font-bold">12 ICU Open</span>
           </div>
           <div className="p-3 bg-white rounded border border-slate-200 flex justify-between items-center">
             <span>Deenanath Mangeshkar Hospital</span>
-            <span className="text-rose-455 font-bold">0 ICU Open</span>
+            <span className="text-rose-600 font-bold">0 ICU Open</span>
           </div>
         </div>
       </div>

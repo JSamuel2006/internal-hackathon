@@ -283,7 +283,7 @@ export default function CitizenReportAnalyzerPage() {
     <div className="space-y-8 max-w-7xl mx-auto px-4">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="p-2 bg-rose-500/10 rounded-lg text-rose-455 border border-rose-500/20">
+        <div className="p-2 bg-rose-500/10 rounded-lg text-rose-600 border border-rose-500/20">
           <FileText className="w-5 h-5 glow-pill" />
         </div>
         <div>
@@ -330,7 +330,7 @@ export default function CitizenReportAnalyzerPage() {
             </div>
             <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200">
               <span className="text-[10px] text-slate-500 block uppercase font-mono">Latest Health Flag</span>
-              <span className="text-sm font-bold text-rose-455">
+              <span className="text-sm font-bold text-rose-600">
                 {history[0]?.riskLevel === 'High' ? 'Abnormal Indicators' : 'All Clear'}
               </span>
               <p className="text-[10px] text-slate-600 mt-1">From {history[0]?.reportType || 'No reports yet'}</p>
@@ -347,7 +347,7 @@ export default function CitizenReportAnalyzerPage() {
               <span className="text-2xl font-bold text-amber-500 font-mono">
                 {overallHealth.score}%
               </span>
-              <p className="text-[10px] text-slate-600 mt-1">Category: <strong className="text-slate-350">{overallHealth.category}</strong></p>
+              <p className="text-[10px] text-slate-600 mt-1">Category: <strong className="text-slate-500">{overallHealth.category}</strong></p>
             </div>
           </div>
 
@@ -370,7 +370,7 @@ export default function CitizenReportAnalyzerPage() {
                     </div>
                     <div>
                       <span className="text-slate-500 text-[10px] uppercase">Contributing Report Types</span>
-                      <p className="text-slate-350 text-xs mt-0.5">{overallHealth.contributingReports.join(', ') || 'None'}</p>
+                      <p className="text-slate-500 text-xs mt-0.5">{overallHealth.contributingReports.join(', ') || 'None'}</p>
                     </div>
                   </div>
                 )}
@@ -408,7 +408,7 @@ export default function CitizenReportAnalyzerPage() {
                   {history.length > 0 && history[0].riskLevel === 'High' ? (
                     <>
                       <div className="p-3 bg-rose-500/5 border border-rose-500/10 rounded-xl space-y-1">
-                        <span className="font-bold text-rose-455 block">Repeat Lab Screening</span>
+                        <span className="font-bold text-rose-600 block">Repeat Lab Screening</span>
                         <p className="text-slate-600">Recheck Lipid profile panel within 12 weeks to assess cholesterol changes.</p>
                       </div>
                       <div className="p-3 bg-amber-500/5 border border-amber-500/10 rounded-xl space-y-1">
@@ -427,7 +427,7 @@ export default function CitizenReportAnalyzerPage() {
                   <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">
                     Recent Activity
                   </h3>
-                  <Link to="/citizen/timeline" className="text-[10px] text-rose-455 hover:underline flex items-center gap-0.5 font-semibold font-mono">
+                  <Link to="/citizen/timeline" className="text-[10px] text-rose-600 hover:underline flex items-center gap-0.5 font-semibold font-mono">
                     View Full Timeline →
                   </Link>
                 </div>
@@ -451,7 +451,7 @@ export default function CitizenReportAnalyzerPage() {
                         <div key={act.id} className="flex items-center justify-between p-2.5 rounded-lg bg-white border border-slate-200">
                           <div className="flex items-center gap-2.5 min-w-0">
                             <div className="p-1.5 bg-white rounded-lg border border-slate-200 shrink-0">
-                              <Icon className="w-3.5 h-3.5 text-slate-355" />
+                              <Icon className="w-3.5 h-3.5 text-slate-500" />
                             </div>
                             <div className="min-w-0 flex-1">
                               <span className="font-bold text-slate-700 block truncate">{act.title}</span>
@@ -522,7 +522,7 @@ export default function CitizenReportAnalyzerPage() {
                     <button
                       type="button"
                       onClick={capturePhoto}
-                      className="w-full py-2 bg-rose-500 hover:bg-rose-455 text-slate-950 font-bold rounded-lg text-xs font-mono uppercase transition-colors"
+                      className="w-full py-2 bg-rose-500 hover:bg-rose-600 text-slate-950 font-bold rounded-lg text-xs font-mono uppercase transition-colors"
                     >
                       Capture Photo
                     </button>
@@ -536,7 +536,7 @@ export default function CitizenReportAnalyzerPage() {
                   <div className="space-y-1.5 max-h-32 overflow-y-auto">
                     {fileList.map((f, i) => (
                       <div key={i} className="bg-white p-2.5 rounded border border-slate-200 text-xs flex justify-between items-center">
-                        <span className="text-slate-350 truncate block font-mono max-w-[200px]">{f.name}</span>
+                        <span className="text-slate-500 truncate block font-mono max-w-[200px]">{f.name}</span>
                         <span className="text-[9px] text-slate-500 shrink-0 font-mono">{(f.size / (1024 * 1024)).toFixed(2)} MB</span>
                       </div>
                     ))}
@@ -546,7 +546,7 @@ export default function CitizenReportAnalyzerPage() {
 
               {loading && (
                 <div className="p-3.5 bg-rose-500/5 border border-rose-500/10 rounded-xl space-y-2">
-                  <span className="text-xs font-semibold text-rose-455 block">{progressStep}</span>
+                  <span className="text-xs font-semibold text-rose-600 block">{progressStep}</span>
                   <div className="w-full bg-white h-1 rounded-full overflow-hidden">
                     <div className="bg-gradient-to-r from-rose-500 to-amber-500 h-full animate-progress-bar" style={{ width: '80%' }}></div>
                   </div>
@@ -555,7 +555,7 @@ export default function CitizenReportAnalyzerPage() {
               )}
 
               {error && (
-                <div className="p-3.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-455 text-xs flex items-center gap-2">
+                <div className="p-3.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-600 text-xs flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
                   <span>{error}</span>
                 </div>
@@ -576,7 +576,7 @@ export default function CitizenReportAnalyzerPage() {
             {previewUrl && (
               <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-2xl border border-slate-200 space-y-3">
                 <div className="flex justify-between items-center border-b border-slate-200 pb-2">
-                  <span className="text-xs font-bold text-slate-350">Document Viewer</span>
+                  <span className="text-xs font-bold text-slate-500">Document Viewer</span>
                   <div className="flex gap-2">
                     <button
                       onClick={() => setZoom(z => Math.min(z + 0.1, 2.5))}
@@ -599,7 +599,7 @@ export default function CitizenReportAnalyzerPage() {
                     <button
                       onClick={() => setSplitScreen(!splitScreen)}
                       className={`px-2 py-0.5 border text-[10px] font-mono rounded ${
-                        splitScreen ? 'bg-rose-500/20 border-rose-500/30 text-rose-455' : 'bg-white border-slate-200 text-slate-600'
+                        splitScreen ? 'bg-rose-500/20 border-rose-500/30 text-rose-600' : 'bg-white border-slate-200 text-slate-600'
                       }`}
                     >
                       Split Compare
@@ -649,7 +649,7 @@ export default function CitizenReportAnalyzerPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-white p-3 rounded-xl border border-slate-200">
                       <span className="text-[10px] text-slate-500 block uppercase">Recommended Specialist</span>
-                      <span className="text-sm font-bold text-rose-455 font-mono">{result.recommendedSpecialist}</span>
+                      <span className="text-sm font-bold text-rose-600 font-mono">{result.recommendedSpecialist}</span>
                     </div>
                     <div className="bg-white p-3 rounded-xl border border-slate-200">
                       <span className="text-[10px] text-slate-500 block uppercase">Confidence Index</span>
@@ -661,8 +661,8 @@ export default function CitizenReportAnalyzerPage() {
                 {/* Abnormal Values */}
                 {result.abnormalValues && result.abnormalValues.length > 0 && (
                   <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4">
-                    <h4 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-1.5">
-                      <ShieldAlert className="w-4 h-4 text-rose-455" />
+                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-1.5">
+                      <ShieldAlert className="w-4 h-4 text-rose-600" />
                       Abnormal Readings Flagged
                     </h4>
 
@@ -675,7 +675,7 @@ export default function CitizenReportAnalyzerPage() {
                               <span className="text-[10px] text-slate-500 font-mono block">Reference Range: {val.referenceRange}</span>
                             </div>
                             <span className={`px-2 py-0.5 text-[9px] font-bold rounded uppercase ${
-                              val.severity === 'High' ? 'bg-rose-500/10 text-rose-455' :
+                              val.severity === 'High' ? 'bg-rose-500/10 text-rose-600' :
                               val.severity === 'Medium' ? 'bg-amber-500/10 text-amber-455' :
                               'bg-emerald-500/10 text-emerald-400'
                             }`}>
@@ -727,7 +727,7 @@ export default function CitizenReportAnalyzerPage() {
               <select
                 value={selectedPrevReport}
                 onChange={e => setSelectedPrevReport(e.target.value)}
-                className="bg-white border border-slate-200 rounded p-1 text-slate-355 flex-1 max-w-xs"
+                className="bg-white border border-slate-200 rounded p-1 text-slate-500 flex-1 max-w-xs"
               >
                 <option value="">-- Select Historical Record --</option>
                 {history.slice(1).map((h, i) => (
@@ -738,7 +738,7 @@ export default function CitizenReportAnalyzerPage() {
                 type="button"
                 onClick={handleCompare}
                 disabled={!selectedPrevReport}
-                className="px-3 py-1 bg-rose-500 hover:bg-rose-455 text-slate-950 font-bold uppercase rounded text-[10px]"
+                className="px-3 py-1 bg-rose-500 hover:bg-rose-600 text-slate-950 font-bold uppercase rounded text-[10px]"
               >
                 Run Comparison
               </button>
@@ -760,7 +760,7 @@ export default function CitizenReportAnalyzerPage() {
                     <div className="text-center text-slate-800 font-bold">{c.current}</div>
                     <div className={`text-right font-mono font-bold flex justify-end items-center gap-1 ${
                       c.status === 'Improved' ? 'text-emerald-400' :
-                      c.status === 'Declining' ? 'text-rose-455' :
+                      c.status === 'Declining' ? 'text-rose-600' :
                       'text-amber-500'
                     }`}>
                       <span>{c.trend === 'increasing' ? '↑ Increasing' : c.trend === 'decreasing' ? '↓ Decreasing' : '→ Stable'}</span>
@@ -785,7 +785,7 @@ export default function CitizenReportAnalyzerPage() {
               <select
                 value={filterYear}
                 onChange={e => setFilterYear(e.target.value)}
-                className="bg-white border border-slate-200 rounded p-1 text-slate-355 font-mono"
+                className="bg-white border border-slate-200 rounded p-1 text-slate-500 font-mono"
               >
                 <option>All</option>
                 <option>2026</option>
@@ -793,7 +793,7 @@ export default function CitizenReportAnalyzerPage() {
               <select
                 value={filterType}
                 onChange={e => setFilterType(e.target.value)}
-                className="bg-white border border-slate-200 rounded p-1 text-slate-355"
+                className="bg-white border border-slate-200 rounded p-1 text-slate-500"
               >
                 <option>All</option>
                 {Array.from(new Set(history.map(h => h.reportType))).map((type, i) => (
@@ -855,7 +855,7 @@ export default function CitizenReportAnalyzerPage() {
                 onClick={() => triggerExport('PDF')}
                 className="flex flex-col items-center justify-center p-5 bg-white hover:bg-rose-500/10 border border-slate-200 rounded-xl space-y-2 transition-all group"
               >
-                <Printer className="w-8 h-8 text-rose-455 group-hover:scale-110 transition-transform" />
+                <Printer className="w-8 h-8 text-rose-600 group-hover:scale-110 transition-transform" />
                 <span className="text-xs font-bold text-slate-800">Patient PDF Summary</span>
                 <span className="text-[9px] text-slate-500 font-mono">Format: PDF</span>
               </button>

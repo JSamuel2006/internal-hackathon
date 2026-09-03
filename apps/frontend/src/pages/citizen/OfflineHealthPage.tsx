@@ -786,13 +786,13 @@ export default function OfflineHealthPage() {
               </div>
               <button
                 onClick={() => setSelectedArticle(null)}
-                className="px-2.5 py-1 bg-white hover:bg-slate-850 border border-slate-200 text-[10px] text-slate-600 font-bold uppercase rounded cursor-pointer"
+                className="px-2.5 py-1 bg-white hover:bg-slate-900 border border-slate-200 text-[10px] text-slate-600 font-bold uppercase rounded cursor-pointer"
                 aria-label="Close first-aid article"
               >
                 Close
               </button>
             </div>
-            <p className="text-xs text-slate-350 leading-relaxed">{t(selectedArticle.description as any)}</p>
+            <p className="text-xs text-slate-500 leading-relaxed">{t(selectedArticle.description as any)}</p>
             <div className="space-y-2">
               <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block">Recommended Steps</span>
               <ol className="list-decimal list-inside text-xs text-slate-700 space-y-2 leading-relaxed">

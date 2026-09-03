@@ -36,7 +36,7 @@ export const TextToSpeechButton: React.FC<TextToSpeechButtonProps> = ({ text, la
         <span>🔊 Listen</span>
       </button>
       {errorMsg && (
-        <span className="text-[9px] text-rose-455 font-mono animate-pulse block">
+        <span className="text-[9px] text-rose-600 font-mono animate-pulse block">
           ⚠ {errorMsg}
         </span>
       )}

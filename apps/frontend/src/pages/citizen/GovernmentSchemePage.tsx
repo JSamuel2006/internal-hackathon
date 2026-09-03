@@ -34,7 +34,7 @@ export default function GovernmentSchemePage() {
   };
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto px-4 font-mono text-xs text-slate-350">
+    <div className="space-y-8 max-w-4xl mx-auto px-4 font-mono text-xs text-slate-500">
       <div className="border-b border-slate-200 pb-4">
         <h2 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Government Health Scheme Navigator</h2>
         <p className="text-[10px] text-slate-500 mt-1">Cross-match local incomes and diagnoses to PM-JAY/CMCHIS eligibility registries</p>
@@ -42,7 +42,7 @@ export default function GovernmentSchemePage() {
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <form onSubmit={checkEligibility} className="md:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 space-y-4">
-          <span className="font-bold text-slate-205 uppercase block">Eligibility Questionnaire</span>
+          <span className="font-bold text-slate-800 uppercase block">Eligibility Questionnaire</span>
           <input
             type="number"
             placeholder="Age..."

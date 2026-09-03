@@ -39,7 +39,7 @@ export default function OfficerDigitalTwinPage() {
         </div>
         <div>
           <h2 className="text-xl font-bold tracking-tight text-slate-900">District Digital Twin Sandbox</h2>
-          <p className="text-xs text-slate-455 mt-0.5">Model regional digital health parameters and simulate outbreak tolerances</p>
+          <p className="text-xs text-slate-600 mt-0.5">Model regional digital health parameters and simulate outbreak tolerances</p>
         </div>
       </div>
 
@@ -49,7 +49,7 @@ export default function OfficerDigitalTwinPage() {
           <h3 className="text-xs font-mono font-bold tracking-wider text-slate-500 uppercase">Twin Controls</h3>
 
           <div className="space-y-2 text-xs">
-            <div className="flex justify-between text-slate-350 font-medium">
+            <div className="flex justify-between text-slate-500 font-medium">
               <span>ASHA Campaign reach</span>
               <span className="font-mono text-teal-400 font-bold">{coverage}%</span>
             </div>
@@ -64,7 +64,7 @@ export default function OfficerDigitalTwinPage() {
           </div>
 
           <div className="space-y-2 text-xs">
-            <div className="flex justify-between text-slate-350 font-medium">
+            <div className="flex justify-between text-slate-500 font-medium">
               <span>District Bed Reserves</span>
               <span className="font-mono text-teal-400 font-bold">{beds}%</span>
             </div>
@@ -79,7 +79,7 @@ export default function OfficerDigitalTwinPage() {
           </div>
 
           <div className="space-y-2 text-xs">
-            <div className="flex justify-between text-slate-350 font-medium">
+            <div className="flex justify-between text-slate-500 font-medium">
               <span>Public Literacy Index</span>
               <span className="font-mono text-teal-400 font-bold">{awareness}%</span>
             </div>
@@ -108,7 +108,7 @@ export default function OfficerDigitalTwinPage() {
                 <div className="p-4 rounded-xl bg-white border border-slate-200">
                   <span className="text-[10px] text-slate-500 font-mono uppercase block mb-1">Stress posture</span>
                   <span className={`text-xs font-bold uppercase font-mono px-2 py-0.5 rounded ${
-                    result.riskLevel === 'HIGH RISK' ? 'bg-rose-500/10 text-rose-455 border border-rose-500/20' : 'bg-emerald-500/10 text-emerald-450 border border-emerald-500/20'
+                    result.riskLevel === 'HIGH RISK' ? 'bg-rose-500/10 text-rose-600 border border-rose-500/20' : 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
                   }`}>
                     {result.riskLevel}
                   </span>
@@ -116,11 +116,11 @@ export default function OfficerDigitalTwinPage() {
               </div>
 
               <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-2 text-xs">
-                <span className="font-bold text-slate-205 flex items-center gap-1">
+                <span className="font-bold text-slate-800 flex items-center gap-1">
                   <Sparkles className="w-4 h-4 text-teal-400 animate-pulse" />
                   Twin Action Recommendation
                 </span>
-                <p className="text-slate-350 leading-relaxed">{result.recommendation}</p>
+                <p className="text-slate-500 leading-relaxed">{result.recommendation}</p>
               </div>
             </div>
           )}

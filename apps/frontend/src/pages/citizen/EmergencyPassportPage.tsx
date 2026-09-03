@@ -30,7 +30,7 @@ export default function EmergencyPassportPage() {
   }, []);
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto px-4 font-mono text-xs text-slate-350">
+    <div className="space-y-8 max-w-4xl mx-auto px-4 font-mono text-xs text-slate-500">
       <div className="border-b border-slate-200 pb-4 flex justify-between items-center">
         <div>
           <h2 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Emergency Health Passport</h2>
@@ -50,7 +50,7 @@ export default function EmergencyPassportPage() {
           {/* ABHA Card representation */}
           <div className="md:col-span-5 bg-gradient-to-r from-slate-950 to-slate-900 border border-slate-200 p-6 rounded-2xl space-y-4">
             <span className="text-[10px] text-slate-500 uppercase block">ABHA ID Health Card</span>
-            <strong className="text-slate-205 text-base block">{passport.abhaId}</strong>
+            <strong className="text-slate-800 text-base block">{passport.abhaId}</strong>
             <div className="text-[10px] text-slate-600 space-y-1">
               <p>Blood Group: <strong className="text-slate-202">{passport.bloodGroup}</strong></p>
               <p>Allergies: <strong className="text-rose-400">{passport.allergies.join(', ')}</strong></p>

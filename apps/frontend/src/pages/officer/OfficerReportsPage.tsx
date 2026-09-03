@@ -42,7 +42,7 @@ export default function OfficerReportsPage() {
         </div>
         <div>
           <h2 className="text-xl font-bold tracking-tight text-slate-900">National Health Report Center</h2>
-          <p className="text-xs text-slate-455 mt-0.5">Generate monthly district epidemiological reports via Gemini AI</p>
+          <p className="text-xs text-slate-600 mt-0.5">Generate monthly district epidemiological reports via Gemini AI</p>
         </div>
       </div>
 
@@ -120,18 +120,18 @@ export default function OfficerReportsPage() {
                 </div>
 
                 {copied && (
-                  <div className="p-2 rounded bg-emerald-500/10 text-emerald-450 border border-emerald-500/20 text-[10px] text-center font-mono uppercase">
+                  <div className="p-2 rounded bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 text-[10px] text-center font-mono uppercase">
                     Report markdown copied to clipboard!
                   </div>
                 )}
 
-                <div className="p-4 rounded-xl bg-white border border-slate-200 text-xs text-slate-350 leading-relaxed font-mono whitespace-pre-wrap max-h-[350px] overflow-y-auto">
+                <div className="p-4 rounded-xl bg-white border border-slate-200 text-xs text-slate-500 leading-relaxed font-mono whitespace-pre-wrap max-h-[350px] overflow-y-auto">
                   {report.reportContent}
                 </div>
               </div>
             ) : (
               <div className="h-64 border border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center text-slate-500 text-center p-6">
-                <FileText className="w-10 h-10 text-slate-850 mb-2 animate-bounce" />
+                <FileText className="w-10 h-10 text-slate-900 mb-2 animate-bounce" />
                 <p className="text-xs">No active document. Adjust parameters and click compile.</p>
               </div>
             )}

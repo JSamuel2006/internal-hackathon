@@ -36,7 +36,7 @@ export default function OfficerHeatmapPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold tracking-tight text-slate-900">Disease Outbreak Heat Map</h2>
-            <p className="text-xs text-slate-455 mt-0.5">District surveillance query density and hotspot mapping</p>
+            <p className="text-xs text-slate-600 mt-0.5">District surveillance query density and hotspot mapping</p>
           </div>
         </div>
 
@@ -74,7 +74,7 @@ export default function OfficerHeatmapPage() {
                 </div>
                 <div className="text-right">
                   <span className="text-rose-400 font-bold block">{pt.queryDensity} queries/km²</span>
-                  <span className={`text-[9px] font-mono ${pt.trend === 'UP' ? 'text-rose-455' : 'text-emerald-450'}`}>
+                  <span className={`text-[9px] font-mono ${pt.trend === 'UP' ? 'text-rose-600' : 'text-emerald-600'}`}>
                     {pt.trend} TREND
                   </span>
                 </div>

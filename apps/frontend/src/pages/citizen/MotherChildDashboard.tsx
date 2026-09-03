@@ -90,7 +90,7 @@ export default function MotherChildDashboard() {
   };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-350">
+    <div className="space-y-8 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-500">
       {/* Title Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
@@ -109,13 +109,13 @@ export default function MotherChildDashboard() {
 
       {/* Notifications */}
       {successMsg && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 text-xs flex items-center gap-2.5 shadow-lg">
+        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 text-xs flex items-center gap-2.5 shadow-lg">
           <CheckCircle2 className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}
       {error && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-455 text-xs flex items-center gap-2.5 shadow-lg">
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 text-xs flex items-center gap-2.5 shadow-lg">
           <AlertCircle className="w-4.5 h-4.5 text-rose-400 shrink-0" />
           <span>{error}</span>
         </div>
@@ -126,7 +126,7 @@ export default function MotherChildDashboard() {
         <div className="lg:col-span-5 space-y-6">
           {/* Pregnancy Registration */}
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-            <h3 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-2">
+            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">
               Pregnancy registration
             </h3>
             {motherProfile ? (
@@ -143,7 +143,7 @@ export default function MotherChildDashboard() {
                   value={motherAbha}
                   aria-label="Mother ABHA ID"
                   onChange={e => setMotherAbha(e.target.value)}
-                  className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 focus:outline-none"
+                  className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-500 focus:outline-none"
                 />
                 <input
                   type="date"
@@ -151,7 +151,7 @@ export default function MotherChildDashboard() {
                   value={edd}
                   aria-label="Estimated Date of Delivery"
                   onChange={e => setEdd(e.target.value)}
-                  className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 focus:outline-none"
+                  className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-500 focus:outline-none"
                 />
                 <button type="submit" className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-slate-950 font-bold rounded-xl uppercase">
                   Register Pregnancy
@@ -162,7 +162,7 @@ export default function MotherChildDashboard() {
 
           {/* Child Registration */}
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-            <h3 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-2">
+            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">
               Child growth registry
             </h3>
             {childProfile ? (
@@ -178,7 +178,7 @@ export default function MotherChildDashboard() {
                   value={childName}
                   aria-label="Child Name"
                   onChange={e => setChildName(e.target.value)}
-                  className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 focus:outline-none"
+                  className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-500 focus:outline-none"
                 />
                 <input
                   type="text"
@@ -186,7 +186,7 @@ export default function MotherChildDashboard() {
                   value={childAbha}
                   aria-label="Child ABHA ID"
                   onChange={e => setChildAbha(e.target.value)}
-                  className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 focus:outline-none"
+                  className="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-slate-500 focus:outline-none"
                 />
                 <button type="submit" className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-slate-950 font-bold rounded-xl uppercase">
                   Register Child
@@ -200,7 +200,7 @@ export default function MotherChildDashboard() {
         <div className="lg:col-span-7 space-y-6">
           {/* Vaccination schedule */}
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-            <h3 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-2">
+            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">
               Immunization Timeline
             </h3>
             <div className="space-y-2 max-h-48 overflow-y-auto">
@@ -222,7 +222,7 @@ export default function MotherChildDashboard() {
 
           {/* Growth curves chart */}
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-            <h3 className="text-xs font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-2">
+            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">
               Pediatric Growth Curves (Percentiles)
             </h3>
             <div className="h-44">

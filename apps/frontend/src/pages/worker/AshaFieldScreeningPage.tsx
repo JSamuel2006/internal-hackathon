@@ -273,7 +273,7 @@ export default function AshaFieldScreeningPage() {
               className={`py-1.5 rounded text-[8px] font-bold uppercase transition-all ${
                 state.status === st.code 
                   ? 'bg-white text-white border border-slate-200' 
-                  : 'text-slate-500 hover:text-slate-355'
+                  : 'text-slate-500 hover:text-slate-500'
               }`}
             >
               {st.name}
@@ -310,12 +310,12 @@ export default function AshaFieldScreeningPage() {
       <div className="flex justify-between items-center border-b border-slate-200 pb-4">
         <button
           onClick={() => navigate('/worker/dashboard')}
-          className="p-2 border border-slate-200 bg-white rounded-xl flex items-center gap-1 hover:bg-slate-850"
+          className="p-2 border border-slate-200 bg-white rounded-xl flex items-center gap-1 hover:bg-slate-900"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Dashboard</span>
         </button>
-        <span className="font-bold text-slate-205 uppercase">Resident: {citizenName}</span>
+        <span className="font-bold text-slate-800 uppercase">Resident: {citizenName}</span>
       </div>
 
       {successResult ? (
@@ -330,7 +330,7 @@ export default function AshaFieldScreeningPage() {
               {successResult.isOfflineSaved ? '🟡 PENDING SYNC (OFFLINE)' : '🟢 SYNCED TO DISTRICT DATABASE'}
             </span></p>
             <p>Computed Priority: <span className={`font-bold ${
-              successResult.risk_level === 'URGENT' || successResult.risk_level === 'PRIORITY' ? 'text-rose-455' : 'text-slate-700'
+              successResult.risk_level === 'URGENT' || successResult.risk_level === 'PRIORITY' ? 'text-rose-600' : 'text-slate-700'
             }`}>{successResult.risk_level}</span></p>
             
             {(() => {
@@ -369,7 +369,7 @@ export default function AshaFieldScreeningPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Section 1: Tri-state Vitals */}
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-            <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Field Vitals Screenings</span>
+            <span className="font-bold text-slate-800 uppercase block border-b border-slate-200 pb-2">Field Vitals Screenings</span>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {renderVitalInput('Systolic BP', systolic, setSystolic, 'e.g. 120', 'mmHg')}
               {renderVitalInput('Diastolic BP', diastolic, setDiastolic, 'e.g. 80', 'mmHg')}
@@ -386,7 +386,7 @@ export default function AshaFieldScreeningPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Symptoms */}
             <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-              <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Symptoms Observed</span>
+              <span className="font-bold text-slate-800 uppercase block border-b border-slate-200 pb-2">Symptoms Observed</span>
               <div className="grid grid-cols-2 gap-2">
                 {SYMPTOMS_LIST.map((s) => {
                   const isChecked = selectedSymptoms.includes(s);
@@ -412,7 +412,7 @@ export default function AshaFieldScreeningPage() {
             {/* Conditions & Allergies */}
             <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-6">
               <div>
-                <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2 mb-3">Chronic Conditions</span>
+                <span className="font-bold text-slate-800 uppercase block border-b border-slate-200 pb-2 mb-3">Chronic Conditions</span>
                 <div className="flex flex-wrap gap-2">
                   {CONDITIONS_LIST.map((c) => {
                     const isChecked = selectedConditions.includes(c);
@@ -435,7 +435,7 @@ export default function AshaFieldScreeningPage() {
               </div>
 
               <div>
-                <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2 mb-3">Known Allergies</span>
+                <span className="font-bold text-slate-800 uppercase block border-b border-slate-200 pb-2 mb-3">Known Allergies</span>
                 <div className="flex flex-wrap gap-2">
                   {ALLERGIES_LIST.map((a) => {
                     const isChecked = selectedAllergies.includes(a);
@@ -461,7 +461,7 @@ export default function AshaFieldScreeningPage() {
 
           {/* Section 3: Medicine Tracking */}
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-            <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Active Prescriptions</span>
+            <span className="font-bold text-slate-800 uppercase block border-b border-slate-200 pb-2">Active Prescriptions</span>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
               <div className="md:col-span-2">
@@ -488,7 +488,7 @@ export default function AshaFieldScreeningPage() {
                 <button
                   type="button"
                   onClick={handleAddMedicine}
-                  className="w-full py-2 bg-white border border-slate-200 hover:bg-slate-850 font-bold rounded-lg text-[10px]"
+                  className="w-full py-2 bg-white border border-slate-200 hover:bg-slate-900 font-bold rounded-lg text-[10px]"
                 >
                   ADD
                 </button>
@@ -499,7 +499,7 @@ export default function AshaFieldScreeningPage() {
               {selectedCurrentMedicines.map((med, index) => (
                 <div key={index} className="flex justify-between items-center p-2.5 bg-white rounded border border-slate-200 font-mono text-[10px]">
                   <span>{med}</span>
-                  <button type="button" onClick={() => handleRemoveMedicine(index)} className="text-rose-455 font-bold hover:underline">Remove</button>
+                  <button type="button" onClick={() => handleRemoveMedicine(index)} className="text-rose-600 font-bold hover:underline">Remove</button>
                 </div>
               ))}
             </div>
@@ -508,7 +508,7 @@ export default function AshaFieldScreeningPage() {
           {/* Section 4: Notes and Voice dictation */}
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
             <div className="flex justify-between items-center border-b border-slate-200 pb-2">
-              <span className="font-bold text-slate-205 uppercase block">Field Observation Notes</span>
+              <span className="font-bold text-slate-800 uppercase block">Field Observation Notes</span>
             </div>
 
             <textarea

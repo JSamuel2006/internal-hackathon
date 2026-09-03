@@ -7,7 +7,7 @@ export default function MedicineSupplyDashboard() {
     <div className="space-y-6 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-700">
       <div className="flex justify-between items-center border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20">
+          <div className="p-2 bg-rose-500/10 rounded-xl text-rose-600 border border-rose-500/20">
             <Warehouse className="w-5 h-5" />
           </div>
           <div>
@@ -44,14 +44,14 @@ export default function MedicineSupplyDashboard() {
             <div className="p-3 bg-white rounded border border-rose-500/20 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
               <div>
-                <span className="text-slate-205 font-bold block">Amoxicillin 500mg</span>
+                <span className="text-slate-800 font-bold block">Amoxicillin 500mg</span>
                 <span className="text-[10px] text-slate-500">Remaining stocks: 240 units in Haveli block health clinics</span>
               </div>
             </div>
             <div className="p-3 bg-white rounded border border-slate-200 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
               <div>
-                <span className="text-slate-205 font-bold block">ORS Sachet packs</span>
+                <span className="text-slate-800 font-bold block">ORS Sachet packs</span>
                 <span className="text-[10px] text-slate-500">Remaining stocks: 120 units in Khed block</span>
               </div>
             </div>

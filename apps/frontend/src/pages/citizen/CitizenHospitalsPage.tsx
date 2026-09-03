@@ -231,7 +231,7 @@ export default function CitizenHospitalsPage() {
 
       {manualMode && (
         <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-3">
-          <span className="text-xs font-bold text-slate-205 uppercase">Choose Your Location Manually</span>
+          <span className="text-xs font-bold text-slate-800 uppercase">Choose Your Location Manually</span>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <select
               value={manualState}
@@ -283,7 +283,7 @@ export default function CitizenHospitalsPage() {
                   className={`w-full text-left p-4 rounded-xl border transition-all ${
                     selectedHospital?.id === hosp.id
                       ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
-                      : 'bg-white border-slate-200 hover:border-slate-200 text-slate-350'
+                      : 'bg-white border-slate-200 hover:border-slate-200 text-slate-500'
                   }`}
                 >
                   <div className="flex items-start justify-between">
@@ -357,7 +357,7 @@ export default function CitizenHospitalsPage() {
           <p className="text-slate-500 text-xs font-mono">Allow location access or enter your city to find nearby healthcare facilities.</p>
           <button
             onClick={() => setManualMode(true)}
-            className="px-4 py-2 bg-white border border-slate-200 text-xs text-slate-700 rounded-xl hover:bg-slate-850 transition-colors"
+            className="px-4 py-2 bg-white border border-slate-200 text-xs text-slate-700 rounded-xl hover:bg-slate-900 transition-colors"
           >
             Enter Location Manually
           </button>

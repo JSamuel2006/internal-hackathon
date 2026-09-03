@@ -43,7 +43,7 @@ export default function SymptomAssessmentPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto px-4 font-mono text-xs text-slate-355">
+    <div className="space-y-8 max-w-4xl mx-auto px-4 font-mono text-xs text-slate-500">
       <div className="border-b border-slate-200 pb-4">
         <h2 className="text-xl font-bold text-slate-900 uppercase tracking-wider">{t('smart_symptom_assessment')}</h2>
         <p className="text-[10px] text-slate-500 mt-1">{t('interactive_triage')}</p>
@@ -51,7 +51,7 @@ export default function SymptomAssessmentPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <form onSubmit={handleAssess} className="md:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 space-y-4">
-          <span className="font-bold text-slate-205 uppercase block">{t('describe_symptoms')}</span>
+          <span className="font-bold text-slate-800 uppercase block">{t('describe_symptoms')}</span>
           <textarea
             placeholder={t('symptoms_placeholder')}
             value={symptoms}

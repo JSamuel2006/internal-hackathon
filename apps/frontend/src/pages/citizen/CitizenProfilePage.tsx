@@ -19,12 +19,12 @@ export default function CitizenProfilePage() {
   return (
     <div className="space-y-6 max-w-3xl mx-auto">
       <div className="flex items-center gap-3">
-        <div className="p-2 bg-rose-500/10 rounded-lg text-rose-455 border border-rose-500/20">
+        <div className="p-2 bg-rose-500/10 rounded-lg text-rose-600 border border-rose-500/20">
           <User className="w-5 h-5 glow-pill" />
         </div>
         <div>
           <h2 className="text-xl font-bold tracking-tight text-slate-900">Ayushman Bharat Profile</h2>
-          <p className="text-xs text-slate-455 mt-0.5">Manage your personal physiological parameters and verified government parameters</p>
+          <p className="text-xs text-slate-600 mt-0.5">Manage your personal physiological parameters and verified government parameters</p>
         </div>
       </div>
 
@@ -83,7 +83,7 @@ export default function CitizenProfilePage() {
             </div>
 
             {saved && (
-              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 text-xs rounded-lg flex items-center gap-2">
+              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 text-xs rounded-lg flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
                 <span>Profile updated successfully! Syncing to ABHA registry.</span>
               </div>
@@ -91,7 +91,7 @@ export default function CitizenProfilePage() {
 
             <button
               type="submit"
-              className="px-4 py-2.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-455 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ml-auto"
+              className="px-4 py-2.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-600 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ml-auto"
             >
               <Save className="w-3.5 h-3.5" />
               <span>Save Profile</span>

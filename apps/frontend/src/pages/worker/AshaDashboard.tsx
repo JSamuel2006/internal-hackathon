@@ -254,7 +254,7 @@ export default function AshaDashboard() {
         <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 flex justify-between items-center">
           <div>
             <span className="text-[10px] text-slate-500 uppercase font-mono block">Synced Records</span>
-            <span className="text-xl font-bold font-mono text-emerald-450">{stats.synced}</span>
+            <span className="text-xl font-bold font-mono text-emerald-600">{stats.synced}</span>
           </div>
           <CheckCircle className="w-8 h-8 text-emerald-500" />
         </div>
@@ -262,7 +262,7 @@ export default function AshaDashboard() {
         <div className="bg-white border border-slate-200 shadow-sm p-4 rounded-xl border border-slate-200 flex justify-between items-center">
           <div>
             <span className="text-[10px] text-slate-500 uppercase font-mono block">Priority Alerts</span>
-            <span className="text-xl font-bold font-mono text-rose-455">{stats.priorityCases}</span>
+            <span className="text-xl font-bold font-mono text-rose-600">{stats.priorityCases}</span>
           </div>
           <AlertTriangle className="w-8 h-8 text-rose-500" />
         </div>
@@ -279,10 +279,10 @@ export default function AshaDashboard() {
         <div className="lg:col-span-7 space-y-4">
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
             <div className="flex justify-between items-center">
-              <span className="font-bold text-slate-205 uppercase block">Village Resident Registry</span>
+              <span className="font-bold text-slate-800 uppercase block">Village Resident Registry</span>
               <button
                 onClick={() => setRegistering(!registering)}
-                className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-[10px] font-bold text-slate-202 flex items-center gap-1 hover:bg-slate-850"
+                className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-[10px] font-bold text-slate-202 flex items-center gap-1 hover:bg-slate-900"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>{registering ? 'Cancel' : 'New Citizen'}</span>
@@ -386,7 +386,7 @@ export default function AshaDashboard() {
                     />
                     <Search className="w-4 h-4 text-slate-600 absolute left-2.5 top-3" />
                   </div>
-                  <button type="submit" className="px-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-850">
+                  <button type="submit" className="px-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-900">
                     Find
                   </button>
                 </form>
@@ -423,7 +423,7 @@ export default function AshaDashboard() {
         {/* Sync Queue Logs */}
         <div className="lg:col-span-5">
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-            <span className="font-bold text-slate-205 uppercase block">Recent Field Screenings</span>
+            <span className="font-bold text-slate-800 uppercase block">Recent Field Screenings</span>
             <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
               {history.map((h) => (
                 <div key={h.client_record_id} className="p-3 bg-white rounded-xl border border-slate-200 space-y-2">
@@ -436,7 +436,7 @@ export default function AshaDashboard() {
                       h.sync_status === 'SYNCED'
                         ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                         : h.sync_status === 'FAILED'
-                        ? 'bg-rose-500/10 text-rose-455 border-rose-500/20'
+                        ? 'bg-rose-500/10 text-rose-600 border-rose-500/20'
                         : 'bg-amber-500/10 text-amber-450 border-amber-500/20'
                     }`}>
                       {h.sync_status}
@@ -458,7 +458,7 @@ export default function AshaDashboard() {
                   )}
 
                   {h.error && (
-                    <p className="text-[8px] text-rose-455 font-mono truncate">Error: {h.error}</p>
+                    <p className="text-[8px] text-rose-600 font-mono truncate">Error: {h.error}</p>
                   )}
                 </div>
               ))}

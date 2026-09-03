@@ -348,7 +348,7 @@ export default function EmergencyDoctorChatPage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] font-mono text-xs text-slate-600 space-y-4">
-        <RefreshCw className="w-8 h-8 text-rose-455 animate-spin" />
+        <RefreshCw className="w-8 h-8 text-rose-600 animate-spin" />
         <span>Securing emergency communication channel...</span>
       </div>
     );
@@ -375,7 +375,7 @@ export default function EmergencyDoctorChatPage() {
 
       {/* Warning Box for HIGH priority */}
       {priority === 'HIGH' && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-455 space-y-2">
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 space-y-2">
           <div className="flex items-center gap-2 font-bold text-sm">
             <AlertTriangle className="w-5 h-5 text-rose-400 animate-pulse" />
             <span>🚨 CRITICAL SAFETY WARNING — SEEK IMMEDIATE OFFLINE CARE</span>
@@ -422,7 +422,7 @@ export default function EmergencyDoctorChatPage() {
             {requestStatus !== 'CLOSED' && (
               <button 
                 onClick={handleCloseConversation}
-                className="w-full py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-455 font-bold rounded-xl border border-rose-500/30 transition-all flex items-center justify-center gap-2"
+                className="w-full py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 font-bold rounded-xl border border-rose-500/30 transition-all flex items-center justify-center gap-2"
               >
                 <XCircle className="w-4 h-4" />
                 <span>Close Consult</span>
@@ -446,7 +446,7 @@ export default function EmergencyDoctorChatPage() {
               className={`w-full py-2.5 rounded-xl font-bold border transition-all flex items-center justify-center gap-2 ${
                 consentGranted 
                   ? 'bg-teal-500/10 border-teal-500/30 text-teal-400 hover:bg-teal-500/20'
-                  : 'bg-white border-slate-200 text-slate-350 hover:bg-slate-855'
+                  : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-900'
               }`}
             >
               <span>{consentGranted ? 'Revoke EHR Access' : 'Authorize EHR Share'}</span>
@@ -478,11 +478,11 @@ export default function EmergencyDoctorChatPage() {
           {/* Chat Header */}
           <div className="p-4 bg-white border-b border-slate-200 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-slate-200 text-rose-455 font-bold">
+              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-slate-200 text-rose-600 font-bold">
                 Doc
               </div>
               <div>
-                <strong className="text-slate-205 text-xs block">{doctorName}</strong>
+                <strong className="text-slate-800 text-xs block">{doctorName}</strong>
                 <span className="text-[9px] text-slate-500">Secure real-time bilingual chat</span>
               </div>
             </div>
@@ -584,7 +584,7 @@ export default function EmergencyDoctorChatPage() {
       </div>
 
       {errorMsg && (
-        <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-455 rounded-xl font-mono text-[10px]">
+        <div className="p-3 bg-rose-500/10 border border-rose-500/20 text-rose-600 rounded-xl font-mono text-[10px]">
           {errorMsg}
         </div>
       )}

@@ -253,7 +253,7 @@ export default function CitizenPharmacyPage() {
       {/* Title Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20 shadow-lg">
+          <div className="p-2.5 bg-rose-500/10 rounded-xl text-rose-600 border border-rose-500/20 shadow-lg">
             <Sliders className="w-5 h-5 glow-pill" />
           </div>
           <div>
@@ -268,7 +268,7 @@ export default function CitizenPharmacyPage() {
         <button
           onClick={fetchPrescriptions}
           disabled={loading}
-          className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-855 text-slate-355 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
+          className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-900 text-slate-500 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Refresh Queue</span>
@@ -277,13 +277,13 @@ export default function CitizenPharmacyPage() {
 
       {/* Notifications */}
       {successMsg && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 text-xs flex items-center gap-2.5 shadow-lg font-mono">
+        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 text-xs flex items-center gap-2.5 shadow-lg font-mono">
           <CheckCircle2 className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
           <span className="font-semibold">{successMsg}</span>
         </div>
       )}
       {error && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-455 text-xs flex items-center gap-2.5 shadow-lg font-mono">
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 text-xs flex items-center gap-2.5 shadow-lg font-mono">
           <AlertCircle className="w-4.5 h-4.5 text-rose-400 shrink-0" />
           <span className="font-semibold">{error}</span>
         </div>
@@ -295,7 +295,7 @@ export default function CitizenPharmacyPage() {
           {/* Voice assistant module */}
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
             <div className="border-b border-slate-200 pb-2 flex justify-between items-center">
-              <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 Voice Medicine Assistant
               </h3>
               <div className="flex items-center gap-1 text-[10px] text-slate-500 font-mono">
@@ -309,7 +309,7 @@ export default function CitizenPharmacyPage() {
                 value={selectedLang}
                 aria-label="Preferred voice assistant language selector"
                 onChange={e => setSelectedLang(e.target.value)}
-                className="bg-white border border-slate-200 rounded-xl p-2 text-slate-355 text-xs focus:outline-none"
+                className="bg-white border border-slate-200 rounded-xl p-2 text-slate-500 text-xs focus:outline-none"
               >
                 <option value="en">English</option>
                 <option value="hi">Hindi (हिन्दी)</option>
@@ -346,7 +346,7 @@ export default function CitizenPharmacyPage() {
                 aria-label="Spoken query text transcript"
                 value={voiceQuery}
                 onChange={e => setVoiceQuery(e.target.value)}
-                className="bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 text-xs flex-1 focus:outline-none"
+                className="bg-white border border-slate-200 rounded-xl p-2.5 text-slate-500 text-xs flex-1 focus:outline-none"
               />
               <button
                 onClick={triggerVoiceAssistantQuery}
@@ -381,7 +381,7 @@ export default function CitizenPharmacyPage() {
                       <span className="text-slate-600 block font-semibold">Q: {v.question}</span>
                       <span className="text-slate-500 block">A: {v.answer}</span>
                     </div>
-                    <button onClick={() => handleDeleteVoiceItem(v.id)} className="text-slate-600 hover:text-rose-455 transition-colors">
+                    <button onClick={() => handleDeleteVoiceItem(v.id)} className="text-slate-600 hover:text-rose-600 transition-colors">
                       <Trash className="w-3 h-3" />
                     </button>
                   </div>
@@ -391,7 +391,7 @@ export default function CitizenPharmacyPage() {
           </div>
 
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2">
               Active Prescriptions Queue
             </h3>
 
@@ -413,7 +413,7 @@ export default function CitizenPharmacyPage() {
                     }`}
                   >
                     <div className="flex justify-between items-center">
-                      <span className="font-bold text-slate-205 text-xs">Prescription #{pr.id}</span>
+                      <span className="font-bold text-slate-800 text-xs">Prescription #{pr.id}</span>
                       <span className={`px-2 py-0.5 rounded text-[8px] font-bold uppercase ${
                         pr.status === 'Dispensed' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'
                       }`}>{pr.status}</span>
@@ -433,7 +433,7 @@ export default function CitizenPharmacyPage() {
 
           {/* Medicine Reminder Timeline scheduler */}
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2">
               Medicine Reminders & Schedule
             </h3>
 
@@ -444,13 +444,13 @@ export default function CitizenPharmacyPage() {
                 aria-label="New medicine reminder name"
                 value={newReminderName}
                 onChange={e => setNewReminderName(e.target.value)}
-                className="bg-white border border-slate-200 rounded-xl p-2 text-slate-355 flex-1 focus:outline-none"
+                className="bg-white border border-slate-200 rounded-xl p-2 text-slate-500 flex-1 focus:outline-none"
               />
               <select
                 value={newReminderTime}
                 aria-label="New medicine time slot select"
                 onChange={e => setNewReminderTime(e.target.value)}
-                className="bg-white border border-slate-200 rounded-xl p-2 text-slate-355 focus:outline-none"
+                className="bg-white border border-slate-200 rounded-xl p-2 text-slate-500 focus:outline-none"
               >
                 <option>Morning</option>
                 <option>Afternoon</option>
@@ -475,11 +475,11 @@ export default function CitizenPharmacyPage() {
                       <Check className="w-3 h-3" />
                     </button>
                     <div>
-                      <span className={`block font-bold ${rem.status === 'Taken' ? 'line-through text-slate-500' : 'text-slate-205'}`}>{rem.medicineName}</span>
+                      <span className={`block font-bold ${rem.status === 'Taken' ? 'line-through text-slate-500' : 'text-slate-800'}`}>{rem.medicineName}</span>
                       <span className="text-[9px] text-slate-500">{rem.timeSlot} | {rem.status}</span>
                     </div>
                   </div>
-                  <button onClick={() => handleDeleteReminder(rem.id)} className="text-slate-500 hover:text-rose-455 transition-colors">
+                  <button onClick={() => handleDeleteReminder(rem.id)} className="text-slate-500 hover:text-rose-600 transition-colors">
                     <Trash className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -512,7 +512,7 @@ export default function CitizenPharmacyPage() {
                   {/* Section 1: AI Clinical Explanation */}
                   <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
                     <div className="border-b border-slate-200 pb-2 flex justify-between items-center">
-                      <h4 className="font-bold text-slate-205 text-xs uppercase">AI Clinical Explanation</h4>
+                      <h4 className="font-bold text-slate-800 text-xs uppercase">AI Clinical Explanation</h4>
                       <span className="text-indigo-400 font-bold">Confidence: {aiReport.confidenceScore}%</span>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -538,7 +538,7 @@ export default function CitizenPharmacyPage() {
                   {/* Section 2: Drug Interaction Analysis */}
                   <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
                     <div className="border-b border-slate-200 pb-2 flex justify-between items-center">
-                      <h4 className="font-bold text-slate-205 text-xs uppercase">Drug Interaction Analysis</h4>
+                      <h4 className="font-bold text-slate-800 text-xs uppercase">Drug Interaction Analysis</h4>
                       <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] rounded font-bold uppercase">Safe Combination</span>
                     </div>
                     <div className="space-y-2">
@@ -555,14 +555,14 @@ export default function CitizenPharmacyPage() {
 
                   {/* Section 3: Side Effects & Organ Warnings */}
                   <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
-                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-200 pb-2">Side Effects & Organ Warnings</h4>
+                    <h4 className="font-bold text-slate-800 text-xs uppercase border-b border-slate-200 pb-2">Side Effects & Organ Warnings</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="bg-white p-3 rounded-xl border border-slate-200">
                         <span className="text-amber-400 text-[9px] uppercase block">Common Side Effects</span>
                         <p className="text-slate-600 mt-1">{aiReport.commonSideEffects}</p>
                       </div>
                       <div className="bg-white p-3 rounded-xl border border-slate-200">
-                        <span className="text-rose-455 text-[9px] uppercase block">Serious Side Effects</span>
+                        <span className="text-rose-600 text-[9px] uppercase block">Serious Side Effects</span>
                         <p className="text-slate-600 mt-1">{aiReport.seriousSideEffects}</p>
                       </div>
                     </div>
@@ -587,7 +587,7 @@ export default function CitizenPharmacyPage() {
 
                   {/* Section 4: Prescription Safety Dashboard */}
                   <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
-                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-200 pb-2">Prescription Safety Scorecards</h4>
+                    <h4 className="font-bold text-slate-800 text-xs uppercase border-b border-slate-200 pb-2">Prescription Safety Scorecards</h4>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                       <div className="bg-white p-3 rounded-xl border border-slate-200">
                         <span className="text-[9px] text-slate-550 block uppercase">Allergy Safety</span>
@@ -610,7 +610,7 @@ export default function CitizenPharmacyPage() {
 
                   {/* Section 5: Generic Medicine comparison */}
                   <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
-                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-200 pb-2">Generic Alternative Price Comparisons</h4>
+                    <h4 className="font-bold text-slate-800 text-xs uppercase border-b border-slate-200 pb-2">Generic Alternative Price Comparisons</h4>
                     <div className="p-4 bg-white rounded-xl border border-slate-200 flex justify-between items-center">
                       {aiReport.estimatedSavings ? (
                         <div>
@@ -629,7 +629,7 @@ export default function CitizenPharmacyPage() {
 
                   {/* Section 8: Nearby Pharmacy listings */}
                   <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
-                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-200 pb-2">Nearby Pharmacy Availability</h4>
+                    <h4 className="font-bold text-slate-800 text-xs uppercase border-b border-slate-200 pb-2">Nearby Pharmacy Availability</h4>
                     <div className="space-y-2.5">
                       {nearbyPharmacies.map((pharm, idx) => (
                         <div key={idx} className="p-3 bg-white rounded border border-slate-200 flex justify-between items-center">
@@ -646,7 +646,7 @@ export default function CitizenPharmacyPage() {
                   {/* Section 5 Adherence charts */}
                   <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
                     <div className="border-b border-slate-200 pb-2 flex justify-between items-center">
-                      <h4 className="font-bold text-slate-205 text-xs uppercase">Medication Adherence Analytics</h4>
+                      <h4 className="font-bold text-slate-800 text-xs uppercase">Medication Adherence Analytics</h4>
                       <span className="text-emerald-400 font-bold">Compliance Score: {aiReport.medicineAdherenceScore}%</span>
                     </div>
                     <div className="h-44">
@@ -673,7 +673,7 @@ export default function CitizenPharmacyPage() {
 
                   {/* Section 6 Refill Progress */}
                   <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono">
-                    <h4 className="font-bold text-slate-205 text-xs uppercase border-b border-slate-200 pb-2">Refill Progress Dashboard</h4>
+                    <h4 className="font-bold text-slate-800 text-xs uppercase border-b border-slate-200 pb-2">Refill Progress Dashboard</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <span className="text-slate-500 text-[9px] block uppercase">Remaining Tablets</span>
@@ -690,7 +690,7 @@ export default function CitizenPharmacyPage() {
                     </div>
                     <button
                       onClick={() => handleRequestRefill(selectedPresc.id)}
-                      className="w-full py-2 bg-rose-500 hover:bg-rose-455 text-slate-950 font-bold rounded-xl text-xs uppercase"
+                      className="w-full py-2 bg-rose-500 hover:bg-rose-600 text-slate-950 font-bold rounded-xl text-xs uppercase"
                     >
                       Request Refill
                     </button>

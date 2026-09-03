@@ -163,7 +163,7 @@ export default function OfficerDashboard() {
       {/* Title Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20 shadow-lg">
+          <div className="p-2.5 bg-rose-500/10 rounded-xl text-rose-600 border border-rose-500/20 shadow-lg">
             <Activity className="w-5 h-5 glow-pill" />
           </div>
           <div>
@@ -178,7 +178,7 @@ export default function OfficerDashboard() {
         <button
           onClick={fetchSurveillanceData}
           disabled={loading}
-          className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-850 text-slate-700 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
+          className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-900 text-slate-700 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Refresh Telemetry</span>
@@ -216,13 +216,13 @@ export default function OfficerDashboard() {
 
       {/* Notifications */}
       {successMsg && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 text-xs flex items-center gap-2.5 shadow-lg">
+        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 text-xs flex items-center gap-2.5 shadow-lg">
           <CheckCircle2 className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
           <span className="font-semibold">{successMsg}</span>
         </div>
       )}
       {error && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-455 text-xs flex items-center gap-2.5 shadow-lg">
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 text-xs flex items-center gap-2.5 shadow-lg">
           <AlertCircle className="w-4.5 h-4.5 text-rose-400 shrink-0" />
           <span className="font-semibold">{error}</span>
         </div>
@@ -235,7 +235,7 @@ export default function OfficerDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
               <span className="text-[10px] text-slate-500 block uppercase font-mono tracking-wider">National Health Score</span>
-              <span className="text-3xl font-extrabold text-slate-205 font-mono my-3">{dashboardData?.nationalHealthScore || 82}%</span>
+              <span className="text-3xl font-extrabold text-slate-800 font-mono my-3">{dashboardData?.nationalHealthScore || 82}%</span>
               <p className="text-[9px] text-slate-550 font-mono">Weighted epidemiological index</p>
             </div>
             <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
@@ -245,7 +245,7 @@ export default function OfficerDashboard() {
             </div>
             <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
               <span className="text-[10px] text-slate-500 block uppercase font-mono tracking-wider">Active Outbreak Cases</span>
-              <span className="text-3xl font-extrabold text-rose-455 font-mono my-3">{dashboardData?.activeCases || 243}</span>
+              <span className="text-3xl font-extrabold text-rose-600 font-mono my-3">{dashboardData?.activeCases || 243}</span>
               <p className="text-[9px] text-slate-550 font-mono">Monitored clinically in 24h</p>
             </div>
             <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
@@ -260,7 +260,7 @@ export default function OfficerDashboard() {
             <div className="lg:col-span-8 space-y-6">
               <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
                 <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-rose-455" />
+                  <TrendingUp className="w-4 h-4 text-rose-600" />
                   Active Outbreak Progression Trend
                 </h3>
                 <div className="h-64">
@@ -284,7 +284,7 @@ export default function OfficerDashboard() {
 
               {/* District Hotspot metrics */}
               <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-                <h3 className="text-sm font-bold text-slate-205 uppercase tracking-wider">District Hotspot Detection Matrix</h3>
+                <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">District Hotspot Detection Matrix</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {(dashboardData?.hotspots || []).map((hot: any, i: number) => (
                     <div key={i} className="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
@@ -294,7 +294,7 @@ export default function OfficerDashboard() {
                       </div>
                       <div className="flex justify-between text-[11px] text-slate-600">
                         <span>Cases: {hot.cases}</span>
-                        <span className="text-rose-455">{hot.growth}</span>
+                        <span className="text-rose-600">{hot.growth}</span>
                       </div>
                       <p className="text-[10px] text-slate-500">Recovery rate: {hot.recovery}</p>
                     </div>
@@ -306,14 +306,14 @@ export default function OfficerDashboard() {
             {/* Right: Disease list distribution (4 cols) */}
             <div className="lg:col-span-4 space-y-6">
               <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4">
-                <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2">
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2">
                   Disease Distribution Index
                 </h3>
                 <div className="space-y-3.5">
                   {(dashboardData?.diseaseDistribution || []).map((dis: any, idx: number) => (
                     <div key={idx} className="flex justify-between items-center text-xs font-mono">
                       <span className="text-slate-700">{dis.name}</span>
-                      <span className="font-bold text-slate-205">{dis.count} cases</span>
+                      <span className="font-bold text-slate-800">{dis.count} cases</span>
                     </div>
                   ))}
                 </div>
@@ -322,7 +322,7 @@ export default function OfficerDashboard() {
               {/* Task manager checklist */}
               <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4">
                 <div className="flex justify-between items-center border-b border-slate-200 pb-2">
-                  <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider">Officer Action Queue</h3>
+                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Officer Action Queue</h3>
                   <button onClick={handleAddCustomTask} className="text-rose-400 hover:text-rose-350 p-1">
                     <Plus className="w-4 h-4" />
                   </button>
@@ -330,8 +330,8 @@ export default function OfficerDashboard() {
                 <div className="space-y-2.5 text-xs">
                   {tasks.map((t) => (
                     <div key={t.id} className="flex items-start gap-2.5 bg-white p-2.5 rounded border border-slate-200">
-                      <button onClick={() => handleToggleTask(t.id)} className="mt-0.5 p-1 border border-slate-200 rounded hover:border-rose-455 text-slate-600">
-                        {t.status === 'Completed' ? <Check className="w-3 h-3 text-rose-455" /> : <div className="w-3 h-3" />}
+                      <button onClick={() => handleToggleTask(t.id)} className="mt-0.5 p-1 border border-slate-200 rounded hover:border-rose-600 text-slate-600">
+                        {t.status === 'Completed' ? <Check className="w-3 h-3 text-rose-600" /> : <div className="w-3 h-3" />}
                       </button>
                       <div className="min-w-0">
                         <span className={`block font-medium ${t.status === 'Completed' ? 'line-through text-slate-500' : 'text-slate-700'}`}>{t.title}</span>
@@ -351,7 +351,7 @@ export default function OfficerDashboard() {
         <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-5 animate-fade-in">
           <div className="flex justify-between items-center border-b border-slate-200 pb-3">
             <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-              <Layers className="w-4 h-4 text-rose-455" />
+              <Layers className="w-4 h-4 text-rose-600" />
               GIS Outbreak intelligence Map
             </h3>
             <span className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded font-mono uppercase animate-pulse">Telemetry Live</span>
@@ -408,12 +408,12 @@ export default function OfficerDashboard() {
                 <div key={i} className="p-5 bg-white rounded-xl border border-slate-200 space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-slate-800 text-sm font-mono">{pred.disease}</span>
-                    <span className="px-2 py-0.5 bg-rose-500/10 text-rose-455 text-[9px] font-mono rounded font-bold uppercase">{pred.severity} Severity</span>
+                    <span className="px-2 py-0.5 bg-rose-500/10 text-rose-600 text-[9px] font-mono rounded font-bold uppercase">{pred.severity} Severity</span>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-center text-xs font-mono">
                     <div className="bg-white p-2 rounded">
                       <span className="text-slate-500 text-[9px] block">Expected Cases</span>
-                      <span className="font-bold text-slate-205">{pred.predictedCases}</span>
+                      <span className="font-bold text-slate-800">{pred.predictedCases}</span>
                     </div>
                     <div className="bg-white p-2 rounded">
                       <span className="text-slate-500 text-[9px] block">Confidence</span>
@@ -421,7 +421,7 @@ export default function OfficerDashboard() {
                     </div>
                     <div className="bg-white p-2 rounded">
                       <span className="text-slate-500 text-[9px] block">Growth Rate</span>
-                      <span className="font-bold text-rose-455">{pred.growthRate}</span>
+                      <span className="font-bold text-rose-600">{pred.growthRate}</span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-600 leading-relaxed font-mono">{pred.reason}</p>
@@ -444,7 +444,7 @@ export default function OfficerDashboard() {
               </div>
               <div className="space-y-1">
                 <span className="text-[10px] text-slate-500 uppercase font-mono block">Expected emergency visits</span>
-                <span className="text-2xl font-bold text-slate-205 font-mono">{capacity.expectedEmergencyVisits} visits</span>
+                <span className="text-2xl font-bold text-slate-800 font-mono">{capacity.expectedEmergencyVisits} visits</span>
               </div>
               <div className="space-y-1">
                 <span className="text-[10px] text-slate-500 uppercase font-mono block">critical stock shortages</span>
@@ -498,7 +498,7 @@ export default function OfficerDashboard() {
                   <span className="text-slate-500 font-mono text-[10px]">Action: {al.suggestedAction}</span>
                   <button
                     onClick={() => handleResolveAlert(al.id)}
-                    className="px-3.5 py-1.5 bg-rose-500 hover:bg-rose-455 text-slate-950 font-bold rounded-lg text-[10px] uppercase transition-colors"
+                    className="px-3.5 py-1.5 bg-rose-500 hover:bg-rose-600 text-slate-950 font-bold rounded-lg text-[10px] uppercase transition-colors"
                   >
                     Acknowledge & Resolve
                   </button>
@@ -514,13 +514,13 @@ export default function OfficerDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
           {/* Left prompt selector */}
           <div className="lg:col-span-4 bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4 self-start">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2">
               Select Awareness Target
             </h3>
             <select
               value={campaignTarget}
               onChange={e => setCampaignTarget(e.target.value)}
-              className="bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 w-full text-xs focus:outline-none"
+              className="bg-white border border-slate-200 rounded-xl p-2.5 text-slate-500 w-full text-xs focus:outline-none"
             >
               <option>Dengue Outbreak</option>
               <option>Diabetes Screening</option>
@@ -530,7 +530,7 @@ export default function OfficerDashboard() {
             <button
               onClick={handleCampaignGenerate}
               disabled={loading}
-              className="w-full py-2.5 bg-rose-500 hover:bg-rose-455 text-slate-950 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1.5 transition-colors"
+              className="w-full py-2.5 bg-rose-500 hover:bg-rose-600 text-slate-950 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1.5 transition-colors"
             >
               <Send className="w-3.5 h-3.5" />
               <span>Generate Brief</span>
@@ -542,7 +542,7 @@ export default function OfficerDashboard() {
             {campaignBrief ? (
               <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono animate-fade-in">
                 <div className="border-b border-slate-200 pb-2 flex justify-between items-center">
-                  <h4 className="font-bold text-slate-205 text-sm uppercase">{campaignBrief.title}</h4>
+                  <h4 className="font-bold text-slate-800 text-sm uppercase">{campaignBrief.title}</h4>
                   <span className="text-[10px] text-slate-500">Audience: {campaignBrief.targetAudience}</span>
                 </div>
                 <div className="space-y-3">
@@ -556,8 +556,8 @@ export default function OfficerDashboard() {
                   </div>
                   <div className="p-3 bg-white rounded border border-slate-200">
                     <span className="text-teal-400 uppercase text-[9px] block mb-1">SMS & WhatsApp Advisory</span>
-                    <p className="text-slate-350 leading-normal mb-1">SMS: {campaignBrief.sms}</p>
-                    <p className="text-slate-350 leading-normal">WhatsApp: {campaignBrief.whatsapp}</p>
+                    <p className="text-slate-500 leading-normal mb-1">SMS: {campaignBrief.sms}</p>
+                    <p className="text-slate-500 leading-normal">WhatsApp: {campaignBrief.whatsapp}</p>
                   </div>
                   <div className="p-3 bg-white rounded border border-slate-200">
                     <span className="text-teal-400 uppercase text-[9px] block mb-1">Public Announcement Audio Script</span>
@@ -580,7 +580,7 @@ export default function OfficerDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
           {/* Config options */}
           <div className="lg:col-span-4 bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4 self-start">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2">
               Report Parameters
             </h3>
             <div className="flex gap-2">
@@ -590,7 +590,7 @@ export default function OfficerDashboard() {
                   onClick={() => setReportType(type as any)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold font-mono border transition-all ${
                     reportType === type
-                      ? 'bg-rose-500/10 text-rose-455 border-rose-500/35'
+                      ? 'bg-rose-500/10 text-rose-600 border-rose-500/35'
                       : 'bg-white border-slate-200 text-slate-600'
                   }`}
                 >
@@ -601,14 +601,14 @@ export default function OfficerDashboard() {
             <div className="flex gap-2 pt-2">
               <button
                 onClick={() => handleExportData('json')}
-                className="w-full py-2 bg-white hover:bg-slate-850 border border-slate-200 text-slate-700 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1.5"
+                className="w-full py-2 bg-white hover:bg-slate-900 border border-slate-200 text-slate-700 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1.5"
               >
                 <Download className="w-3.5 h-3.5" />
                 JSON
               </button>
               <button
                 onClick={() => handleExportData('csv')}
-                className="w-full py-2 bg-white hover:bg-slate-850 border border-slate-200 text-slate-700 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1.5"
+                className="w-full py-2 bg-white hover:bg-slate-900 border border-slate-200 text-slate-700 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1.5"
               >
                 <Download className="w-3.5 h-3.5" />
                 CSV
@@ -621,13 +621,13 @@ export default function OfficerDashboard() {
             {sitReport ? (
               <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono animate-fade-in">
                 <div className="border-b border-slate-200 pb-2 flex justify-between items-center">
-                  <h4 className="font-bold text-slate-205 text-sm uppercase">{sitReport.type} Preview</h4>
+                  <h4 className="font-bold text-slate-800 text-sm uppercase">{sitReport.type} Preview</h4>
                   <span className="text-[10px] text-slate-500">Range: {sitReport.dateRange}</span>
                 </div>
                 <div className="grid grid-cols-3 gap-4 text-center my-3">
                   <div className="bg-white p-3 rounded border border-slate-200">
                     <span className="text-[9px] text-slate-500 uppercase block">Cases</span>
-                    <span className="font-bold text-slate-205 text-sm">{sitReport.metrics?.totalCases}</span>
+                    <span className="font-bold text-slate-800 text-sm">{sitReport.metrics?.totalCases}</span>
                   </div>
                   <div className="bg-white p-3 rounded border border-slate-200">
                     <span className="text-[9px] text-slate-500 uppercase block">Recoveries</span>
@@ -635,7 +635,7 @@ export default function OfficerDashboard() {
                   </div>
                   <div className="bg-white p-3 rounded border border-slate-200">
                     <span className="text-[9px] text-slate-500 uppercase block">Deaths</span>
-                    <span className="font-bold text-rose-455 text-sm">{sitReport.metrics?.deaths}</span>
+                    <span className="font-bold text-rose-600 text-sm">{sitReport.metrics?.deaths}</span>
                   </div>
                 </div>
 
@@ -644,7 +644,7 @@ export default function OfficerDashboard() {
                   {sitReport.districtRankings?.map((dist: any, idx: number) => (
                     <div key={idx} className="flex justify-between bg-white p-2.5 rounded border border-slate-200">
                       <span>{dist.rank}. {dist.district}</span>
-                      <strong className="text-rose-455">{dist.riskScore} score</strong>
+                      <strong className="text-rose-600">{dist.riskScore} score</strong>
                     </div>
                   ))}
                 </div>

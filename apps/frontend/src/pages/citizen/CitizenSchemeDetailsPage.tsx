@@ -271,7 +271,7 @@ export default function CitizenSchemeDetailsPage() {
       <div className="flex items-center justify-between border-b border-slate-200 pb-4">
         <button
           onClick={() => navigate('/citizen/schemes')}
-          className="flex items-center gap-2 py-1.5 px-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-850 transition-colors text-slate-700"
+          className="flex items-center gap-2 py-1.5 px-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-900 transition-colors text-slate-700"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Schemes</span>
@@ -306,7 +306,7 @@ export default function CitizenSchemeDetailsPage() {
             href={scheme.website}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 py-1.5 px-3 bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-slate-850 transition-colors text-[10px]"
+            className="flex items-center gap-1 py-1.5 px-3 bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-slate-900 transition-colors text-[10px]"
           >
             <ExternalLink className="w-3 h-3" />
             Official Portal
@@ -369,7 +369,7 @@ export default function CitizenSchemeDetailsPage() {
           {/* OVERVIEW TAB */}
           {activeTab === 'overview' && (
             <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-              <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Scheme Overview</span>
+              <span className="font-bold text-slate-800 uppercase block border-b border-slate-200 pb-2">Scheme Overview</span>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <span className="text-[9px] text-slate-500 uppercase block">Coverage Limit</span>
@@ -394,7 +394,7 @@ export default function CitizenSchemeDetailsPage() {
           {/* ELIGIBILITY TAB */}
           {activeTab === 'eligibility' && (
             <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-              <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Automatic Eligibility Checker</span>
+              <span className="font-bold text-slate-800 uppercase block border-b border-slate-200 pb-2">Automatic Eligibility Checker</span>
               <form onSubmit={handleCheckEligibility} className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-[10px] text-slate-500 block mb-1">Your Age</label>
@@ -452,7 +452,7 @@ export default function CitizenSchemeDetailsPage() {
             <div className="space-y-4">
               <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="font-bold text-slate-205 uppercase">
+                  <span className="font-bold text-slate-800 uppercase">
                     Empanelled Hospitals {cityLabel ? `— ${cityLabel}` : ''}
                   </span>
                   {locating && <span className="text-amber-400 text-[10px] animate-pulse">Locating...</span>}
@@ -513,7 +513,7 @@ export default function CitizenSchemeDetailsPage() {
           {/* DOCUMENTS TAB */}
           {activeTab === 'documents' && (
             <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-              <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Required Documents Checklist</span>
+              <span className="font-bold text-slate-800 uppercase block border-b border-slate-200 pb-2">Required Documents Checklist</span>
               <div className="space-y-2">
                 {scheme.documents.split(',').map((doc: string, i: number) => (
                   <div key={i} className="flex justify-between items-center p-2.5 bg-white rounded border border-slate-200">
@@ -537,7 +537,7 @@ export default function CitizenSchemeDetailsPage() {
           {/* APPLICATION STEPS TAB */}
           {activeTab === 'apply' && (
             <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-              <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Application Process</span>
+              <span className="font-bold text-slate-800 uppercase block border-b border-slate-200 pb-2">Application Process</span>
               <div className="space-y-4">
                 {scheme.applicationSteps?.map((s: any) => (
                   <div key={s.step} className="flex gap-4 p-3 bg-white rounded-xl border border-slate-200">
@@ -561,7 +561,7 @@ export default function CitizenSchemeDetailsPage() {
           {/* FAQ TAB */}
           {activeTab === 'faq' && (
             <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-              <span className="font-bold text-slate-205 uppercase block border-b border-slate-200 pb-2">Frequently Asked Questions</span>
+              <span className="font-bold text-slate-800 uppercase block border-b border-slate-200 pb-2">Frequently Asked Questions</span>
               <div className="space-y-3">
                 {scheme.faqs?.map((f: any, i: number) => (
                   <div key={i} className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
@@ -582,7 +582,7 @@ export default function CitizenSchemeDetailsPage() {
           <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 flex flex-col h-96">
             <div className="flex items-center gap-2 border-b border-slate-200 pb-3 mb-3">
               <Bot className="w-4 h-4 text-rose-400" />
-              <span className="font-bold text-slate-205 text-xs uppercase">Ask ArogyaMitra</span>
+              <span className="font-bold text-slate-800 text-xs uppercase">Ask ArogyaMitra</span>
               <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse ml-auto"></span>
             </div>
             <div className="flex-1 overflow-y-auto space-y-2 text-[10px] mb-3">
@@ -619,7 +619,7 @@ export default function CitizenSchemeDetailsPage() {
               <button
                 key={q}
                 onClick={() => { setChatInput(q); }}
-                className="w-full text-left py-1.5 px-3 bg-white border border-slate-200 text-[10px] text-slate-600 rounded-lg hover:text-slate-800 hover:bg-slate-850 transition-colors"
+                className="w-full text-left py-1.5 px-3 bg-white border border-slate-200 text-[10px] text-slate-600 rounded-lg hover:text-slate-800 hover:bg-slate-900 transition-colors"
               >
                 {q}
               </button>

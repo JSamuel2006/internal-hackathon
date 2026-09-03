@@ -30,7 +30,7 @@ export default function OfficerNewsPage() {
         </div>
         <div>
           <h2 className="text-xl font-bold tracking-tight text-slate-900">National News & Advisories</h2>
-          <p className="text-xs text-slate-455 mt-0.5">Real-time health advisories with Gemini-synthesized clinical takeaways</p>
+          <p className="text-xs text-slate-600 mt-0.5">Real-time health advisories with Gemini-synthesized clinical takeaways</p>
         </div>
       </div>
 
@@ -51,7 +51,7 @@ export default function OfficerNewsPage() {
                       {adv.date}
                     </span>
                   </div>
-                  <h3 className="text-sm font-bold text-slate-205">{adv.title}</h3>
+                  <h3 className="text-sm font-bold text-slate-800">{adv.title}</h3>
                   <p className="text-[10px] font-mono text-indigo-400">{adv.source}</p>
                 </div>
                 <span className="text-[10px] text-slate-550 font-mono uppercase">ID: {adv.id}</span>

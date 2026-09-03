@@ -17,10 +17,10 @@ export default function CitizenAlertCenter() {
       </div>
 
       <div className="space-y-4">
-        <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-455 flex items-start gap-3">
+        <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-600 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
           <div>
-            <strong className="block font-bold text-slate-205">⚠️ epidemic Outbreak Alert: Pune Haveli</strong>
+            <strong className="block font-bold text-slate-800">⚠️ epidemic Outbreak Alert: Pune Haveli</strong>
             <p className="text-slate-600 mt-1 leading-normal">
               A vector density spike has been identified. Citizens are advised to verify that all stagnant domestic water sources are covered. Consult a doctor immediately if fever, retro-orbital pain, or joint rash develops.
             </p>
@@ -30,7 +30,7 @@ export default function CitizenAlertCenter() {
         <div className="p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-450 flex items-start gap-3">
           <Info className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
           <div>
-            <strong className="block font-bold text-slate-205">📢 National Influenza Vaccination Drive</strong>
+            <strong className="block font-bold text-slate-800">📢 National Influenza Vaccination Drive</strong>
             <p className="text-slate-600 mt-1 leading-normal">
               State wellness centers are distributing primary booster shots. Book your slot through the Citizen Portal or visit nearest government health sub-centers.
             </p>

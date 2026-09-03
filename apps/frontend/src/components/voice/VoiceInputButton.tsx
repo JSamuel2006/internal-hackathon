@@ -115,7 +115,7 @@ export const VoiceInputButton: React.FC<VoiceInputButtonProps> = ({ onCapture, l
             <button
               type="button"
               onClick={handleConfirm}
-              className="flex items-center gap-1 px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-450 rounded-lg text-[9px] font-bold uppercase tracking-wider cursor-pointer"
+              className="flex items-center gap-1 px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-600 rounded-lg text-[9px] font-bold uppercase tracking-wider cursor-pointer"
             >
               <Check className="w-3 h-3" />
               <span>✓ Use this</span>
@@ -123,14 +123,14 @@ export const VoiceInputButton: React.FC<VoiceInputButtonProps> = ({ onCapture, l
             <button
               type="button"
               onClick={handleReset}
-              className="flex items-center gap-1 px-3 py-1 bg-white hover:bg-slate-850 border border-slate-200 text-slate-600 rounded-lg text-[9px] font-bold uppercase tracking-wider cursor-pointer"
+              className="flex items-center gap-1 px-3 py-1 bg-white hover:bg-slate-900 border border-slate-200 text-slate-600 rounded-lg text-[9px] font-bold uppercase tracking-wider cursor-pointer"
             >
               <span>✎ Edit</span>
             </button>
             <button
               type="button"
               onClick={handleStart}
-              className="flex items-center gap-1 px-3 py-1 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-455 rounded-lg text-[9px] font-bold uppercase tracking-wider cursor-pointer"
+              className="flex items-center gap-1 px-3 py-1 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-600 rounded-lg text-[9px] font-bold uppercase tracking-wider cursor-pointer"
             >
               <Mic className="w-3 h-3" />
               <span>🔄 Speak again</span>

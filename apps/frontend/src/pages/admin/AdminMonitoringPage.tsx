@@ -12,7 +12,7 @@ export default function AdminMonitoringPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold tracking-tight text-slate-900">Infrastructure Monitoring</h2>
-            <p className="text-xs text-slate-455 mt-0.5">Real-time health status of databases, APIs, and AI nodes</p>
+            <p className="text-xs text-slate-600 mt-0.5">Real-time health status of databases, APIs, and AI nodes</p>
           </div>
         </div>
       </div>
@@ -23,21 +23,21 @@ export default function AdminMonitoringPage() {
           <h3 className="text-xs font-mono font-bold tracking-wider text-slate-500 uppercase border-b border-slate-200 pb-2">Core Services</h3>
           <div className="space-y-3.5 text-xs">
             <div className="flex justify-between items-center">
-              <span className="text-slate-350 flex items-center gap-2">
+              <span className="text-slate-500 flex items-center gap-2">
                 <Server className="w-4 h-4 text-indigo-400" />
                 Express Web Server (Node.js)
               </span>
-              <span className="text-[10px] font-mono text-emerald-450 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="text-[10px] font-mono text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                 UP (99.98% Uptime)
               </span>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-slate-350 flex items-center gap-2">
+              <span className="text-slate-500 flex items-center gap-2">
                 <Database className="w-4 h-4 text-teal-400" />
                 MongoDB Health Status
               </span>
-              <span className="text-[10px] font-mono text-emerald-450 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="text-[10px] font-mono text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                 CONNECTED (12ms latency)
               </span>
             </div>
@@ -49,21 +49,21 @@ export default function AdminMonitoringPage() {
           <h3 className="text-xs font-mono font-bold tracking-wider text-slate-500 uppercase border-b border-slate-200 pb-2">AI Micro-Services</h3>
           <div className="space-y-3.5 text-xs">
             <div className="flex justify-between items-center">
-              <span className="text-slate-350 flex items-center gap-2">
-                <BrainCircuit className="w-4 h-4 text-rose-455" />
+              <span className="text-slate-500 flex items-center gap-2">
+                <BrainCircuit className="w-4 h-4 text-rose-600" />
                 Gemini LLM API Endpoint
               </span>
-              <span className="text-[10px] font-mono text-emerald-450 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="text-[10px] font-mono text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                 OPERATIONAL (0.8s avg response)
               </span>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-slate-350 flex items-center gap-2">
+              <span className="text-slate-500 flex items-center gap-2">
                 <Activity className="w-4 h-4 text-teal-400" />
                 Tesseract OCR Engine
               </span>
-              <span className="text-[10px] font-mono text-emerald-450 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="text-[10px] font-mono text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                 READY (Traineddata loaded)
               </span>
             </div>

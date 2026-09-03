@@ -232,7 +232,7 @@ export default function AshaDashboard() {
             </span>
             <span className="text-xs text-slate-600 block mt-1">Active Community Cadre</span>
           </div>
-          <div className="w-full bg-slate-850 h-1 rounded-full mt-3 overflow-hidden">
+          <div className="w-full bg-slate-900 h-1 rounded-full mt-3 overflow-hidden">
             <div className="bg-teal-400 h-full rounded-full" style={{ width: '100%' }}></div>
           </div>
         </div>
@@ -251,7 +251,7 @@ export default function AshaDashboard() {
             </span>
             <span className="text-xs text-slate-600 block mt-1">Field Health Assessments</span>
           </div>
-          <div className="w-full bg-slate-850 h-1 rounded-full mt-3 overflow-hidden">
+          <div className="w-full bg-slate-900 h-1 rounded-full mt-3 overflow-hidden">
             <div className="bg-indigo-400 h-full rounded-full" style={{ width: '100%' }}></div>
           </div>
         </div>
@@ -270,7 +270,7 @@ export default function AshaDashboard() {
             </span>
             <span className="text-xs text-slate-600 block mt-1">Evaluated in last 24h</span>
           </div>
-          <div className="w-full bg-slate-850 h-1 rounded-full mt-3 overflow-hidden">
+          <div className="w-full bg-slate-900 h-1 rounded-full mt-3 overflow-hidden">
             <div className="bg-amber-400 h-full rounded-full" style={{ width: '100%' }}></div>
           </div>
         </div>
@@ -289,7 +289,7 @@ export default function AshaDashboard() {
             </span>
             <span className="text-xs text-rose-300/80 block mt-1">Urgent & Priority Escalations</span>
           </div>
-          <div className="w-full bg-slate-850 h-1 rounded-full mt-3 overflow-hidden">
+          <div className="w-full bg-slate-900 h-1 rounded-full mt-3 overflow-hidden">
             <div className="bg-rose-500 h-full rounded-full" style={{ width: '100%' }}></div>
           </div>
         </div>
@@ -416,7 +416,7 @@ export default function AshaDashboard() {
                 <th className="pb-3 px-3 font-semibold text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-850">
+            <tbody className="divide-y divide-slate-900">
               {workers.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="text-center py-6 text-slate-500 italic">
@@ -464,7 +464,7 @@ export default function AshaDashboard() {
                           setInspectedWorker(w);
                           setPage(1);
                         }}
-                        className="px-2.5 py-1 bg-slate-850 hover:bg-slate-800 border border-slate-700 text-slate-700 hover:text-teal-300 rounded text-[10px] font-bold uppercase transition-colors cursor-pointer"
+                        className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-700 hover:text-teal-300 rounded text-[10px] font-bold uppercase transition-colors cursor-pointer"
                       >
                         Filter Logs
                       </button>
@@ -598,7 +598,7 @@ export default function AshaDashboard() {
                 <th className="pb-3 px-3 font-semibold text-center">Sync</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-850">
+            <tbody className="divide-y divide-slate-900">
               {loading ? (
                 <tr>
                   <td colSpan={7} className="text-center py-12 text-slate-500 font-mono">

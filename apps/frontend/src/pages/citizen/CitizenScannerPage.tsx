@@ -458,7 +458,7 @@ export default function CitizenScannerPage() {
               <button onClick={handleGrantConsent} className="flex-1 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg uppercase">
                 Allow
               </button>
-              <button onClick={handleDenyConsent} className="flex-1 py-2 bg-white border border-slate-200 text-slate-350 hover:bg-slate-800 font-bold rounded-lg uppercase">
+              <button onClick={handleDenyConsent} className="flex-1 py-2 bg-white border border-slate-200 text-slate-500 hover:bg-slate-800 font-bold rounded-lg uppercase">
                 Skip
               </button>
             </div>
@@ -573,10 +573,10 @@ export default function CitizenScannerPage() {
                     <span className="font-mono text-[10px] text-slate-500">ID: {scanId}</span>
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={handlePrint} className="p-2 bg-white border border-slate-200 hover:bg-slate-800 text-slate-350 rounded-lg text-xs flex items-center gap-1.5">
+                    <button onClick={handlePrint} className="p-2 bg-white border border-slate-200 hover:bg-slate-800 text-slate-500 rounded-lg text-xs flex items-center gap-1.5">
                       <Printer className="w-3.5 h-3.5" /> Print
                     </button>
-                    <button onClick={() => setShowShareModal(true)} className="p-2 bg-white border border-slate-200 hover:bg-slate-800 text-slate-350 rounded-lg text-xs flex items-center gap-1.5">
+                    <button onClick={() => setShowShareModal(true)} className="p-2 bg-white border border-slate-200 hover:bg-slate-800 text-slate-500 rounded-lg text-xs flex items-center gap-1.5">
                       <Share2 className="w-3.5 h-3.5" /> Share
                     </button>
                   </div>
@@ -742,7 +742,7 @@ export default function CitizenScannerPage() {
                             imageQuality.detectedFields.map((field: string) => (
                               <div key={field} className="flex items-center gap-1 text-emerald-400">
                                 <span>✓</span>
-                                <span className="text-slate-350">{field}</span>
+                                <span className="text-slate-500">{field}</span>
                               </div>
                             ))
                           ) : (
@@ -1120,7 +1120,7 @@ export default function CitizenScannerPage() {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="border-b border-slate-200">
-                        <th className="py-2 text-slate-455 font-mono">Field</th>
+                        <th className="py-2 text-slate-600 font-mono">Field</th>
                         {compareIds.map(id => {
                           const item = historyList.find(h => h.scanId === id);
                           return (

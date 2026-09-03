@@ -39,17 +39,17 @@ export default function CitizenHistoryPage() {
     <div className="space-y-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-rose-500/10 rounded-lg text-rose-455 border border-rose-500/20">
+          <div className="p-2 bg-rose-500/10 rounded-lg text-rose-600 border border-rose-500/20">
             <History className="w-5 h-5 glow-pill" />
           </div>
           <div>
             <h2 className="text-xl font-bold tracking-tight text-slate-900">{t('medical_history_timeline')}</h2>
-            <p className="text-xs text-slate-455 mt-0.5">{t('historical_consultations_prescriptions_scans')}</p>
+            <p className="text-xs text-slate-600 mt-0.5">{t('historical_consultations_prescriptions_scans')}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 border-l border-slate-200 pl-4">
           <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-          <span className="text-[10px] font-mono text-emerald-450 uppercase">{t('abha_synchronized')}</span>
+          <span className="text-[10px] font-mono text-emerald-600 uppercase">{t('abha_synchronized')}</span>
         </div>
       </div>
 
@@ -74,7 +74,7 @@ export default function CitizenHistoryPage() {
             </div>
             <div className="text-[10px] font-mono text-slate-500 border-t md:border-t-0 md:border-l border-slate-200 pt-2.5 md:pt-0 md:pl-4 min-w-[150px]">
               <span className="block uppercase text-[9px] text-slate-550 mb-0.5">{t('facility_provider')}</span>
-              <span className="text-slate-350 font-semibold">{entry.provider}</span>
+              <span className="text-slate-500 font-semibold">{entry.provider}</span>
             </div>
           </div>
         ))}

@@ -256,7 +256,7 @@ export default function CitizenTwinPage() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20 shadow-lg">
+          <div className="p-2.5 bg-rose-500/10 rounded-xl text-rose-600 border border-rose-500/20 shadow-lg">
             <Compass className="w-5 h-5 animate-pulse" />
           </div>
           <div>
@@ -296,13 +296,13 @@ export default function CitizenTwinPage() {
 
       {/* Notifications */}
       {successMsg && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 text-xs flex items-center gap-2.5 shadow-lg">
+        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 text-xs flex items-center gap-2.5 shadow-lg">
           <CheckCircle className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
           <span className="font-semibold">{successMsg}</span>
         </div>
       )}
       {error && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-455 text-xs flex items-center gap-2.5 shadow-lg">
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 text-xs flex items-center gap-2.5 shadow-lg">
           <AlertCircle className="w-4.5 h-4.5 text-rose-400 shrink-0" />
           <span className="font-semibold">{error}</span>
         </div>
@@ -325,7 +325,7 @@ export default function CitizenTwinPage() {
                     onClick={() => loadPastPrediction(hist.id)}
                     className={`px-3.5 py-1.5 rounded-lg text-xs font-mono shrink-0 transition-all border ${
                       selectedHistId === hist.id
-                        ? 'bg-rose-500/10 text-rose-455 border-rose-500/30'
+                        ? 'bg-rose-500/10 text-rose-600 border-rose-500/30'
                         : 'bg-white border-slate-200 text-slate-600 hover:text-slate-800'
                     }`}
                   >
@@ -408,7 +408,7 @@ export default function CitizenTwinPage() {
                         <div className="flex items-baseline gap-2">
                           <span className="text-lg font-bold text-slate-700 font-mono">{sys.score}</span>
                           <span className="text-[10px] text-slate-500">score</span>
-                          <span className="text-[10px] text-rose-455 ml-auto font-mono">{sys.trend}</span>
+                          <span className="text-[10px] text-rose-600 ml-auto font-mono">{sys.trend}</span>
                         </div>
                         <p className="text-[10px] text-slate-600 leading-relaxed italic mt-1">{sys.recommendation}</p>
                       </div>
@@ -431,7 +431,7 @@ export default function CitizenTwinPage() {
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                           <div>
                             <span className="text-[10px] text-slate-500 font-mono uppercase font-bold tracking-wider">PREDICTIVE INDICATOR</span>
-                            <h4 className="font-bold text-slate-205 text-sm mt-0.5">{pred.disease}</h4>
+                            <h4 className="font-bold text-slate-800 text-sm mt-0.5">{pred.disease}</h4>
                             <p className="text-[10px] text-slate-600 font-mono mt-1">Trend: <strong className="text-amber-500">{pred.historicalTrend}</strong></p>
                           </div>
                           
@@ -454,7 +454,7 @@ export default function CitizenTwinPage() {
                             <div className="space-y-3">
                               <div>
                                 <span className="text-slate-500 text-[10px] uppercase font-mono block font-bold mb-1">Clinical Reasoning</span>
-                                <div className="text-slate-350 leading-relaxed font-mono whitespace-pre-line bg-white p-3 rounded-lg border border-slate-200">
+                                <div className="text-slate-500 leading-relaxed font-mono whitespace-pre-line bg-white p-3 rounded-lg border border-slate-200">
                                   {pred.reasoning}
                                 </div>
                               </div>
@@ -500,7 +500,7 @@ export default function CitizenTwinPage() {
 
               {/* Risk Timeline */}
               <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4">
-                <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-1.5">
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-1.5">
                   <TrendingUp className="w-4 h-4 text-amber-500" />
                   Risk Evolution Timeline
                 </h3>
@@ -526,7 +526,7 @@ export default function CitizenTwinPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
           {/* Sliders Input Panel (4 cols) */}
           <div className="lg:col-span-4 bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-6 self-start">
-            <h3 className="text-xs font-bold text-slate-355 uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-2">
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-2">
               <Settings className="w-4 h-4 text-rose-400" />
               Adjust Lifestyle Sliders
             </h3>
@@ -608,7 +608,7 @@ export default function CitizenTwinPage() {
                 <button
                   onClick={runLiveSimulation}
                   disabled={loading}
-                  className="w-full py-2.5 bg-rose-500 hover:bg-rose-455 text-slate-950 font-bold rounded-xl text-xs uppercase transition-colors"
+                  className="w-full py-2.5 bg-rose-500 hover:bg-rose-600 text-slate-950 font-bold rounded-xl text-xs uppercase transition-colors"
                 >
                   Recalculate
                 </button>
@@ -676,7 +676,7 @@ export default function CitizenTwinPage() {
                     <div className="my-2 flex items-baseline gap-1.5">
                       <span className="text-3xl font-extrabold text-teal-400 font-mono">{simResult.simulatedOverallScore}%</span>
                       <span className={`text-[10px] font-mono font-bold ${
-                        simResult.simulatedOverallScore >= (twinData?.overallHealthScore || 85) ? 'text-emerald-400' : 'text-rose-455'
+                        simResult.simulatedOverallScore >= (twinData?.overallHealthScore || 85) ? 'text-emerald-400' : 'text-rose-600'
                       }`}>
                         ({simResult.simulatedOverallScore - (twinData?.overallHealthScore || 85) >= 0 ? '+' : ''}
                         {simResult.simulatedOverallScore - (twinData?.overallHealthScore || 85)} diff)
@@ -687,7 +687,7 @@ export default function CitizenTwinPage() {
 
                 {/* Financial Healthcare Impact */}
                 <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4">
-                  <h4 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-1.5">
                     <DollarSign className="w-4 h-4 text-emerald-400" />
                     Estimated Financial Healthcare Impact
                   </h4>
@@ -709,7 +709,7 @@ export default function CitizenTwinPage() {
 
                 {/* Simulated Disease Risk Differences */}
                 <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-4">
-                  <h4 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2">
+                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2">
                     Simulated Disease Risk Differences
                   </h4>
                   <div className="space-y-2">
@@ -721,7 +721,7 @@ export default function CitizenTwinPage() {
                           <div className="flex items-center gap-3">
                             <span className="text-slate-600 font-mono">{risk.simulatedProbability}% risk</span>
                             <span className={`px-2 py-0.5 text-[9px] rounded font-mono font-bold uppercase ${
-                              isReduction ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-455'
+                              isReduction ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-600'
                             }`}>
                               {isReduction ? '' : '+'}{risk.differencePct}% Diff
                             </span>
@@ -734,7 +734,7 @@ export default function CitizenTwinPage() {
 
                 {/* Body System Impacts */}
                 <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-                  <h3 className="text-xs font-bold text-slate-355 uppercase tracking-wider border-b border-slate-200 pb-2">
+                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2">
                     Body System Impact Details
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -753,7 +753,7 @@ export default function CitizenTwinPage() {
                 {/* LifeStyle coach advice plan */}
                 {simResult.lifestyleCoachActionPlan && (
                   <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-3">
-                    <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2">
+                    <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2">
                       AI Lifestyle Coach Action Plan
                     </h3>
                     <div className="space-y-2 text-xs">
@@ -773,7 +773,7 @@ export default function CitizenTwinPage() {
                 {/* Health Journey Timeline */}
                 {simResult.healthJourneyTimeline && (
                   <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 space-y-3">
-                    <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2">
+                    <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2">
                       Expected Health Journey Timeline
                     </h3>
                     <div className="space-y-2 text-xs">
@@ -807,7 +807,7 @@ export default function CitizenTwinPage() {
       {activeSubTab === 'compare' && (
         <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-6 animate-fade-in">
           <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-3 flex items-center gap-2">
-            <BarChart2 className="w-4 h-4 text-rose-455" />
+            <BarChart2 className="w-4 h-4 text-rose-600" />
             Compare Scenarios
           </h3>
 
@@ -817,7 +817,7 @@ export default function CitizenTwinPage() {
               <select
                 value={savedSims.indexOf(savedSims.find(s => JSON.stringify(s.simulationData) === JSON.stringify(compareTwinA)))}
                 onChange={e => setCompareTwinA(savedSims[Number(e.target.value)]?.simulationData)}
-                className="bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 w-full focus:outline-none"
+                className="bg-white border border-slate-200 rounded-xl p-2.5 text-slate-500 w-full focus:outline-none"
               >
                 <option value="">-- Select Scenario A --</option>
                 {savedSims.map((s, i) => (
@@ -830,7 +830,7 @@ export default function CitizenTwinPage() {
               <select
                 value={savedSims.indexOf(savedSims.find(s => JSON.stringify(s.simulationData) === JSON.stringify(compareTwinB)))}
                 onChange={e => setCompareTwinB(savedSims[Number(e.target.value)]?.simulationData)}
-                className="bg-white border border-slate-200 rounded-xl p-2.5 text-slate-355 w-full focus:outline-none"
+                className="bg-white border border-slate-200 rounded-xl p-2.5 text-slate-500 w-full focus:outline-none"
               >
                 <option value="">-- Select Scenario B --</option>
                 {savedSims.map((s, i) => (
@@ -846,7 +846,7 @@ export default function CitizenTwinPage() {
                 <span className="px-2.5 py-0.5 bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[9px] font-mono rounded font-bold uppercase">SCENARIO A</span>
                 <div className="mt-3 flex justify-between items-center border-b border-slate-200 pb-2">
                   <span className="text-slate-600 font-bold uppercase">Simulated Overall Score</span>
-                  <span className="text-lg font-bold font-mono text-slate-205">{compareTwinA.simulatedOverallScore}%</span>
+                  <span className="text-lg font-bold font-mono text-slate-800">{compareTwinA.simulatedOverallScore}%</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-slate-200 pb-2">
                   <span className="text-slate-600 font-bold uppercase">Lifestyle Score</span>
@@ -858,7 +858,7 @@ export default function CitizenTwinPage() {
                 <span className="px-2.5 py-0.5 bg-white text-slate-600 border border-slate-200 text-[9px] font-mono rounded font-bold uppercase">SCENARIO B</span>
                 <div className="mt-3 flex justify-between items-center border-b border-slate-200 pb-2">
                   <span className="text-slate-600 font-bold uppercase">Simulated Overall Score</span>
-                  <span className="text-lg font-bold font-mono text-slate-205">{compareTwinB.simulatedOverallScore}%</span>
+                  <span className="text-lg font-bold font-mono text-slate-800">{compareTwinB.simulatedOverallScore}%</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-slate-200 pb-2">
                   <span className="text-slate-600 font-bold uppercase">Lifestyle Score</span>

@@ -75,7 +75,7 @@ export default function OfficerCampaignPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold tracking-tight text-slate-105">AI Health Campaign Builder</h2>
-            <p className="text-xs text-slate-455 mt-0.5">Generate health advisories, SMS copy, and ASHA field pamphlets</p>
+            <p className="text-xs text-slate-600 mt-0.5">Generate health advisories, SMS copy, and ASHA field pamphlets</p>
           </div>
         </div>
       </div>
@@ -111,7 +111,7 @@ export default function OfficerCampaignPage() {
             </div>
 
             {error && (
-              <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-455 text-xs flex items-center gap-2">
+              <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-600 text-xs flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
                 <span>{error}</span>
               </div>
@@ -169,7 +169,7 @@ export default function OfficerCampaignPage() {
                 <p className="text-slate-600 text-[10px] leading-relaxed line-clamp-3">{c.content}</p>
                 <div className="text-[9px] text-slate-500 font-mono flex items-center justify-between pt-1 border-t border-slate-200">
                   <span>Target: {c.targetAudience}</span>
-                  <span className="text-emerald-450 font-bold">LIVE</span>
+                  <span className="text-emerald-600 font-bold">LIVE</span>
                 </div>
               </div>
             ))}

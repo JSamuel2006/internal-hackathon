@@ -177,7 +177,7 @@ export default function EmergencyModePage() {
           className={`w-32 h-32 rounded-full font-bold text-slate-950 text-sm uppercase shadow-2xl transition-transform border-4 cursor-pointer ${
             sosActivated 
               ? 'bg-rose-600 border-rose-500 animate-pulse scale-105 cursor-not-allowed text-white'
-              : 'bg-rose-500 border-rose-455 hover:scale-105 hover:bg-rose-600 text-white'
+              : 'bg-rose-500 border-rose-600 hover:scale-105 hover:bg-rose-600 text-white'
           }`}
         >
           {loading ? t('sos_activating') : sosActivated ? t('sos_active') : t('sos_trigger')}

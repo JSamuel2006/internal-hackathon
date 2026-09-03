@@ -7,7 +7,7 @@ export default function DiseaseSurveillanceDashboard() {
     <div className="space-y-6 max-w-7xl mx-auto px-4 font-mono text-xs text-slate-700">
       <div className="flex justify-between items-center border-b border-slate-200 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-rose-500/10 rounded-xl text-rose-455 border border-rose-500/20">
+          <div className="p-2 bg-rose-500/10 rounded-xl text-rose-600 border border-rose-500/20">
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div>

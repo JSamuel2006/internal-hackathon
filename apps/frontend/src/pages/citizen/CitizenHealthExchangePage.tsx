@@ -131,7 +131,7 @@ export default function CitizenHealthExchangePage() {
         <button
           onClick={fetchProfile}
           disabled={loading}
-          className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-855 text-slate-355 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
+          className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-900 text-slate-500 font-semibold rounded-xl text-xs flex items-center gap-2 transition-all"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Sync ABDM Status</span>
@@ -140,13 +140,13 @@ export default function CitizenHealthExchangePage() {
 
       {/* Notifications */}
       {successMsg && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 text-xs flex items-center gap-2.5 shadow-lg font-mono">
+        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 text-xs flex items-center gap-2.5 shadow-lg font-mono">
           <CheckCircle2 className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
           <span className="font-semibold">{successMsg}</span>
         </div>
       )}
       {error && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-455 text-xs flex items-center gap-2.5 shadow-lg font-mono">
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 text-xs flex items-center gap-2.5 shadow-lg font-mono">
           <AlertCircle className="w-4.5 h-4.5 text-rose-400 shrink-0" />
           <span className="font-semibold">{error}</span>
         </div>
@@ -176,7 +176,7 @@ export default function CitizenHealthExchangePage() {
                 <div className="space-y-1 text-xs font-mono">
                   <div>
                     <span className="text-slate-500 block text-[9px] uppercase">ABHA Address</span>
-                    <span className="font-bold text-slate-205">{profile.abhaAddress}</span>
+                    <span className="font-bold text-slate-800">{profile.abhaAddress}</span>
                   </div>
                   <div>
                     <span className="text-slate-500 block text-[9px] uppercase">ABHA Number</span>
@@ -207,7 +207,7 @@ export default function CitizenHealthExchangePage() {
                   placeholder="e.g. name@abha"
                   value={abhaAddressInput}
                   onChange={e => setAbhaAddressInput(e.target.value)}
-                  className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-355 w-full focus:outline-none font-mono"
+                  className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-500 w-full focus:outline-none font-mono"
                 />
                 <button
                   onClick={handleLinkABHA}
@@ -230,7 +230,7 @@ export default function CitizenHealthExchangePage() {
               {(profile?.consents || []).map((c: any) => (
                 <div key={c.id} className="p-4 bg-white rounded-xl border border-slate-200 space-y-3 text-xs font-mono">
                   <div className="flex justify-between items-center">
-                    <span className="font-bold text-slate-205">{c.hospital}</span>
+                    <span className="font-bold text-slate-800">{c.hospital}</span>
                     <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${
                       c.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400' :
                       c.status === 'Pending' ? 'bg-amber-500/10 text-amber-400 animate-pulse' :
@@ -266,7 +266,7 @@ export default function CitizenHealthExchangePage() {
           {/* Interactive FHIR Bundle Viewer */}
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
             <div className="flex justify-between items-center border-b border-slate-200 pb-2.5">
-              <h3 className="text-sm font-bold text-slate-205 uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
                 <FileText className="w-4 h-4 text-indigo-400" />
                 HL7 FHIR Bundle Package
               </h3>
@@ -298,7 +298,7 @@ export default function CitizenHealthExchangePage() {
 
           {/* Sync timeline */}
           <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-            <h3 className="text-sm font-bold text-slate-205 uppercase tracking-wider border-b border-slate-200 pb-2">
+            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">
               Exchange Sync History Log
             </h3>
 

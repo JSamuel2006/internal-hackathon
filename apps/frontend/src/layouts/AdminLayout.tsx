@@ -95,13 +95,64 @@ export default function AdminLayout() {
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         <header className="h-16 bg-white border-b border-slate-200 px-4 md:px-8 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 cursor-pointer" aria-label="Toggle Menu">
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
             <h1 className="font-extrabold text-lg text-slate-900 tracking-tight">System Infrastructure Command</h1>
           </div>
-          <LanguageSelector />
+          <div className="hidden md:block">
+            <LanguageSelector />
+          </div>
         </header>
+
+        {/* Mobile Navigation Drawer Sheet */}
+        {mobileOpen && (
+          <div className="md:hidden z-50 bg-white border-b border-slate-200 p-6 flex flex-col gap-5 shadow-lg animate-in slide-in-from-top duration-200 font-sans">
+            <div className="p-3.5 rounded-2xl bg-[#EEF7FA] border border-emerald-100 shadow-2xs">
+              <span className="text-[10px] font-bold tracking-wider text-emerald-700 uppercase">Platform Root</span>
+              <p className="text-xs font-bold text-slate-900 truncate mt-0.5">{user.name}</p>
+            </div>
+
+            <nav className="flex flex-col gap-1.5">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setMobileOpen(false)}
+                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all ${
+                      isActive
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs'
+                        : 'text-slate-700 hover:bg-slate-50 border border-transparent'
+                    }`}
+                  >
+                    <span className="flex items-center gap-3">
+                      <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-600' : 'text-slate-400'}`} />
+                      <span>{item.name}</span>
+                    </span>
+                    {isActive && <ChevronRight className="w-4 h-4 text-emerald-600" />}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="pt-4 border-t border-slate-100 flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-500">Language</span>
+                <LanguageSelector />
+              </div>
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 transition-all cursor-pointer"
+              >
+                <LogOut className="w-4 h-4 text-rose-600" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        )}
 
         <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#F5FAFC]">
           <Outlet />

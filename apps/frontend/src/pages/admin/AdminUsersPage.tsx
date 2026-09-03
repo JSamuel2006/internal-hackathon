@@ -17,7 +17,7 @@ export default function AdminUsersPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold tracking-tight text-slate-900">User Directory</h2>
-            <p className="text-xs text-slate-455 mt-0.5">Manage credentials, federated roles, and security jurisdictions</p>
+            <p className="text-xs text-slate-600 mt-0.5">Manage credentials, federated roles, and security jurisdictions</p>
           </div>
         </div>
       </div>
