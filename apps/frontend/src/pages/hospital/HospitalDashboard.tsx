@@ -86,34 +86,34 @@ export default function HospitalDashboard() {
       {/* Hospital details layout */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {hospitals.map((h) => (
-          <div key={h.id} className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950/20 shadow-xl space-y-4">
-            <div className="flex justify-between items-start border-b border-slate-200 pb-2.5">
+          <div key={h.id} className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl space-y-4">
+            <div className="flex justify-between items-start border-b border-slate-100 pb-3">
               <div>
-                <h3 className="text-sm font-bold text-slate-205">{h.name}</h3>
-                <span className="text-[10px] text-slate-500 font-mono block mt-0.5">{h.address}</span>
+                <h3 className="text-base font-bold text-slate-900">{h.name}</h3>
+                <span className="text-xs text-slate-500 block mt-0.5">{h.address}</span>
               </div>
-              <span className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded font-mono font-bold uppercase">Online</span>
+              <span className="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wide">Online</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 text-xs font-mono text-center">
-              <div className="bg-white p-3 rounded-xl border border-slate-200">
-                <span className="text-slate-500 text-[9px] uppercase block">Bed Occupancy</span>
-                <strong className="text-lg font-bold text-amber-500 block mt-1">{h.bedOccupancy}%</strong>
+            <div className="grid grid-cols-2 gap-4 text-xs font-sans text-center">
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+                <span className="text-slate-500 text-[10px] uppercase font-bold tracking-wider block">Bed Occupancy</span>
+                <strong className="text-xl font-extrabold text-amber-600 block mt-1">{h.bedOccupancy}%</strong>
               </div>
-              <div className="bg-white p-3 rounded-xl border border-slate-200">
-                <span className="text-slate-500 text-[9px] uppercase block">Emergency Queue</span>
-                <strong className="text-lg font-bold text-rose-455 block mt-1">{h.emergencyQueue} patients</strong>
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+                <span className="text-slate-500 text-[10px] uppercase font-bold tracking-wider block">Emergency Queue</span>
+                <strong className="text-xl font-extrabold text-rose-600 block mt-1">{h.emergencyQueue} patients</strong>
               </div>
             </div>
 
             {/* Online doctor list */}
-            <div className="space-y-2">
-              <span className="text-[9px] text-slate-550 uppercase font-mono font-bold block">Assigned Doctors:</span>
-              <div className="space-y-1.5 text-[11px] font-mono">
+            <div className="space-y-2 pt-1">
+              <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block">Assigned Medical Officers:</span>
+              <div className="space-y-1.5 text-xs">
                 {doctors.filter(d => d.hospitalId === h.id).map(doc => (
-                  <div key={doc.id} className="flex justify-between p-2 bg-white rounded border border-slate-200/80 text-slate-600">
-                    <span>{doc.name} ({doc.specialty})</span>
-                    <span className="text-indigo-400">{doc.availability}</span>
+                  <div key={doc.id} className="flex flex-wrap justify-between items-center p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-slate-700">
+                    <span className="font-semibold text-slate-900">{doc.name} ({doc.specialty})</span>
+                    <span className="text-teal-700 font-bold text-xs">{doc.availability}</span>
                   </div>
                 ))}
               </div>
@@ -123,9 +123,9 @@ export default function HospitalDashboard() {
       </div>
 
       {/* LIS & PMS Analytics */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 font-mono text-xs">
-        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-          <h4 className="font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl space-y-4">
+          <h4 className="font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2 text-xs">
             Laboratory turnaround Time Trends (Mins)
           </h4>
           <div className="h-48">
@@ -137,18 +137,18 @@ export default function HospitalDashboard() {
                 { name: '15:00', time: 61 },
                 { name: '17:00', time: 30 }
               ]}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis dataKey="name" stroke="#64748b" fontSize={10} />
-                <YAxis stroke="#64748b" fontSize={10} />
-                <Tooltip contentStyle={{ backgroundColor: '#020617', borderColor: '#1e293b' }} />
-                <Area type="monotone" dataKey="time" stroke="#ec4899" fill="rgba(236,72,153,0.1)" strokeWidth={2} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                <XAxis dataKey="name" stroke="#64748B" fontSize={10} />
+                <YAxis stroke="#64748B" fontSize={10} />
+                <Tooltip contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#CBD5E1', borderRadius: '12px', color: '#0F172A' }} />
+                <Area type="monotone" dataKey="time" stroke="#0D9488" fill="rgba(13,148,136,0.1)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-          <h4 className="font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl space-y-4">
+          <h4 className="font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2 text-xs">
             Pharmacy Inventory stock Levels
           </h4>
           <div className="h-48">
@@ -159,11 +159,11 @@ export default function HospitalDashboard() {
                 { name: 'Metformin', qty: 85 },
                 { name: 'Ibuprofen', qty: 45 }
               ]}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis dataKey="name" stroke="#64748b" fontSize={10} />
-                <YAxis stroke="#64748b" fontSize={10} />
-                <Tooltip contentStyle={{ backgroundColor: '#020617', borderColor: '#1e293b' }} />
-                <Area type="monotone" dataKey="qty" stroke="#6366f1" fill="rgba(99,102,241,0.1)" strokeWidth={2} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                <XAxis dataKey="name" stroke="#64748B" fontSize={10} />
+                <YAxis stroke="#64748B" fontSize={10} />
+                <Tooltip contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#CBD5E1', borderRadius: '12px', color: '#0F172A' }} />
+                <Area type="monotone" dataKey="qty" stroke="#2563EB" fill="rgba(37,99,235,0.1)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>

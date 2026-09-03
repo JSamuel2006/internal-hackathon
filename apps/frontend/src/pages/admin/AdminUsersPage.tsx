@@ -22,10 +22,11 @@ export default function AdminUsersPage() {
         </div>
       </div>
 
-      <div className="bg-white border border-slate-200 shadow-sm rounded-2xl border border-slate-200 overflow-hidden">
+      {/* Desktop Table View (md and above) */}
+      <div className="hidden md:block bg-white border border-slate-200 shadow-sm rounded-2xl overflow-hidden">
         <table className="w-full text-left border-collapse text-xs">
           <thead>
-            <tr className="bg-white border-b border-slate-200 text-slate-500 font-mono uppercase">
+            <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-sans font-bold uppercase tracking-wider">
               <th className="p-4 font-semibold">User Details</th>
               <th className="p-4 font-semibold">Federated Role</th>
               <th className="p-4 font-semibold">Jurisdiction / Node</th>
@@ -33,42 +34,81 @@ export default function AdminUsersPage() {
               <th className="p-4 font-semibold text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-900">
+          <tbody className="divide-y divide-slate-100">
             {MOCK_USERS.map((user) => (
-              <tr key={user.id} className="hover:bg-white transition-colors">
+              <tr key={user.id} className="hover:bg-slate-50/50 transition-colors">
                 <td className="p-4">
-                  <span className="font-bold text-slate-800 block">{user.name}</span>
-                  <span className="text-[10px] text-slate-500 font-mono mt-0.5">{user.email}</span>
+                  <span className="font-bold text-slate-900 block">{user.name}</span>
+                  <span className="text-[11px] text-slate-500 font-mono mt-0.5">{user.email}</span>
                 </td>
                 <td className="p-4 font-mono text-[10px]">
-                  <span className={`px-2 py-0.5 rounded border ${
+                  <span className={`px-2.5 py-1 rounded-full font-bold border ${
                     user.role === 'ROLE_ADMIN'
-                      ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'
+                      ? 'bg-purple-50 text-purple-700 border-purple-200'
                       : user.role === 'ROLE_OFFICER'
-                      ? 'bg-teal-500/10 text-teal-400 border-teal-500/20'
-                      : 'bg-rose-500/10 text-rose-455 border-rose-500/20'
+                      ? 'bg-teal-50 text-teal-700 border-teal-200'
+                      : 'bg-slate-50 text-slate-700 border-slate-200'
                   }`}>
                     {user.role}
                   </span>
                 </td>
-                <td className="p-4 text-slate-350">{user.jurisdiction}</td>
+                <td className="p-4 text-slate-700 font-medium">{user.jurisdiction}</td>
                 <td className="p-4">
-                  <span className="text-[10px] font-mono text-emerald-450 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 uppercase tracking-wide">
                     {user.status}
                   </span>
                 </td>
                 <td className="p-4 text-right space-x-2">
-                  <button className="p-1.5 bg-white border border-slate-200 hover:border-slate-200 text-slate-600 hover:text-white rounded">
-                    <Edit2 className="w-3.5 h-3.5" />
+                  <button className="p-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl transition-colors cursor-pointer" title="Edit user">
+                    <Edit2 className="w-4 h-4" />
                   </button>
-                  <button className="p-1.5 bg-white border border-slate-855 hover:border-rose-500/30 text-slate-600 hover:text-rose-400 rounded">
-                    <Trash2 className="w-3.5 h-3.5" />
+                  <button className="p-2 bg-white border border-rose-200 hover:bg-rose-50 text-rose-600 rounded-xl transition-colors cursor-pointer" title="Delete user">
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Stacked Card View (below md) */}
+      <div className="md:hidden space-y-4">
+        {MOCK_USERS.map((user) => (
+          <div key={user.id} className="bg-white border border-slate-200 shadow-sm p-4 rounded-2xl space-y-3">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="font-bold text-slate-900 text-sm">{user.name}</h3>
+                <span className="text-xs text-slate-500 font-mono block mt-0.5">{user.email}</span>
+              </div>
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 uppercase">
+                {user.status}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-slate-100">
+              <div>
+                <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block">Role</span>
+                <span className="font-mono text-[10px] font-bold text-teal-700">{user.role}</span>
+              </div>
+              <div>
+                <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block">Jurisdiction</span>
+                <span className="text-slate-800 font-medium">{user.jurisdiction}</span>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+              <button className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl" title="Edit user">
+                <Edit2 className="w-3.5 h-3.5" />
+                <span>Edit</span>
+              </button>
+              <button className="flex items-center gap-1.5 px-3 py-2 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold rounded-xl" title="Delete user">
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Delete</span>
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

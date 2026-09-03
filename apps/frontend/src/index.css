@@ -2,123 +2,97 @@
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 174 86% 41%; /* Tealy/cyan */
-    --primary-foreground: 144 20% 98%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 263.4 70% 50.4%; /* Cyber Purple */
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
+    --background: 204 45% 97%; /* #F5FAFC Clean Healthcare Light */
+    --foreground: 222 47% 11%; /* #0F172A Slate 900 */
+    --card: 0 0% 100%; /* White cards */
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 174 86% 41%; /* Tealy/cyan #0D9488 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 174 86% 41%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 346 84% 61%; /* Emergency Rose */
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 91%; /* Slate 200 */
+    --input: 214 32% 91%;
     --ring: 174 86% 41%;
-    --radius: 0.75rem;
+    --radius: 0.875rem;
   }
 }
 
-/* Premium Custom Styles */
+/* Professional White Healthcare Foundation */
 body {
   margin: 0;
   padding: 0;
-  background-color: #030712;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(20, 184, 166, 0.07) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(59, 130, 246, 0.06) 0px, transparent 50%);
-  background-attachment: fixed;
-  color: #f3f4f6;
+  background-color: #F5FAFC;
+  color: #0F172A;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #root {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 
-/* Glassmorphism Card Style */
+/* Healthcare White Card Style */
 .glass-panel {
-  background: rgba(17, 24, 39, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
 }
 
 .glass-panel:hover {
-  border-color: rgba(20, 184, 166, 0.2);
-  box-shadow: 0 12px 40px 0 rgba(20, 184, 166, 0.05);
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
 }
 
-/* Scrollbar styling */
+/* Clean Healthcare Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(17, 24, 39, 0.5);
+  background: #F1F5F9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(20, 184, 166, 0.3);
+  background: #CBD5E1;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(20, 184, 166, 0.5);
+  background: #94A3B8;
 }
 
-/* Custom animations */
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.5;
-    filter: drop-shadow(0 0 5px rgba(20, 184, 166, 0.5));
-  }
-  50% {
-    opacity: 1;
-    filter: drop-shadow(0 0 15px rgba(20, 184, 166, 0.8));
-  }
-}
-
-.glow-pill {
-  animation: pulse-glow 3s infinite;
-}
-
-/* Leaflet Container Defaults */
+/* Clean Map Defaults */
 .leaflet-container {
   height: 100%;
   width: 100%;
   border-radius: 0.75rem;
-  background-color: #0b0f19 !important;
-}
-
-.leaflet-tile {
-  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+  background-color: #F8FAFC !important;
 }
 
 .leaflet-bar {
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  background: rgba(17, 24, 39, 0.8) !important;
+  border: 1px solid #E2E8F0 !important;
+  background: #FFFFFF !important;
 }
 
 .leaflet-bar a {
-  background: rgba(17, 24, 39, 0.8) !important;
-  color: #f3f4f6 !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border-bottom: 1px solid #E2E8F0 !important;
 }
 
 .leaflet-bar a:hover {
-  background: rgba(20, 184, 166, 0.2) !important;
+  background: #F1F5F9 !important;
 }

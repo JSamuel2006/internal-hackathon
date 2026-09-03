@@ -182,35 +182,38 @@ export default function CitizenHospitalsPage() {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
-      <div className="flex items-center gap-3">
-        <div className="p-2 bg-rose-500/10 rounded-lg text-rose-455 border border-rose-500/20">
-          <MapPin className="w-5 h-5 glow-pill" />
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 bg-rose-50 rounded-xl text-rose-600 border border-rose-200">
+            <MapPin className="w-5 h-5 glow-pill" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold tracking-tight text-slate-900">Healthcare Locator</h2>
+            <p className="text-xs text-slate-500 mt-0.5">Find nearby government hospitals, PHCs, and immunization points</p>
+          </div>
         </div>
-        <div className="flex-1">
-          <h2 className="text-xl font-bold tracking-tight text-slate-900">Healthcare Locator</h2>
-          <p className="text-xs text-slate-455 mt-0.5">Find nearby government hospitals, PHCs, and immunization points</p>
-        </div>
+
         {/* Location bar */}
-        <div className="flex items-center gap-2 text-xs font-mono">
+        <div className="flex items-center gap-2 text-xs font-sans">
           {locating ? (
-            <span className="text-amber-400 flex items-center gap-1.5 animate-pulse">
+            <span className="text-amber-600 font-bold flex items-center gap-1.5 animate-pulse bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200">
               <LocateFixed className="w-3.5 h-3.5" />
               Locating…
             </span>
           ) : userLat ? (
-            <span className="text-emerald-400 flex items-center gap-1.5">
+            <span className="text-teal-700 font-bold flex items-center gap-1.5 bg-teal-50 px-3 py-1.5 rounded-xl border border-teal-200">
               <LocateFixed className="w-3.5 h-3.5" />
               {cityLabel}
             </span>
           ) : (
-            <span className="text-slate-500 flex items-center gap-1.5">
+            <span className="text-slate-500 flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
               <MapPin className="w-3.5 h-3.5" />
               No location
             </span>
           )}
           <button
             onClick={requestLocation}
-            className="p-1.5 rounded-lg bg-white border border-slate-200 hover:bg-rose-500/10 hover:text-rose-400 transition-colors"
+            className="p-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer"
             title="Refresh location"
           >
             <RefreshCw className="w-3.5 h-3.5" />

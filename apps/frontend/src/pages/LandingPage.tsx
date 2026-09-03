@@ -207,7 +207,7 @@ export default function LandingPage() {
             {t('strip_eyebrow')}
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             <div className="p-5 rounded-2xl bg-[#F5FAFC] border border-teal-50/80 text-center space-y-2">
               <Bot className="w-6 h-6 text-teal-600 mx-auto" />
               <h4 className="font-bold text-sm text-slate-800">{t('strip_ai_title')}</h4>

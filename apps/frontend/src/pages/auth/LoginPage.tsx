@@ -271,7 +271,7 @@ export default function LoginPage() {
               <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
                 {t('auth_select_role')}
               </label>
-              <div className="grid grid-cols-5 gap-1.5 p-1.5 bg-[#F5FAFC] rounded-2xl border border-slate-200/80">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 p-1.5 bg-[#F5FAFC] rounded-2xl border border-slate-200/80">
                 {[
                   { id: 'ROLE_CITIZEN', name: 'Citizen', icon: User, color: 'text-teal-600' },
                   { id: 'ROLE_DOCTOR', name: 'Doctor', icon: Stethoscope, color: 'text-teal-600' },

@@ -240,8 +240,92 @@ export default function CitizenAssistantPage() {
     s.title?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const [mobileDrawer, setMobileDrawer] = useState<'none' | 'history' | 'context'>('none');
+
   return (
-    <div className="flex flex-col lg:flex-row h-auto lg:h-[calc(100vh-140px)] gap-6 max-w-7xl mx-auto px-4 min-w-0">
+    <div className="flex flex-col lg:flex-row h-auto lg:h-[calc(100dvh-140px)] gap-6 max-w-7xl mx-auto px-4 min-w-0">
+      
+      {/* Mobile Top Toolbar (< lg) */}
+      <div className="lg:hidden flex flex-wrap items-center justify-between gap-2 p-3 bg-white border border-slate-200 rounded-2xl shadow-xs">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setMobileDrawer(mobileDrawer === 'history' ? 'none' : 'history')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 border transition-all ${
+              mobileDrawer === 'history' ? 'bg-rose-50 border-rose-200 text-rose-700' : 'bg-slate-50 border-slate-200 text-slate-700'
+            }`}
+          >
+            <MessageCircle className="w-3.5 h-3.5" />
+            <span>Conversations ({sessions.length})</span>
+          </button>
+
+          <button
+            onClick={() => setMobileDrawer(mobileDrawer === 'context' ? 'none' : 'context')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 border transition-all ${
+              mobileDrawer === 'context' ? 'bg-teal-50 border-teal-200 text-teal-700' : 'bg-slate-50 border-slate-200 text-slate-700'
+            }`}
+          >
+            <Eye className="w-3.5 h-3.5" />
+            <span>Patient Context</span>
+          </button>
+        </div>
+
+        <select
+          value={languageCode}
+          onChange={(e) => handleLanguageChange(e.target.value)}
+          className="bg-slate-50 border border-slate-200 text-slate-700 font-bold px-2.5 py-1.5 rounded-xl text-xs focus:outline-none"
+        >
+          {LANGUAGES.map((lang) => (
+            <option key={lang.code} value={lang.code}>
+              {lang.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Mobile History Drawer Sheet */}
+      {mobileDrawer === 'history' && (
+        <div className="lg:hidden p-4 bg-white border border-slate-200 rounded-2xl shadow-md space-y-3">
+          <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+            <span className="font-bold text-xs text-slate-900 uppercase">Conversations History</span>
+            <button onClick={() => setMobileDrawer('none')} className="text-slate-400 font-bold text-xs">Close</button>
+          </div>
+          <button
+            onClick={() => { createNewSession(); setMobileDrawer('none'); }}
+            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-xs"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Conversation</span>
+          </button>
+          <div className="space-y-1 max-h-48 overflow-y-auto">
+            {filteredSessions.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => { selectSession(s.id); setMobileDrawer('none'); }}
+                className={`w-full p-2.5 rounded-xl text-xs font-medium text-left truncate flex items-center gap-2 ${
+                  currentSessionId === s.id ? 'bg-teal-50 text-teal-800 font-bold' : 'text-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                <MessageCircle className="w-3.5 h-3.5 shrink-0 text-slate-400" />
+                <span className="truncate">{s.title || `Session ${s.id.slice(-4)}`}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Patient Context Drawer Sheet */}
+      {mobileDrawer === 'context' && (
+        <div className="lg:hidden p-4 bg-white border border-slate-200 rounded-2xl shadow-md space-y-3 text-xs">
+          <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+            <span className="font-bold text-xs text-slate-900 uppercase">Active Patient Record Context</span>
+            <button onClick={() => setMobileDrawer('none')} className="text-slate-400 font-bold text-xs">Close</button>
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-slate-700">
+            <div><span className="text-[10px] text-rose-600 font-bold block">Allergies</span>{patientContext.allergies.join(', ')}</div>
+            <div><span className="text-[10px] text-teal-600 font-bold block">Chronic</span>{patientContext.chronicDiseases.join(', ')}</div>
+          </div>
+        </div>
+      )}
       {/* Session sidebar */}
       <div className="hidden lg:flex flex-col w-full lg:w-64 bg-white border border-slate-200 shadow-sm rounded-2xl border border-slate-200 shrink-0 p-4 justify-between bg-white">
         <div className="flex flex-col gap-4 overflow-y-auto">

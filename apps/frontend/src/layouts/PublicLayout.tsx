@@ -129,8 +129,8 @@ export default function PublicLayout() {
 
       {/* ── Mobile Navigation Drawer ─────────────────────────────────── */}
       {menuOpen && (
-        <div className="lg:hidden fixed inset-0 top-[105px] z-40 bg-white/98 backdrop-blur-xl flex flex-col p-6 gap-6 border-t border-slate-100 overflow-y-auto">
-          <div className="flex flex-col gap-4">
+        <div className="lg:hidden z-40 bg-white border-b border-slate-200 p-6 flex flex-col gap-4 shadow-lg animate-in slide-in-from-top duration-200">
+          <div className="flex flex-col gap-3">
             {navItems.map((item) => (
               <a
                 key={item.path}
@@ -143,8 +143,8 @@ export default function PublicLayout() {
                     setMenuOpen(false);
                   }
                 }}
-                className={`text-base font-bold tracking-wider py-2.5 border-b border-slate-100 ${
-                  location.pathname === item.path ? 'text-teal-600' : 'text-slate-700'
+                className={`py-2 text-base font-semibold transition-colors ${
+                  location.pathname === item.path ? 'text-teal-600 font-bold' : 'text-slate-700 hover:text-teal-600'
                 }`}
               >
                 {item.name}
@@ -152,20 +152,22 @@ export default function PublicLayout() {
             ))}
           </div>
 
-          <div className="flex flex-col gap-3 pt-4 border-t border-slate-100">
+          <div className="flex flex-col gap-2 pt-4 border-t border-slate-100">
             <Link
               to="/login"
               onClick={() => setMenuOpen(false)}
-              className="w-full text-center py-3 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm"
+              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-semibold text-slate-700 bg-slate-50 border border-slate-200"
             >
-              {t('nav_sign_in')}
+              <LogIn className="w-4 h-4 text-slate-500" />
+              <span>{t('nav_sign_in')}</span>
             </Link>
             <Link
               to="/signup"
               onClick={() => setMenuOpen(false)}
-              className="w-full text-center py-3 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-bold uppercase text-sm shadow-md shadow-teal-500/20"
+              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold bg-teal-600 text-white shadow-xs"
             >
-              {t('nav_sign_up')}
+              <UserCheck className="w-4 h-4" />
+              <span>{t('nav_sign_up')}</span>
             </Link>
           </div>
         </div>
