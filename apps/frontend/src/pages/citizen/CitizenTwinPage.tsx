@@ -338,42 +338,42 @@ export default function CitizenTwinPage() {
 
           {/* Top Level Gauges */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 to-slate-950 flex flex-col justify-between relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/5 rounded-full blur-xl"></div>
-              <span className="text-[10px] text-slate-500 block uppercase font-mono tracking-wider">Overall Health Score</span>
+            <div className="bg-white border border-slate-200 shadow-xs p-5 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-teal-500/5 rounded-full blur-xl"></div>
+              <span className="text-xs font-semibold text-slate-600 block uppercase tracking-wider">Overall Health Score</span>
               <div className="my-3 flex items-baseline gap-2">
-                <span className="text-4xl font-extrabold text-slate-800 font-mono tracking-tight">{twinData?.overallHealthScore || 85}</span>
-                <span className="text-xs text-rose-400 font-mono font-bold">%</span>
+                <span className="text-4xl font-bold text-slate-900 tracking-tight">{twinData?.overallHealthScore || 85}</span>
+                <span className="text-xs text-teal-600 font-bold">%</span>
               </div>
-              <div className="w-full bg-white h-1.5 rounded-full overflow-hidden">
-                <div className="bg-gradient-to-r from-rose-500 to-emerald-500 h-full" style={{ width: `${twinData?.overallHealthScore || 85}%` }}></div>
+              <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div className="bg-teal-600 h-full rounded-full transition-all duration-500" style={{ width: `${twinData?.overallHealthScore || 85}%` }}></div>
               </div>
             </div>
 
-            <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
-              <span className="text-[10px] text-slate-500 block uppercase font-mono tracking-wider">Current Health Status</span>
-              <span className="text-xl font-bold text-teal-400 my-3 block font-mono">
+            <div className="bg-white border border-slate-200 shadow-xs p-5 rounded-2xl flex flex-col justify-between">
+              <span className="text-xs font-semibold text-slate-600 block uppercase tracking-wider">Current Health Status</span>
+              <span className="text-xl font-bold text-teal-600 my-3 block">
                 {twinData?.currentHealthStatus || 'Stable / Optimal'}
               </span>
-              <p className="text-[9px] text-slate-600 font-mono">Based on active clinical records</p>
+              <p className="text-xs text-slate-500">Based on active clinical records</p>
             </div>
 
-            <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
-              <span className="text-[10px] text-slate-500 block uppercase font-mono tracking-wider">AI Prognosis Confidence</span>
+            <div className="bg-white border border-slate-200 shadow-xs p-5 rounded-2xl flex flex-col justify-between">
+              <span className="text-xs font-semibold text-slate-600 block uppercase tracking-wider">AI Prognosis Confidence</span>
               <div className="my-3 flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-emerald-400 font-mono">{twinData?.confidenceScore || 90}</span>
-                <span className="text-xs text-emerald-400 font-mono">%</span>
+                <span className="text-2xl font-bold text-teal-600">{twinData?.confidenceScore || 90}</span>
+                <span className="text-xs text-teal-600 font-bold">%</span>
               </div>
-              <p className="text-[9px] text-slate-600 font-mono truncate">{twinData?.confidenceReason || 'Dataset completeness verified'}</p>
+              <p className="text-xs text-slate-500 truncate">{twinData?.confidenceReason || 'Dataset completeness verified'}</p>
             </div>
 
-            <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
-              <span className="text-[10px] text-slate-500 block uppercase font-mono tracking-wider">Recovery Stability</span>
+            <div className="bg-white border border-slate-200 shadow-xs p-5 rounded-2xl flex flex-col justify-between">
+              <span className="text-xs font-semibold text-slate-600 block uppercase tracking-wider">Recovery Stability</span>
               <div className="my-3 flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-amber-500 font-mono">{twinData?.recoveryProgress || 80}</span>
-                <span className="text-xs text-slate-500 font-mono">%</span>
+                <span className="text-2xl font-bold text-amber-600">{twinData?.recoveryProgress || 80}</span>
+                <span className="text-xs text-slate-500 font-bold">%</span>
               </div>
-              <p className="text-[9px] text-slate-600 font-mono">Simulated target: 100%</p>
+              <p className="text-xs text-slate-500">Simulated target: 100%</p>
             </div>
           </div>
 
@@ -484,16 +484,17 @@ export default function CitizenTwinPage() {
 
             {/* Right Panel (4 cols) */}
             <div className="lg:col-span-4 space-y-6">
-              <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-gradient-to-b from-slate-900 to-slate-950 space-y-4">
-                <h3 className="text-xs font-bold text-slate-350 uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center gap-1.5">
-                  <Brain className="w-4 h-4 text-rose-400" />
+              <div className="bg-white border border-slate-200 shadow-xs p-5 rounded-2xl space-y-4">
+                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider border-b border-slate-200 pb-3 flex items-center gap-2">
+                  <Brain className="w-4.5 h-4.5 text-teal-600" />
                   AI Prognosis Summary
                 </h3>
-                <p className="text-xs text-slate-700 leading-relaxed font-mono">
+                <div className="p-4 rounded-2xl bg-[#EEF7FA] border border-[#CCFBF1] text-[#334155] text-xs leading-relaxed font-sans font-medium">
                   {twinData?.aiSummary || 'No diagnostic health summaries have been generated.'}
-                </p>
-                <div className="text-[9px] text-slate-500 italic border-t border-slate-200 pt-2 text-center">
-                  ⚠️ This prediction is AI-assisted and not a confirmed diagnosis.
+                </div>
+                <div className="p-3 rounded-2xl bg-[#FFFBEB] border border-[#FDE68A] text-[#92400E] text-[11px] font-sans font-semibold text-center flex items-center justify-center gap-1.5">
+                  <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                  <span>This prediction is AI-assisted and not a confirmed diagnosis.</span>
                 </div>
               </div>
 

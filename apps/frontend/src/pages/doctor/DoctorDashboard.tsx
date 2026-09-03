@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   HeartPulse, ShieldAlert, CheckCircle2, AlertCircle, RefreshCw, Send, ShieldCheck, Stethoscope, Star, Check, Plus,
-  LayoutDashboard, MessageSquare, History, User, LogOut, Clock, Activity, ClipboardList
+  LayoutDashboard, MessageSquare, History, User, LogOut, Clock, Activity, ClipboardList, ChevronRight
 } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { emergencyNetworkService, doctorApiService, authService, workerService } from '../../services/api';
 import { socketService } from '../../services/socketService';
+import { LanguageSelector } from '../../components/voice/LanguageSelector';
 
 interface DoctorProfile {
   id: string;
@@ -39,6 +40,12 @@ export default function DoctorDashboard() {
   const [replyInput, setReplyInput] = useState('');
   const [aiSummary, setAiSummary] = useState<string>('');
   const [ashaScreenings, setAshaScreenings] = useState<any[]>([]);
+  const [doctorChatLang, setDoctorChatLang] = useState<string>('en');
+  const [showOriginalMap, setShowOriginalMap] = useState<Record<string, boolean>>({});
+
+  const toggleShowOriginal = (msgId: string) => {
+    setShowOriginalMap((prev) => ({ ...prev, [msgId]: !prev[msgId] }));
+  };
 
   // Elapsed Timer state for active consultation
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -221,6 +228,60 @@ export default function DoctorDashboard() {
     };
   }, [selectedRequest, doctor]);
 
+  // Dynamic Translation Resolver: fetches missing target language translations for existing messages when doctorChatLang changes
+  useEffect(() => {
+    if (!selectedRequest || messages.length === 0) return;
+
+    messages.forEach(async (m) => {
+      if (m.senderRole === 'SYSTEM') return;
+      const origLang = (m.originalLanguage || 'en').toLowerCase().substring(0, 2);
+      const targetLang = doctorChatLang.toLowerCase().substring(0, 2);
+
+      if (origLang === targetLang) return; // Original language matches target
+      if (m.translations && m.translations[targetLang]) return; // Already cached locally
+
+      try {
+        const res = await emergencyNetworkService.translateChatMessage(selectedRequest.requestId, m.id, targetLang);
+        if (res && res.success && res.data) {
+          setMessages((prev) =>
+            prev.map((msg) => {
+              if (msg.id !== m.id) return msg;
+              const updatedTranslations = { ...(msg.translations || {}), [targetLang]: res.data.translatedText };
+              return {
+                ...msg,
+                translations: updatedTranslations,
+              };
+            })
+          );
+        }
+      } catch (err) {
+        console.warn(`Translation fetch failed for message ${m.id}:`, err);
+      }
+    });
+  }, [doctorChatLang, selectedRequest, messages.length]);
+
+  // Helper to determine exact text to render for a message based on doctorChatLang
+  const getDisplayText = (m: any) => {
+    if (m.senderRole === 'SYSTEM') return m.message;
+    const showOriginal = showOriginalMap[m.id];
+    const origText = m.originalText || m.message;
+    const origLang = (m.originalLanguage || 'en').toLowerCase().substring(0, 2);
+    const targetLang = doctorChatLang.toLowerCase().substring(0, 2);
+
+    if (showOriginal) return { text: origText, isOriginal: true, label: `Original • ${origLang.toUpperCase()}` };
+    if (origLang === targetLang) return { text: origText, isOriginal: true, label: `Original • ${origLang.toUpperCase()}` };
+
+    if (m.translations && m.translations[targetLang]) {
+      return { text: m.translations[targetLang], isOriginal: false, label: `Translated from ${origLang.toUpperCase()}` };
+    }
+
+    if (m.translatedLanguage && m.translatedLanguage.toLowerCase().substring(0, 2) === targetLang) {
+      return { text: m.translatedText || m.message, isOriginal: false, label: `Translated from ${origLang.toUpperCase()}` };
+    }
+
+    return { text: origText, isOriginal: true, label: `Original • ${origLang.toUpperCase()}` };
+  };
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -296,7 +357,7 @@ export default function DoctorDashboard() {
     if (!replyInput.trim() || !selectedRequest) return;
 
     try {
-      const res = await emergencyNetworkService.sendChatMessage(selectedRequest.requestId, replyInput);
+      const res = await emergencyNetworkService.sendChatMessage(selectedRequest.requestId, replyInput, { doctorLanguage: doctorChatLang });
       if (res.success) {
         setMessages((prev) => [...prev, res.data]);
         setReplyInput('');
@@ -347,720 +408,802 @@ export default function DoctorDashboard() {
     return `${mins}:${secs}`;
   };
 
-  // Color mapping helpers
+  // Color mapping helpers matching Citizen Portal standards
   const availStatusColors = {
-    AVAILABLE: { text: 'text-emerald-400', label: '🟢 AVAILABLE', desc: 'Ready to accept patients' },
-    ONLINE: { text: 'text-emerald-400', label: '🟢 AVAILABLE', desc: 'Ready to accept patients' },
-    BUSY: { text: 'text-amber-400', label: '🟠 BUSY', desc: 'Not accepting new emergency requests' },
-    IN_CONSULTATION: { text: 'text-rose-500', label: '🔴 IN CONSULTATION', desc: 'Currently attending a patient' },
-    OFFLINE: { text: 'text-slate-600', label: '⚫ OFFLINE', desc: 'Not available for emergency requests' }
+    AVAILABLE: { text: 'text-emerald-700 font-bold', label: '🟢 AVAILABLE', desc: 'Ready to accept patients' },
+    ONLINE: { text: 'text-emerald-700 font-bold', label: '🟢 AVAILABLE', desc: 'Ready to accept patients' },
+    BUSY: { text: 'text-amber-700 font-bold', label: '🟠 BUSY', desc: 'Not accepting new emergency requests' },
+    IN_CONSULTATION: { text: 'text-rose-700 font-bold', label: '🔴 IN CONSULTATION', desc: 'Currently attending a patient' },
+    OFFLINE: { text: 'text-slate-500 font-bold', label: '⚫ OFFLINE', desc: 'Not available for emergency requests' }
   };
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-900 font-mono text-xs flex">
-      {/* Sidebar Panel */}
-      <aside className="w-64 border-r border-slate-200 bg-white p-6 flex flex-col justify-between shrink-0 select-none">
-        <div className="space-y-6">
-          <div className="flex items-center gap-2 pb-4 border-b border-slate-200">
-            <HeartPulse className="w-6 h-6 text-rose-500 animate-pulse" />
+    <div className="h-screen bg-[#F5FAFC] text-slate-800 flex flex-col md:flex-row overflow-hidden font-sans selection:bg-teal-500 selection:text-white">
+      
+      {/* Sidebar Panel (White Healthcare Design) */}
+      <aside className="hidden md:flex flex-col w-72 h-full border-r border-slate-200 bg-white p-5 justify-between shrink-0 overflow-hidden shadow-xs select-none">
+        <div className="flex flex-col gap-4 overflow-y-auto flex-1 pr-1">
+          
+          {/* Logo Branding */}
+          <div className="flex items-center gap-3 px-2 py-1">
+            <div className="p-2.5 bg-gradient-to-tr from-teal-500 to-cyan-500 rounded-xl text-white shadow-md shadow-teal-500/20">
+              <Stethoscope className="w-5 h-5" />
+            </div>
             <div>
-              <span className="font-bold text-sm tracking-wide text-slate-800">ArogyaMitra</span>
-              <span className="text-[9px] block text-rose-500 uppercase tracking-widest font-bold">DOCTOR PORTAL</span>
+              <span className="font-extrabold text-xl tracking-tight text-slate-900">
+                Arogya<span className="text-teal-600">Mitra</span>
+              </span>
+              <span className="text-[10px] block text-teal-700 font-bold uppercase tracking-wider font-sans -mt-1">
+                Doctor Care Portal
+              </span>
             </div>
           </div>
 
+          {/* Practitioner Identity Card */}
           {doctor && (
-            <div className="py-2 border-b border-slate-200">
-              <span className="text-slate-800 font-bold block text-[11px]">{doctor.name}</span>
-              <span className="text-slate-500 text-[9px] block uppercase">{doctor.specialty}</span>
+            <div className="p-3.5 rounded-2xl bg-[#EEF7FA] border border-teal-100 shadow-2xs">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-bold tracking-wider text-teal-700 uppercase font-sans">Medical Practitioner</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-teal-600" />
+              </div>
+              <p className="text-xs font-bold text-slate-900 truncate font-sans">{doctor.name}</p>
+              <p className="text-[10px] font-sans font-semibold text-slate-500 mt-0.5">{doctor.specialty}</p>
             </div>
           )}
 
           {/* MAIN Section */}
           <div className="space-y-1">
-            <span className="text-[9px] uppercase tracking-widest text-slate-600 font-bold block mb-1">MAIN</span>
+            <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase font-sans px-3 block">
+              MAIN
+            </span>
             <button
               onClick={() => setSearchParams({ tab: 'dashboard' })}
-              className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center gap-2 ${
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all font-sans ${
                 activeTab === 'dashboard'
-                  ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                  : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-white'
+                  ? 'bg-teal-50 text-teal-700 font-bold border border-teal-200/80 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-teal-50/50 border border-transparent'
               }`}
             >
-              <LayoutDashboard className="w-3.5 h-3.5" />
-              <span>Dashboard</span>
+              <div className="flex items-center gap-2.5">
+                <LayoutDashboard className={`w-4 h-4 ${activeTab === 'dashboard' ? 'text-teal-600' : 'text-slate-400'}`} />
+                <span>Dashboard</span>
+              </div>
+              {activeTab === 'dashboard' && <ChevronRight className="w-3.5 h-3.5 text-teal-600" />}
             </button>
           </div>
 
           {/* EMERGENCY CARE Section */}
           <div className="space-y-1">
-            <span className="text-[9px] uppercase tracking-widest text-slate-600 font-bold block mb-1">EMERGENCY CARE</span>
+            <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase font-sans px-3 block">
+              EMERGENCY CARE
+            </span>
             <button
               onClick={() => setSearchParams({ tab: 'emergency' })}
-              className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center justify-between ${
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all font-sans ${
                 activeTab === 'emergency'
-                  ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                  : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-white'
+                  ? 'bg-teal-50 text-teal-700 font-bold border border-teal-200/80 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-teal-50/50 border border-transparent'
               }`}
             >
-              <div className="flex items-center gap-2">
-                <ShieldAlert className="w-3.5 h-3.5" />
+              <div className="flex items-center gap-2.5">
+                <ShieldAlert className={`w-4 h-4 ${activeTab === 'emergency' ? 'text-teal-600' : 'text-slate-400'}`} />
                 <span>Emergency Requests</span>
               </div>
-              {emergencyRequests.filter(r => r.status === 'REQUESTED').length > 0 && (
-                <span className="bg-rose-500 text-slate-950 px-1.5 py-0.5 rounded text-[8px] font-extrabold animate-pulse">
+              {emergencyRequests.filter(r => r.status === 'REQUESTED').length > 0 ? (
+                <span className="bg-rose-600 text-white px-2 py-0.5 rounded-full text-[9px] font-bold animate-pulse">
                   {emergencyRequests.filter(r => r.status === 'REQUESTED').length}
                 </span>
+              ) : (
+                activeTab === 'emergency' && <ChevronRight className="w-3.5 h-3.5 text-teal-600" />
               )}
             </button>
 
             <button
               onClick={() => setSearchParams({ tab: 'chats' })}
-              className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center justify-between ${
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all font-sans ${
                 activeTab === 'chats'
-                  ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                  : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-white'
+                  ? 'bg-teal-50 text-teal-700 font-bold border border-teal-200/80 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-teal-50/50 border border-transparent'
               }`}
             >
-              <div className="flex items-center gap-2">
-                <MessageSquare className="w-3.5 h-3.5" />
-                <span>Active Chats</span>
+              <div className="flex items-center gap-2.5">
+                <MessageSquare className={`w-4 h-4 ${activeTab === 'chats' ? 'text-teal-600' : 'text-slate-400'}`} />
+                <span>Active Consultation</span>
               </div>
-              {availability === 'IN_CONSULTATION' && (
-                <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+              {availability === 'IN_CONSULTATION' ? (
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
+              ) : (
+                activeTab === 'chats' && <ChevronRight className="w-3.5 h-3.5 text-teal-600" />
               )}
             </button>
           </div>
 
           {/* RECORDS Section */}
           <div className="space-y-1">
-            <span className="text-[9px] uppercase tracking-widest text-slate-600 font-bold block mb-1">RECORDS</span>
+            <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase font-sans px-3 block">
+              RECORDS & SCREENINGS
+            </span>
             {selectedRequest && (
               <button
                 onClick={() => setSearchParams({ tab: 'screenings' })}
-                className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center gap-2 ${
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all font-sans ${
                   activeTab === 'screenings'
-                    ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                    : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-white'
+                    ? 'bg-teal-50 text-teal-700 font-bold border border-teal-200/80 shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-teal-50/50 border border-transparent'
                 }`}
               >
-                <ClipboardList className="w-3.5 h-3.5" />
-                <span>ASHA Screenings</span>
+                <div className="flex items-center gap-2.5">
+                  <ClipboardList className={`w-4 h-4 ${activeTab === 'screenings' ? 'text-teal-600' : 'text-slate-400'}`} />
+                  <span>ASHA Field Screenings</span>
+                </div>
+                {activeTab === 'screenings' && <ChevronRight className="w-3.5 h-3.5 text-teal-600" />}
               </button>
             )}
 
             <button
               onClick={() => setSearchParams({ tab: 'history' })}
-              className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center gap-2 ${
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all font-sans ${
                 activeTab === 'history'
-                  ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                  : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-white'
+                  ? 'bg-teal-50 text-teal-700 font-bold border border-teal-200/80 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-teal-50/50 border border-transparent'
               }`}
             >
-              <History className="w-3.5 h-3.5" />
-              <span>History</span>
+              <div className="flex items-center gap-2.5">
+                <History className={`w-4 h-4 ${activeTab === 'history' ? 'text-teal-600' : 'text-slate-400'}`} />
+                <span>Consultation Archive</span>
+              </div>
+              {activeTab === 'history' && <ChevronRight className="w-3.5 h-3.5 text-teal-600" />}
             </button>
 
             <button
               onClick={() => setSearchParams({ tab: 'profile' })}
-              className={`w-full py-2 px-3 rounded-lg border text-left font-bold text-[10px] uppercase transition-all flex items-center gap-2 ${
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all font-sans ${
                 activeTab === 'profile'
-                  ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                  : 'border-transparent text-slate-600 hover:text-slate-800 hover:bg-white'
+                  ? 'bg-teal-50 text-teal-700 font-bold border border-teal-200/80 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-teal-50/50 border border-transparent'
               }`}
             >
-              <User className="w-3.5 h-3.5" />
-              <span>Profile</span>
+              <div className="flex items-center gap-2.5">
+                <User className={`w-4 h-4 ${activeTab === 'profile' ? 'text-teal-600' : 'text-slate-400'}`} />
+                <span>Practitioner Profile</span>
+              </div>
+              {activeTab === 'profile' && <ChevronRight className="w-3.5 h-3.5 text-teal-600" />}
             </button>
           </div>
 
           {/* MY AVAILABILITY Section */}
-          <div className="space-y-2 pt-2 border-t border-slate-200">
-            <span className="text-[9px] uppercase tracking-widest text-slate-600 font-bold block">MY AVAILABILITY</span>
+          <div className="space-y-2 pt-2 border-t border-slate-100">
+            <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase font-sans px-3 block">
+              MY AVAILABILITY
+            </span>
             <div className="flex flex-col gap-1">
               {(['AVAILABLE', 'BUSY', 'OFFLINE'] as const).map((status) => (
                 <button
                   key={status}
                   onClick={() => handleUpdateAvailability(status)}
                   disabled={availability === 'IN_CONSULTATION'}
-                  className={`w-full py-1.5 px-3 rounded-lg border text-left font-bold text-[9px] uppercase transition-all flex items-center justify-between ${
+                  className={`w-full px-3 py-2 rounded-xl text-xs font-semibold transition-all flex items-center justify-between font-sans ${
                     availability === status 
-                      ? 'bg-rose-500/10 border-rose-500/20 text-rose-400 font-extrabold' 
-                      : 'border-transparent text-slate-500 hover:text-slate-350 disabled:opacity-30'
+                      ? 'bg-teal-50 text-teal-800 font-bold border border-teal-200' 
+                      : 'text-slate-600 hover:bg-slate-50 border border-transparent disabled:opacity-40'
                   }`}
                 >
                   <span>{status}</span>
-                  <span className={`w-1.5 h-1.5 rounded-full ${
-                    status === 'AVAILABLE' ? 'bg-emerald-500' : status === 'BUSY' ? 'bg-amber-500' : 'bg-slate-500'
+                  <span className={`w-2 h-2 rounded-full ${
+                    status === 'AVAILABLE' ? 'bg-emerald-500' : status === 'BUSY' ? 'bg-amber-500' : 'bg-slate-400'
                   }`} />
                 </button>
               ))}
               {availability === 'IN_CONSULTATION' && (
-                <div className="py-1.5 px-3 rounded-lg border border-rose-500/20 bg-rose-500/5 text-rose-400 font-bold text-[9px] uppercase flex items-center justify-between">
+                <div className="px-3 py-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 font-bold text-xs flex items-center justify-between font-sans">
                   <span>IN CONSULTATION</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
                 </div>
               )}
             </div>
           </div>
 
-          {/* CURRENT STATUS Info */}
-          <div className="p-3 rounded-xl bg-white border border-slate-200 text-[10px]">
-            <span className="text-slate-550 block uppercase text-[8px] tracking-wider mb-1 font-bold">CURRENT STATUS</span>
-            <strong className={availStatusColors[availability].text}>{availStatusColors[availability].label}</strong>
-            <p className="text-slate-500 text-[9px] mt-0.5">{availStatusColors[availability].desc}</p>
+          {/* CURRENT STATUS Info Card */}
+          <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs font-sans">
+            <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase block mb-1">Current Status</span>
+            <strong className={`text-xs block ${availStatusColors[availability].text}`}>{availStatusColors[availability].label}</strong>
+            <p className="text-[11px] text-slate-500 mt-0.5">{availStatusColors[availability].desc}</p>
           </div>
 
-          {/* CURRENT CONSULTATION Section */}
+          {/* CURRENT CONSULTATION Active Badge */}
           {selectedRequest && (
-            <div className="p-3.5 rounded-xl bg-rose-500/5 border border-rose-500/10 text-[10px] space-y-2.5 animate-pulse">
+            <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs space-y-2.5 font-sans">
               <div>
-                <span className="text-[8px] text-rose-400 font-bold uppercase tracking-wider block">CURRENT CONSULTATION</span>
-                <span className="text-[9px] text-slate-500 font-mono block">ID: {selectedRequest.emergencyId.substring(0, 12)}...</span>
+                <span className="text-[10px] font-bold tracking-wider text-rose-700 uppercase block">Active Consultation</span>
+                <span className="text-[11px] font-mono text-slate-600 block mt-0.5">ID: {selectedRequest.emergencyId.substring(0, 12)}...</span>
               </div>
-              <div className="flex justify-between text-slate-350">
-                <span>Elapsed:</span>
-                <strong className="text-rose-400 flex items-center gap-1 font-bold">
-                  <Clock className="w-3 h-3 text-rose-500" />
+              <div className="flex justify-between items-center text-slate-600 text-[11px]">
+                <span>Elapsed Time:</span>
+                <strong className="text-rose-700 flex items-center gap-1 font-bold font-mono">
+                  <Clock className="w-3.5 h-3.5 text-rose-600" />
                   {formatTime(elapsedSeconds)}
                 </strong>
               </div>
               <button 
                 onClick={() => setSearchParams({ tab: 'chats' })}
-                className="w-full py-1.5 bg-rose-500 text-slate-950 font-bold rounded-lg text-[9px] uppercase hover:bg-rose-400"
+                className="w-full py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs uppercase tracking-wide transition-all shadow-xs cursor-pointer"
               >
-                OPEN CHAT
+                Open Workspace
               </button>
             </div>
           )}
         </div>
 
-        <button 
-          onClick={handleLogout}
-          className="w-full py-2 border border-slate-200 bg-white text-slate-500 hover:text-rose-455 hover:bg-rose-500/5 transition-all text-center rounded-xl font-bold uppercase tracking-wider text-[9px]"
-        >
-          Sign Out Portal
-        </button>
+        {/* Footer Language & Sign Out */}
+        <div className="pt-3 border-t border-slate-100 space-y-2.5 shrink-0">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-xs font-bold text-slate-600 font-sans">Language</span>
+            <LanguageSelector />
+          </div>
+
+          <button 
+            onClick={handleLogout}
+            className="w-full py-2.5 px-3 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 font-bold transition-all text-xs flex items-center justify-center gap-2 cursor-pointer font-sans shadow-2xs"
+          >
+            <LogOut className="w-4 h-4 text-slate-400 group-hover:text-rose-600" />
+            <span>Sign Out Doctor Portal</span>
+          </button>
+        </div>
       </aside>
 
-      {/* Main Workspace */}
-      <main className="flex-1 p-8 overflow-y-auto space-y-6">
+      {/* Main Content Canvas (Light Blue Healthcare System) */}
+      <main className="flex-1 overflow-y-auto flex flex-col min-w-0 bg-[#F5FAFC]">
         
-        {/* Dashboard Status Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
-          {doctor ? (
+        {/* Header Bar */}
+        <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shrink-0 shadow-2xs sticky top-0 z-10">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-teal-500/10 rounded-xl text-teal-600 border border-teal-500/20 md:hidden">
+              <Stethoscope className="w-5 h-5" />
+            </div>
             <div>
-              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                {doctor.name}
-                <span className="text-[9px] bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded font-mono uppercase font-bold">
-                  SIH Demo Doctor
-                </span>
-              </h2>
-              <p className="text-slate-500 mt-0.5">
-                {doctor.specialty} | Government General Hospital
+              {doctor ? (
+                <h1 className="text-base font-bold text-slate-900 flex items-center gap-2 font-sans">
+                  <span>{doctor.name}</span>
+                  <span className="text-[10px] bg-teal-50 text-teal-700 border border-teal-200/80 px-2 py-0.5 rounded-full font-bold uppercase">
+                    Primary Practitioner
+                  </span>
+                </h1>
+              ) : (
+                <h1 className="text-base font-bold text-slate-900 font-sans">Doctor Portal</h1>
+              )}
+              <p className="text-xs text-slate-500 mt-0.5 font-sans">
+                {doctor ? `${doctor.specialty} • Government General Hospital` : 'Healthcare Assistance Dashboard'}
               </p>
             </div>
-          ) : (
-            <p className="text-slate-500">Retrieving doctor profile...</p>
-          )}
+          </div>
 
-          <div className="flex flex-col lg:flex-row lg:items-end gap-3 text-right">
-            <div>
-              <span className="text-[9px] text-slate-550 block uppercase tracking-wider">Current Patient Status</span>
-              <strong className="text-slate-700">
-                {selectedRequest ? `Consulting ID: ${selectedRequest.emergencyId.substring(0, 8)}...` : 'None'}
-              </strong>
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:block text-right">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-sans">Active Patient Session</span>
+              <span className="text-xs font-mono font-bold text-slate-800">
+                {selectedRequest ? `ID: ${selectedRequest.emergencyId.substring(0, 10)}...` : 'None Active'}
+              </span>
             </div>
             <button
               onClick={syncDashboardData}
               disabled={loading}
-              className="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-800 text-slate-700 font-semibold rounded-xl text-[9px] uppercase flex items-center gap-2 transition-all"
+              className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer border border-slate-200 font-sans shadow-2xs"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-              <span>Sync Dashboard</span>
+              <span>Refresh Queue</span>
             </button>
           </div>
-        </div>
+        </header>
 
-        {/* Global Safety Alert Banner */}
-        <div className="p-4 rounded-xl bg-rose-500/5 border border-rose-500/10 text-rose-400 text-[10px] leading-relaxed flex items-start gap-3">
-          <ShieldAlert className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-          <div>
-            <p className="font-bold uppercase tracking-wider text-rose-455 mb-0.5"> Traumatology Emergency Notice</p>
-            <p className="text-slate-455">
-              This system is an emergency coordination and decision-support tool. It does not replace emergency medical services or professional clinical judgment. For critical life-threatening situations, prioritize immediate transport and call 112.
-            </p>
-          </div>
-        </div>
-
-        {/* Error / Success Notifications */}
-        {successMsg && (
-          <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 text-[10px] flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            <span className="font-bold">{successMsg}</span>
-          </div>
-        )}
-        {error && (
-          <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-455 text-[10px] flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-rose-400" />
-            <span className="font-bold">{error}</span>
-          </div>
-        )}
-
-        {/* Dynamic Route/Tab rendering */}
-        {activeTab === 'dashboard' && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-2">
-              <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Status State</span>
-              <p className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <span className={`w-3.5 h-3.5 rounded-full ${
-                  availability === 'AVAILABLE' ? 'bg-emerald-500 animate-pulse' : availability === 'BUSY' ? 'bg-amber-500' : availability === 'IN_CONSULTATION' ? 'bg-rose-500 animate-ping' : 'bg-slate-500'
-                }`} />
-                {availability}
+        {/* Inner Scrollable Workspace */}
+        <div className="p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full flex-1">
+          
+          {/* Emergency Safety Notice (Medical Warning Style) */}
+          <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900 text-xs leading-relaxed flex items-start gap-3.5 shadow-2xs font-sans">
+            <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold uppercase tracking-wider text-rose-900 mb-0.5 font-sans">Traumatology Emergency Notice</p>
+              <p className="text-rose-800">
+                This system is an emergency coordination and decision-support tool. It does not replace emergency medical services or professional clinical judgment. For critical life-threatening situations, prioritize immediate transport and call 112.
               </p>
-              <p className="text-slate-500 text-[10px]">Toggled availability will control triage flow.</p>
-            </div>
-            
-            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-2">
-              <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Pending Requests</span>
-              <p className="text-xl font-bold text-rose-400">
-                {emergencyRequests.filter(r => r.status === 'REQUESTED').length} Requests
-              </p>
-              <p className="text-slate-500 text-[10px]">Awaiting acceptance from availability queue.</p>
-            </div>
-
-            <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-2">
-              <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block">Active Consultation</span>
-              <p className="text-base font-bold text-slate-800">
-                {selectedRequest ? '1 consultation running' : 'No active session'}
-              </p>
-              <p className="text-slate-500 text-[10px]">Derived securely using authenticated JWT credentials.</p>
             </div>
           </div>
-        )}
 
-        {activeTab === 'emergency' && (
-          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-4">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-200 pb-2">
-              Assistance Request Queue
-            </h3>
-            
-            {availability === 'OFFLINE' ? (
-              <p className="text-slate-600 py-6 text-center">You are currently offline. Please set your availability status to AVAILABLE to fetch requests.</p>
-            ) : emergencyRequests.filter(r => r.status === 'REQUESTED').length === 0 ? (
-              <p className="text-slate-600 py-6 text-center">No active doctor assistance requests found.</p>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {emergencyRequests.filter(r => r.status === 'REQUESTED').map((req) => (
-                  <div key={req.requestId} className="p-4 rounded-xl border border-slate-200 bg-white space-y-3">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        {req.priority === 'HIGH' && (
-                          <span className="inline-block px-2 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse mb-1.5">
-                            🔴 High Priority Emergency
-                          </span>
-                        )}
-                        <h4 className="text-[11px] font-bold text-slate-800">{req.category} EMERGENCY</h4>
-                      </div>
-                      <span className="text-[9px] text-slate-500 font-mono">
-                        {new Date(req.requestedAt).toLocaleTimeString()}
-                      </span>
-                    </div>
+          {/* Success & Error Alert Banners */}
+          {successMsg && (
+            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex items-center gap-2.5 font-sans shadow-2xs">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span className="font-bold">{successMsg}</span>
+            </div>
+          )}
+          {error && (
+            <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900 text-xs flex items-center gap-2.5 font-sans shadow-2xs">
+              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              <span className="font-bold">{error}</span>
+            </div>
+          )}
 
-                    <div className="text-[10px] text-slate-500 space-y-1">
-                      <p>Session ID: <strong className="text-slate-350">{req.emergencyId}</strong></p>
-                      <p>Priority Triage: <strong className="text-slate-350">{req.priority}</strong></p>
-                    </div>
-
-                    {req.priority === 'HIGH' && (
-                      <div className="p-2.5 rounded bg-rose-500/5 border border-rose-500/10 text-[9px] text-rose-455 font-bold uppercase tracking-wider">
-                        ⚠️ Action Required: CALL 112 / SEEK IMMEDIATE EMERGENCY CARE
-                      </div>
-                    )}
-
-                    <div className="flex gap-2 pt-1.5">
-                      <button 
-                        onClick={() => handleAcceptRequest(req.requestId)}
-                        className="flex-1 py-1.5 bg-rose-500 text-slate-950 font-bold rounded-lg text-[9px] uppercase hover:bg-rose-400"
-                      >
-                        Accept Request
-                      </button>
-                      <button 
-                        onClick={() => handleDeclineRequest(req.requestId)}
-                        className="py-1.5 px-3 bg-white border border-slate-200 text-slate-500 hover:text-rose-455 rounded-lg text-[9px] uppercase"
-                      >
-                        Decline
-                      </button>
-                    </div>
-                  </div>
-                ))}
+          {/* Tab 1: Dashboard Overview */}
+          {activeTab === 'dashboard' && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 font-sans">
+              <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-xs space-y-3">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Practitioner Triage Status</span>
+                <div className="flex items-center gap-3">
+                  <span className={`w-3.5 h-3.5 rounded-full ${
+                    availability === 'AVAILABLE' ? 'bg-emerald-500 animate-pulse' : availability === 'BUSY' ? 'bg-amber-500' : availability === 'IN_CONSULTATION' ? 'bg-rose-500 animate-ping' : 'bg-slate-400'
+                  }`} />
+                  <span className="text-lg font-bold text-slate-900">{availability}</span>
+                </div>
+                <p className="text-xs text-slate-500">Selected availability controls automated triage routing.</p>
               </div>
-            )}
-          </div>
-        )}
+              
+              <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-xs space-y-3">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Pending Requests Queue</span>
+                <p className="text-2xl font-bold text-rose-600">
+                  {emergencyRequests.filter(r => r.status === 'REQUESTED').length} <span className="text-sm font-semibold text-slate-600">Pending</span>
+                </p>
+                <p className="text-xs text-slate-500">Awaiting acceptance from regional healthcare queue.</p>
+              </div>
 
-        {activeTab === 'chats' && (
-          <div>
-            {selectedRequest ? (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
-                {/* Left col: Chat & Handoff */}
-                <div className="lg:col-span-8 space-y-6">
-                  
-                  {/* Secure Consultation Chat Room */}
-                  <div className="flex flex-col h-[380px] bg-white border border-slate-200 shadow-sm rounded-2xl border border-slate-200 bg-white overflow-hidden">
-                    <div className="p-3 bg-white border-b border-slate-200 flex justify-between items-center">
-                      <span className="font-bold text-[9px] text-slate-500 tracking-wider uppercase">Secure Trauma Consultation Message Node</span>
-                      <button
-                        onClick={handleCloseEmergency}
-                        className="px-3 py-1 bg-rose-650 hover:bg-rose-555 text-slate-900 rounded-lg text-[9px] uppercase font-bold"
-                      >
-                        Close Session
-                      </button>
+              <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-xs space-y-3">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Active Consultation Session</span>
+                <p className="text-base font-bold text-slate-900">
+                  {selectedRequest ? '1 Consultation Running' : 'No Active Session'}
+                </p>
+                <p className="text-xs text-slate-500">Protected by JWT role authentication and patient consent.</p>
+              </div>
+            </div>
+          )}
+
+          {/* Tab 2: Emergency Requests Queue */}
+          {activeTab === 'emergency' && (
+            <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-xs space-y-5 font-sans">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                <h3 className="text-sm font-bold text-slate-900 tracking-tight">Assistance Request Queue</h3>
+                <span className="text-xs font-mono text-slate-500">{emergencyRequests.filter(r => r.status === 'REQUESTED').length} Pending</span>
+              </div>
+              
+              {availability === 'OFFLINE' ? (
+                <div className="text-center py-12 space-y-2">
+                  <ShieldAlert className="w-10 h-10 text-slate-300 mx-auto" />
+                  <p className="text-sm font-bold text-slate-700">Practitioner Currently Offline</p>
+                  <p className="text-xs text-slate-500">Set your status to AVAILABLE in the sidebar to view emergency triage requests.</p>
+                </div>
+              ) : emergencyRequests.filter(r => r.status === 'REQUESTED').length === 0 ? (
+                <div className="text-center py-12 space-y-2">
+                  <CheckCircle2 className="w-10 h-10 text-teal-500/40 mx-auto" />
+                  <p className="text-sm font-bold text-slate-800">No Active Emergency Requests</p>
+                  <p className="text-xs text-slate-500">All incoming triage assistance requests are clear.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {emergencyRequests.filter(r => r.status === 'REQUESTED').map((req) => (
+                    <div 
+                      key={req.requestId} 
+                      className={`p-5 rounded-2xl border transition-all ${
+                        req.priority === 'HIGH'
+                          ? 'bg-rose-50/50 border-rose-200 shadow-xs'
+                          : 'bg-white border-slate-200 shadow-xs'
+                      }`}
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          {req.priority === 'HIGH' && (
+                            <span className="inline-block px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider bg-rose-100 text-rose-700 border border-rose-200 mb-2">
+                              🔴 High Priority Emergency
+                            </span>
+                          )}
+                          <h4 className="text-sm font-bold text-slate-900">{req.category} EMERGENCY</h4>
+                        </div>
+                        <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-2 py-1 rounded-md">
+                          {new Date(req.requestedAt).toLocaleTimeString()}
+                        </span>
+                      </div>
+
+                      <div className="text-xs text-slate-600 space-y-1 font-mono bg-slate-50 p-3 rounded-xl border border-slate-100 mb-4">
+                        <p>Session ID: <strong className="text-slate-900">{req.emergencyId}</strong></p>
+                        <p>Triage Level: <strong className="text-slate-900">{req.priority}</strong></p>
+                      </div>
+
+                      {req.priority === 'HIGH' && (
+                        <div className="p-3 rounded-xl bg-rose-100/80 border border-rose-200 text-xs text-rose-900 font-bold mb-4">
+                          ⚠️ Action Required: Immediate Tele-Triage / Urgent Ambulance Dispatch
+                        </div>
+                      )}
+
+                      <div className="flex gap-2.5">
+                        <button 
+                          onClick={() => handleAcceptRequest(req.requestId)}
+                          className="flex-1 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all cursor-pointer shadow-xs"
+                        >
+                          Accept Consultation
+                        </button>
+                        <button 
+                          onClick={() => handleDeclineRequest(req.requestId)}
+                          className="py-2.5 px-4 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                        >
+                          Decline
+                        </button>
+                      </div>
                     </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
-                    <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#030712]/30">
-                      {messages.map((m) => {
-                        const isDoctor = m.senderRole === 'DOCTOR';
-                        const isSystem = m.senderRole === 'SYSTEM';
+          {/* Tab 3: Active Consultation Workspace */}
+          {activeTab === 'chats' && (
+            <div>
+              {selectedRequest ? (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 font-sans">
+                  {/* Left col: Chat Workspace & AI Hand-off */}
+                  <div className="lg:col-span-8 space-y-6">
+                    
+                    <div className="flex flex-col h-[480px] bg-white border border-slate-200 shadow-xs rounded-2xl overflow-hidden">
+                      <div className="p-4 bg-white border-b border-slate-200 flex justify-between items-center">
+                        <div>
+                          <span className="font-bold text-xs text-slate-900 uppercase tracking-wider block">Secure Trauma Consultation Session</span>
+                          <span className="text-[10px] font-mono text-slate-500">ID: {selectedRequest.emergencyId}</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-1.5 text-[10px]">
+                            <span className="text-slate-400 font-bold hidden sm:inline">My Chat Language:</span>
+                            <select
+                              value={doctorChatLang}
+                              onChange={(e) => setDoctorChatLang(e.target.value)}
+                              className="bg-slate-50 border border-slate-200 text-slate-700 font-bold px-2 py-1 rounded-lg text-[10px] focus:outline-none focus:border-teal-500 cursor-pointer"
+                            >
+                              <option value="en">English</option>
+                              <option value="ta">தமிழ் (Tamil)</option>
+                              <option value="hi">हिंदी (Hindi)</option>
+                              <option value="mr">मराठी (Marathi)</option>
+                            </select>
+                          </div>
+                          
+                          <button
+                            onClick={handleCloseEmergency}
+                            className="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs"
+                          >
+                            Close Session
+                          </button>
+                        </div>
+                      </div>
 
-                        if (isSystem) {
+                      {/* Chat Messages */}
+                      <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50/50">
+                        {messages.map((m) => {
+                          const isDoctor = m.senderRole === 'DOCTOR';
+                          const isSystem = m.senderRole === 'SYSTEM';
+
+                          if (isSystem) {
+                            return (
+                              <div key={m.id} className="p-2 bg-white border border-slate-200 rounded-xl text-[10px] text-slate-500 text-center font-mono shadow-2xs">
+                                {m.message}
+                              </div>
+                            );
+                          }
+
+                          const displayInfo = getDisplayText(m);
+                          const showOriginal = showOriginalMap[m.id];
+
                           return (
-                            <div key={m.id} className="p-2 bg-white border border-slate-200/60 rounded text-[9px] text-slate-500 text-center">
-                              {m.message}
+                            <div key={m.id} className={`flex ${isDoctor ? 'justify-end' : 'justify-start'}`}>
+                              <div className={`max-w-[75%] p-3.5 rounded-2xl text-xs leading-relaxed ${
+                                isDoctor
+                                  ? 'bg-teal-600 text-white shadow-xs'
+                                  : 'bg-white border border-slate-200 text-slate-800 shadow-xs'
+                              }`}>
+                                <div className={`flex justify-between items-center text-[9px] uppercase font-bold tracking-wider mb-1 gap-3 ${
+                                  isDoctor ? 'text-teal-100' : 'text-slate-400'
+                                }`}>
+                                  <span>{isDoctor ? 'You (Practitioner)' : 'Patient'}</span>
+                                  <span className={`text-[8px] font-mono ${isDoctor ? 'text-teal-200' : 'text-teal-600'}`}>
+                                    {displayInfo.label}
+                                  </span>
+                                </div>
+
+                                <p className="text-xs">{displayInfo.text}</p>
+
+                                <button
+                                  type="button"
+                                  onClick={() => toggleShowOriginal(m.id)}
+                                  className={`mt-2 text-[9px] font-bold underline cursor-pointer block ${
+                                    isDoctor ? 'text-teal-100 hover:text-white' : 'text-teal-600 hover:text-teal-800'
+                                  }`}
+                                >
+                                  {showOriginal ? 'Hide Original' : 'View Original'}
+                                </button>
+                              </div>
                             </div>
                           );
-                        }
+                        })}
+                        <div ref={messagesEndRef} />
+                      </div>
 
-                        return (
-                          <div key={m.id} className={`flex ${isDoctor ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`max-w-[75%] p-3 rounded-xl border text-[11px] leading-relaxed ${
-                              isDoctor
-                                ? 'bg-rose-500/10 border-rose-500/20 text-slate-800'
-                                : 'bg-white border-slate-200 text-slate-800'
-                            }`}>
-                              <p className="text-[8px] text-slate-500 uppercase mb-0.5 tracking-wider font-bold">
-                                {isDoctor ? 'You' : 'Patient'}
-                              </p>
-                              <p>{m.message}</p>
-                            </div>
-                          </div>
-                        );
-                      })}
-                      <div ref={messagesEndRef} />
+                      {/* Input bar */}
+                      <form onSubmit={handleSendChatMessage} className="p-4 bg-white border-t border-slate-200 flex gap-3">
+                        <input
+                          type="text"
+                          value={replyInput}
+                          onChange={(e) => setReplyInput(e.target.value)}
+                          disabled={selectedRequest.status === 'CLOSED'}
+                          placeholder={selectedRequest.status === 'CLOSED' ? 'Session closed.' : 'Type clinical triage response...'}
+                          className="flex-1 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 text-xs focus:outline-none focus:border-teal-500 disabled:opacity-50 shadow-2xs"
+                        />
+                        <button
+                          type="submit"
+                          disabled={selectedRequest.status === 'CLOSED' || !replyInput.trim()}
+                          className="px-5 py-2.5 bg-teal-600 text-white rounded-xl hover:bg-teal-700 font-bold text-xs disabled:opacity-40 uppercase tracking-wider transition-all cursor-pointer shadow-xs"
+                        >
+                          Transmit
+                        </button>
+                      </form>
                     </div>
 
-                    <form onSubmit={handleSendChatMessage} className="p-3 bg-white border-t border-slate-200 flex gap-2">
-                      <input
-                        type="text"
-                        value={replyInput}
-                        onChange={(e) => setReplyInput(e.target.value)}
-                        disabled={selectedRequest.status === 'CLOSED'}
-                        placeholder={selectedRequest.status === 'CLOSED' ? 'Session closed.' : 'Type clinical emergency guidance response...'}
-                        className="flex-1 px-4 py-2 bg-white border border-slate-200 rounded-xl text-slate-800 text-xs focus:outline-none disabled:opacity-50"
-                      />
-                      <button
-                        type="submit"
-                        disabled={selectedRequest.status === 'CLOSED' || !replyInput.trim()}
-                        className="px-4 py-2 bg-rose-500 text-slate-950 rounded-xl hover:bg-rose-400 font-bold text-xs disabled:opacity-40 uppercase"
-                      >
-                        Transmit
-                      </button>
-                    </form>
+                    {/* AI Hand-off Summary */}
+                    {messages.length > 1 && (
+                      <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs space-y-3">
+                        <button
+                          onClick={generateHandoffSummary}
+                          className="w-full py-2.5 bg-teal-50 hover:bg-teal-100/80 text-teal-700 border border-teal-200 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                        >
+                          <RefreshCw className="w-3.5 h-3.5" />
+                          <span>Compile AI Hand-off Summary</span>
+                        </button>
+                        {aiSummary && (
+                          <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 leading-relaxed whitespace-pre-line font-mono">
+                            {aiSummary}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                   </div>
 
-                  {/* AI Summary compiled summary */}
-                  {messages.length > 1 && (
-                    <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
-                      <button
-                        onClick={generateHandoffSummary}
-                        className="w-full py-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 rounded-xl font-bold flex items-center justify-center gap-1.5"
-                      >
-                        <RefreshCw className="w-3.5 h-3.5" />
-                        <span>Compile AI Hand-off summary</span>
-                      </button>
-                      {aiSummary && (
-                        <div className="p-3.5 bg-white border border-slate-200 rounded-xl text-[10px] text-slate-600 leading-relaxed whitespace-pre-line">
-                          {aiSummary}
+                  {/* Right col: Triage Details & Medical Records */}
+                  <div className="lg:col-span-4 space-y-6">
+                    
+                    {/* Triage Coordination Info */}
+                    <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs space-y-3">
+                      <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 border-b border-slate-100 pb-3">
+                        <ShieldAlert className="w-4 h-4 text-rose-600" />
+                        Triage Coordination Details
+                      </h4>
+
+                      {emergencyContext ? (
+                        <div className="text-xs space-y-3">
+                          <div>
+                            <span className="text-[10px] font-bold text-slate-400 block uppercase">Reported Symptoms</span>
+                            <p className="font-semibold text-slate-800 mt-0.5">{emergencyContext.symptoms.join(', ')}</p>
+                          </div>
+                          <div>
+                            <span className="text-[10px] font-bold text-slate-400 block uppercase">Triage Category</span>
+                            <p className="font-semibold text-slate-800 mt-0.5">{emergencyContext.category}</p>
+                          </div>
+                          <div>
+                            <span className="text-[10px] font-bold text-slate-400 block uppercase">Triage Priority</span>
+                            <p className="font-bold text-rose-600 mt-0.5">{emergencyContext.priority}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-slate-500">Loading context details...</p>
+                      )}
+                    </div>
+
+                    {/* Medical Summary */}
+                    <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs space-y-3">
+                      <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-3">
+                        Medical Summary
+                      </h4>
+
+                      {medicalSummary ? (
+                        <div className="text-xs space-y-2.5 font-sans">
+                          <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">Blood Group</span>
+                            <strong className="text-teal-700 font-bold font-mono">{medicalSummary.bloodGroup}</strong>
+                          </div>
+                          <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">Allergies</span>
+                            <strong className="text-rose-600 font-bold">{medicalSummary.allergies.join(', ') || 'None'}</strong>
+                          </div>
+                          <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">Chronic Conditions</span>
+                            <strong className="text-slate-800 font-semibold">{medicalSummary.chronicConditions.join(', ') || 'None'}</strong>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-2.5 text-slate-500 text-xs">
+                          <ShieldCheck className="w-5 h-5 text-slate-400 shrink-0" />
+                          <span>Medical history locked. Waiting for patient consent...</span>
                         </div>
                       )}
                     </div>
-                  )}
 
-                </div>
-
-                {/* Right col: Context & Consent */}
-                <div className="lg:col-span-4 space-y-6">
-                  
-                  {/* Active Trauma info banner */}
-                  <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
-                    <h4 className="text-[10px] font-bold text-rose-455 uppercase tracking-widest flex items-center gap-1.5">
-                      <ShieldAlert className="w-4 h-4" />
-                      Coordination Details
-                    </h4>
-
-                    {emergencyContext && (
-                      <div className="text-[10px] space-y-2 leading-normal">
-                        <div className="space-y-1">
-                          <span className="text-slate-550 block uppercase text-[8px] tracking-wider">Reported Symptoms</span>
-                          <p className="text-slate-700 font-semibold">{emergencyContext.symptoms.join(', ')}</p>
-                        </div>
-                        <div className="space-y-1">
-                          <span className="text-slate-550 block uppercase text-[8px] tracking-wider">Triage Class</span>
-                          <p className="text-slate-700 font-semibold">{emergencyContext.category}</p>
-                        </div>
-                        <div className="space-y-1">
-                          <span className="text-slate-550 block uppercase text-[8px] tracking-wider">Triage Priority</span>
-                          <p className="text-rose-400 font-bold">{emergencyContext.priority}</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Consent-gated Patient Records */}
-                  <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
-                    <h4 className="text-[10px] font-bold text-slate-350 uppercase tracking-widest border-b border-slate-200 pb-2">
-                      Medical Summary
-                    </h4>
-
-                    {medicalSummary ? (
-                      <div className="text-[10px] font-mono space-y-3">
-                        <div className="bg-white p-3 rounded-xl border border-slate-200">
-                          <span className="text-slate-550 uppercase text-[8px] block mb-0.5">Blood Group</span>
-                          <strong className="text-teal-400 font-bold">{medicalSummary.bloodGroup}</strong>
-                        </div>
-                        <div className="bg-white p-3 rounded-xl border border-slate-200">
-                          <span className="text-slate-550 uppercase text-[8px] block mb-0.5">Allergies</span>
-                          <strong className="text-rose-455 font-bold">{medicalSummary.allergies.join(', ') || 'None'}</strong>
-                        </div>
-                        <div className="bg-white p-3 rounded-xl border border-slate-200">
-                          <span className="text-slate-550 uppercase text-[8px] block mb-0.5">Chronic Conditions</span>
-                          <strong className="text-slate-700 font-semibold">{medicalSummary.chronicConditions.join(', ') || 'None'}</strong>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center gap-2.5 text-slate-500">
-                        <ShieldCheck className="w-5 h-5 text-slate-700 shrink-0" />
-                        <span>Medical history locked. Waiting for patient consent...</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* ASHA Field Screenings Panel */}
-                  <div className="bg-white border border-slate-200 shadow-sm p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
-                    <h4 className="text-[10px] font-bold text-slate-350 uppercase tracking-widest border-b border-slate-200 pb-2">
-                      ASHA Community Screenings
-                    </h4>
-                    {ashaScreenings && ashaScreenings.length > 0 ? (
-                      <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
-                        {ashaScreenings.map((scr: any) => (
-                          <div key={scr.id} className="p-3 bg-white rounded-xl border border-slate-200 text-[10px] font-mono space-y-2">
-                            <div className="flex justify-between border-b border-slate-200 pb-1 text-slate-500 text-[8px] uppercase">
-                              <span>Date: {new Date(scr.screening_date).toLocaleDateString()}</span>
-                              <span className={scr.risk_level === 'URGENT' || scr.risk_level === 'PRIORITY' ? 'text-rose-455 font-bold' : 'text-slate-500'}>
-                                {scr.risk_level}
-                              </span>
-                            </div>
-                            <div className="grid grid-cols-2 gap-1 text-[9px]">
-                              <div>BP: <span className="text-slate-700">{scr.systolic_status === 'MEASURED' ? `${scr.systolic}/${scr.diastolic}` : 'N/A'}</span></div>
-                              <div>SpO2: <span className="text-slate-700">{scr.spo2_status === 'MEASURED' ? `${scr.spo2}%` : 'N/A'}</span></div>
-                              <div>Temp: <span className="text-slate-700">{scr.temperature_status === 'MEASURED' ? `${scr.temperature}°F` : 'N/A'}</span></div>
-                              <div>Glucose: <span className="text-slate-700">{scr.glucose_status === 'MEASURED' ? `${scr.glucose} mg/dL` : 'N/A'}</span></div>
-                            </div>
-                            {scr.symptoms && JSON.parse(scr.symptoms).length > 0 && (
-                              <div>
-                                <span className="text-[8px] text-slate-500 uppercase block">Symptoms</span>
-                                <span className="text-slate-600">{JSON.parse(scr.symptoms).join(', ')}</span>
+                    {/* ASHA Field Screenings Panel */}
+                    <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs space-y-3">
+                      <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-3">
+                        ASHA Community Screenings
+                      </h4>
+                      {ashaScreenings && ashaScreenings.length > 0 ? (
+                        <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
+                          {ashaScreenings.map((scr: any) => (
+                            <div key={scr.id} className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-2 font-sans">
+                              <div className="flex justify-between border-b border-slate-200/80 pb-1.5 text-[10px] text-slate-500 font-mono">
+                                <span>{new Date(scr.screening_date).toLocaleDateString()}</span>
+                                <span className={scr.risk_level === 'URGENT' || scr.risk_level === 'PRIORITY' ? 'text-rose-600 font-bold' : 'text-slate-600 font-bold'}>
+                                  {scr.risk_level}
+                                </span>
                               </div>
-                            )}
-                            {scr.risk_flags && JSON.parse(scr.risk_flags).length > 0 && (
-                              <div className="text-[9px] text-rose-400 font-bold">
-                                ⚠ {JSON.parse(scr.risk_flags).join('; ')}
+                              <div className="grid grid-cols-2 gap-1.5 text-xs font-mono">
+                                <div>BP: <span className="font-bold text-slate-800">{scr.systolic_status === 'MEASURED' ? `${scr.systolic}/${scr.diastolic}` : 'N/A'}</span></div>
+                                <div>SpO2: <span className="font-bold text-slate-800">{scr.spo2_status === 'MEASURED' ? `${scr.spo2}%` : 'N/A'}</span></div>
                               </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-slate-500 italic text-[10px]">No community screening records found for this patient.</p>
-                    )}
-                  </div>
-
-                </div>
-              </div>
-            ) : (
-              <div className="h-64 flex flex-col items-center justify-center text-center p-8 text-slate-500 bg-white border border-slate-200 shadow-sm rounded-2xl border border-slate-200 bg-white">
-                <HeartPulse className="w-12 h-12 text-slate-700 mb-3 animate-pulse" />
-                <p className="text-xs">No active consultation running. Select a requested emergency from the requests queue tab.</p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'screenings' && (
-          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-4">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-200 pb-2">
-              ASHA Community Field Screenings
-            </h3>
-            {ashaScreenings && ashaScreenings.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {ashaScreenings.map((scr: any) => (
-                  <div key={scr.id} className="p-5 rounded-xl border border-slate-200 bg-white space-y-4 text-xs font-mono">
-                    <div className="flex justify-between items-center border-b border-slate-200 pb-2 text-[10px] text-slate-500 uppercase font-bold">
-                      <span>Screening Date: {new Date(scr.screening_date).toLocaleString()}</span>
-                      <span className={`px-2 py-0.5 rounded text-[9px] font-extrabold ${
-                        scr.risk_level === 'URGENT' || scr.risk_level === 'PRIORITY' ? 'bg-rose-500/20 text-rose-400' : 'bg-white text-slate-600'
-                      }`}>
-                        {scr.risk_level}
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3 text-slate-700">
-                      <div className="bg-white p-2.5 rounded-lg border border-slate-200">
-                        <span className="text-[9px] text-slate-500 uppercase block mb-1">Blood Pressure</span>
-                        <strong>{scr.systolic_status === 'MEASURED' ? `${scr.systolic}/${scr.diastolic} mmHg` : scr.systolic_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
-                      </div>
-                      <div className="bg-white p-2.5 rounded-lg border border-slate-200">
-                        <span className="text-[9px] text-slate-500 uppercase block mb-1">Pulse Rate</span>
-                        <strong>{scr.pulse_status === 'MEASURED' ? `${scr.pulse} BPM` : scr.pulse_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
-                      </div>
-                      <div className="bg-white p-2.5 rounded-lg border border-slate-200">
-                        <span className="text-[9px] text-slate-500 uppercase block mb-1">SpO2 (Oxygen)</span>
-                        <strong>{scr.spo2_status === 'MEASURED' ? `${scr.spo2}%` : scr.spo2_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
-                      </div>
-                      <div className="bg-white p-2.5 rounded-lg border border-slate-200">
-                        <span className="text-[9px] text-slate-500 uppercase block mb-1">Temperature</span>
-                        <strong>{scr.temperature_status === 'MEASURED' ? `${scr.temperature}°F` : scr.temperature_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
-                      </div>
-                      <div className="bg-white p-2.5 rounded-lg border border-slate-200">
-                        <span className="text-[9px] text-slate-500 uppercase block mb-1">Random Glucose</span>
-                        <strong>{scr.glucose_status === 'MEASURED' ? `${scr.glucose} mg/dL` : scr.glucose_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
-                      </div>
-                      <div className="bg-white p-2.5 rounded-lg border border-slate-200">
-                        <span className="text-[9px] text-slate-500 uppercase block mb-1">Weight & Height</span>
-                        <strong>
-                          {scr.weight_status === 'MEASURED' ? `${scr.weight} kg` : 'N/A'} / {scr.height_status === 'MEASURED' ? `${scr.height} cm` : 'N/A'}
-                        </strong>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <div>
-                        <span className="text-[9px] text-slate-500 uppercase block font-bold">Symptoms Observed</span>
-                        <p className="text-slate-355 font-semibold">{scr.symptoms ? JSON.parse(scr.symptoms).join(', ') || 'None' : 'None'}</p>
-                      </div>
-                      <div>
-                        <span className="text-[9px] text-slate-500 uppercase block font-bold">Known Conditions</span>
-                        <p className="text-slate-355 font-semibold">{scr.known_conditions ? JSON.parse(scr.known_conditions).join(', ') || 'None' : 'None'}</p>
-                      </div>
-                      <div>
-                        <span className="text-[9px] text-slate-500 uppercase block font-bold">Known Allergies</span>
-                        <p className="text-slate-355 font-semibold">{scr.allergies ? JSON.parse(scr.allergies).join(', ') || 'None' : 'None'}</p>
-                      </div>
-                      {scr.notes && (
-                        <div>
-                          <span className="text-[9px] text-slate-500 uppercase block font-bold">ASHA Worker Notes</span>
-                          <p className="text-slate-355 italic">{scr.notes}</p>
+                              {scr.risk_flags && JSON.parse(scr.risk_flags).length > 0 && (
+                                <div className="text-[11px] text-rose-600 font-bold pt-1">
+                                  ⚠️ {JSON.parse(scr.risk_flags).join('; ')}
+                                </div>
+                              )}
+                            </div>
+                          ))}
                         </div>
+                      ) : (
+                        <p className="text-slate-500 text-xs italic">No community screening records found for this patient.</p>
                       )}
+                    </div>
+
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-white border border-slate-200 p-12 rounded-2xl shadow-xs text-center space-y-3 font-sans">
+                  <HeartPulse className="w-10 h-10 text-teal-500/40 mx-auto" />
+                  <h3 className="text-sm font-bold text-slate-800">No Active Consultation Running</h3>
+                  <p className="text-xs text-slate-500 max-w-md mx-auto">Select an emergency request from the Emergency Requests queue tab to activate a consultation workspace.</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Tab 4: ASHA Field Screenings Detailed Grid */}
+          {activeTab === 'screenings' && (
+            <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-xs space-y-4 font-sans">
+              <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3">
+                ASHA Community Field Screenings
+              </h3>
+              {ashaScreenings && ashaScreenings.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {ashaScreenings.map((scr: any) => (
+                    <div key={scr.id} className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3 text-xs">
+                      <div className="flex justify-between items-center border-b border-slate-200 pb-2 text-xs font-mono text-slate-500">
+                        <span>Date: {new Date(scr.screening_date).toLocaleString()}</span>
+                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                          scr.risk_level === 'URGENT' || scr.risk_level === 'PRIORITY' ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                        }`}>
+                          {scr.risk_level}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-slate-700 font-sans">
+                        <div className="bg-white p-3 rounded-xl border border-slate-200">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">Blood Pressure</span>
+                          <strong className="font-mono">{scr.systolic_status === 'MEASURED' ? `${scr.systolic}/${scr.diastolic} mmHg` : scr.systolic_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
+                        </div>
+                        <div className="bg-white p-3 rounded-xl border border-slate-200">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">Pulse Rate</span>
+                          <strong className="font-mono">{scr.pulse_status === 'MEASURED' ? `${scr.pulse} BPM` : scr.pulse_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
+                        </div>
+                        <div className="bg-white p-3 rounded-xl border border-slate-200">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">SpO2 (Oxygen)</span>
+                          <strong className="font-mono">{scr.spo2_status === 'MEASURED' ? `${scr.spo2}%` : scr.spo2_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
+                        </div>
+                        <div className="bg-white p-3 rounded-xl border border-slate-200">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">Temperature</span>
+                          <strong className="font-mono">{scr.temperature_status === 'MEASURED' ? `${scr.temperature}°F` : scr.temperature_status === 'NOT_MEASURED' ? 'Not measured' : 'Equipment unavailable'}</strong>
+                        </div>
+                      </div>
+
                       {scr.risk_flags && JSON.parse(scr.risk_flags).length > 0 && (
-                        <div className="p-3 rounded-lg bg-rose-500/5 border border-rose-500/10 text-[10px] text-rose-400 font-bold">
-                          ⚠ Referral Flags: {JSON.parse(scr.risk_flags).join('; ')}
+                        <div className="p-3 rounded-xl bg-rose-100/70 border border-rose-200 text-xs text-rose-900 font-bold">
+                          ⚠️ Referral Flags: {JSON.parse(scr.risk_flags).join('; ')}
                         </div>
                       )}
                     </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-slate-500 italic text-center py-8">No community screening records found for this patient.</p>
-            )}
-          </div>
-        )}
+                  ))}
+                </div>
+              ) : (
+                <p className="text-slate-500 text-xs italic text-center py-8">No community screening records found for this patient.</p>
+              )}
+            </div>
+          )}
 
-        {activeTab === 'history' && (
-          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-4">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-200 pb-2">
-              Consultation Archive
-            </h3>
+          {/* Tab 5: History Archive */}
+          {activeTab === 'history' && (
+            <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-xs space-y-4 font-sans">
+              <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3">
+                Consultation Archive
+              </h3>
 
-            <div className="overflow-x-auto text-[10px]">
-              <table className="w-full text-left font-mono">
-                <thead>
-                  <tr className="border-b border-slate-200 text-slate-500 uppercase text-[9px]">
-                    <th className="pb-3">Emergency ID</th>
-                    <th className="pb-3">Triage Category</th>
-                    <th className="pb-3">Priority</th>
-                    <th className="pb-3">Date</th>
-                    <th className="pb-3">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-900/50">
-                  {emergencyRequests.filter(r => r.status === 'CLOSED').length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="py-6 text-center text-slate-600">No completed consultations in archive.</td>
+              <div className="overflow-x-auto text-xs">
+                <table className="w-full text-left font-sans">
+                  <thead>
+                    <tr className="border-b border-slate-200 text-slate-400 uppercase text-[10px] font-bold">
+                      <th className="pb-3">Emergency ID</th>
+                      <th className="pb-3">Triage Category</th>
+                      <th className="pb-3">Priority</th>
+                      <th className="pb-3">Date</th>
+                      <th className="pb-3">Status</th>
                     </tr>
-                  ) : (
-                    emergencyRequests.filter(r => r.status === 'CLOSED').map(req => (
-                      <tr key={req.requestId} className="text-slate-700">
-                        <td className="py-3 font-bold">{req.emergencyId.substring(0, 14)}...</td>
-                        <td className="py-3">{req.category}</td>
-                        <td className="py-3">
-                          <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold ${
-                            req.priority === 'HIGH' ? 'bg-rose-500/20 text-rose-400' : 'bg-white text-slate-600'
-                          }`}>
-                            {req.priority}
-                          </span>
-                        </td>
-                        <td className="py-3">{new Date(req.requestedAt).toLocaleDateString()}</td>
-                        <td className="py-3 text-emerald-400 font-bold">RESOLVED</td>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {emergencyRequests.filter(r => r.status === 'CLOSED').length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="py-8 text-center text-slate-500">No completed consultations in archive.</td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'profile' && doctor && (
-          <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 bg-white space-y-6 max-w-xl">
-            <h3 className="text-xs font-bold text-slate-350 uppercase tracking-widest border-b border-slate-200 pb-2">
-              Medical Practitioner Profile
-            </h3>
-
-            <div className="space-y-4 font-mono text-[10px]">
-              <div className="bg-white p-4 rounded-xl border border-slate-200 grid grid-cols-2 gap-4">
-                <div>
-                  <span className="text-slate-550 block uppercase text-[8px]">Practitioner Name</span>
-                  <strong className="text-slate-800 text-sm font-bold">{doctor.name}</strong>
-                </div>
-                <div>
-                  <span className="text-slate-550 block uppercase text-[8px]">Medical Specialty</span>
-                  <strong className="text-slate-800 font-bold">{doctor.specialty}</strong>
-                </div>
-              </div>
-
-              <div className="bg-white p-4 rounded-xl border border-slate-200 grid grid-cols-2 gap-4">
-                <div>
-                  <span className="text-slate-550 block uppercase text-[8px]">Affiliation Hospital</span>
-                  <strong className="text-slate-800 font-bold">Government General Hospital</strong>
-                </div>
-                <div>
-                  <span className="text-slate-550 block uppercase text-[8px]">Availability Triage Status</span>
-                  <strong className="text-rose-455 font-bold uppercase">{availability}</strong>
-                </div>
-              </div>
-
-              <div className="bg-white p-4 rounded-xl border border-slate-200">
-                <span className="text-slate-550 block uppercase text-[8px] mb-1">Doctor ID Identification</span>
-                <code className="text-slate-600 font-bold select-all bg-white px-2 py-1 rounded border border-slate-200">
-                  {doctor.id}
-                </code>
+                    ) : (
+                      emergencyRequests.filter(r => r.status === 'CLOSED').map(req => (
+                        <tr key={req.requestId} className="text-slate-700">
+                          <td className="py-3 font-bold font-mono text-slate-900">{req.emergencyId.substring(0, 14)}...</td>
+                          <td className="py-3">{req.category}</td>
+                          <td className="py-3">
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                              req.priority === 'HIGH' ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-700'
+                            }`}>
+                              {req.priority}
+                            </span>
+                          </td>
+                          <td className="py-3 font-mono">{new Date(req.requestedAt).toLocaleDateString()}</td>
+                          <td className="py-3 text-emerald-700 font-bold">RESOLVED</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
+          {/* Tab 6: Practitioner Profile */}
+          {activeTab === 'profile' && doctor && (
+            <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-xs space-y-5 font-sans max-w-xl">
+              <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-3">
+                Medical Practitioner Profile
+              </h3>
+
+              <div className="space-y-3 text-xs">
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 block uppercase">Practitioner Name</span>
+                    <strong className="text-slate-900 text-sm font-bold">{doctor.name}</strong>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 block uppercase">Medical Specialty</span>
+                    <strong className="text-slate-800 font-bold">{doctor.specialty}</strong>
+                  </div>
+                </div>
+
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 block uppercase">Affiliation Hospital</span>
+                    <strong className="text-slate-800 font-bold">Government General Hospital</strong>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 block uppercase">Availability Triage Status</span>
+                    <strong className="text-rose-600 font-bold uppercase">{availability}</strong>
+                  </div>
+                </div>
+
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                  <span className="text-[10px] font-bold text-slate-400 block uppercase mb-1">Doctor ID Identification</span>
+                  <code className="text-slate-800 font-bold font-mono select-all bg-white px-2.5 py-1 rounded-md border border-slate-200">
+                    {doctor.id}
+                  </code>
+                </div>
+              </div>
+            </div>
+          )}
+
+        </div>
       </main>
     </div>
   );

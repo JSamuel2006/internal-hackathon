@@ -23,6 +23,12 @@ export interface ChatMessageEntity {
   senderUserId: string;
   senderRole: string; // CITIZEN, DOCTOR, SYSTEM
   message: string;
+  originalText?: string;
+  originalLanguage?: string;
+  translatedText?: string;
+  translatedLanguage?: string;
+  translations?: Record<string, string>;
+  translationStatus?: string;
   createdAt: Date;
   readAt?: Date;
 }
@@ -340,13 +346,17 @@ export class EmergencyDoctorChatService {
 
   // ── Messaging ────────────────────────────────────────────────
 
+  // ── Messaging ────────────────────────────────────────────────
+
   async sendMessage(params: {
     requestId: string;
     senderId: string;
     senderRole: string;
     message: string;
+    patientLanguage?: string;
+    doctorLanguage?: string;
   }): Promise<ChatMessageEntity> {
-    const { requestId, senderId, senderRole, message } = params;
+    const { requestId, senderId, senderRole, message, patientLanguage, doctorLanguage } = params;
 
     const reqRes = await pool.query('SELECT * FROM emergency_doctor_requests WHERE id = $1', [requestId]);
     if (reqRes.rows.length === 0) {
@@ -377,28 +387,91 @@ export class EmergencyDoctorChatService {
       }
     }
 
+    // Determine and update participant language preference if supplied
+    let pLang = request.patient_language || 'ta';
+    let dLang = request.doctor_language || 'en';
+
+    if (senderRole === 'ROLE_DOCTOR' && doctorLanguage) {
+      dLang = doctorLanguage;
+      await pool.query('UPDATE emergency_doctor_requests SET doctor_language = $1 WHERE id = $2', [dLang, requestId]);
+    } else if (senderRole !== 'ROLE_DOCTOR' && patientLanguage) {
+      pLang = patientLanguage;
+      await pool.query('UPDATE emergency_doctor_requests SET patient_language = $1 WHERE id = $2', [pLang, requestId]);
+    }
+
+    const isDoctor = senderRole === 'ROLE_DOCTOR';
+    const sourceLang = isDoctor ? dLang : pLang;
+    const targetLang = isDoctor ? pLang : dLang;
+    const originalText = message.trim();
+
+    // ── Translation Execution via Gemini Service ────────────────────
+    let translatedText = originalText;
+    let translationStatus = 'COMPLETED';
+
+    if (sourceLang !== targetLang && originalText) {
+      try {
+        const sourceName = sourceLang === 'ta' ? 'Tamil' : sourceLang === 'hi' ? 'Hindi' : sourceLang === 'mr' ? 'Marathi' : 'English';
+        const targetName = targetLang === 'ta' ? 'Tamil' : targetLang === 'hi' ? 'Hindi' : targetLang === 'mr' ? 'Marathi' : 'English';
+
+        const systemInstruction = `You are a real-time clinical translator between a medical practitioner and a patient.
+Translate directly from ${sourceName} to ${targetName}.
+RULES:
+1. Translate faithfully without summarizing, altering medical urgency, or adding commentary.
+2. DO NOT change medical terms, drug names (e.g. Dolo-650, Paracetamol), medical abbreviations (ABHA, HbA1c, CBC, ECG, SpO2, BP, ICMR, WHO), clinical numbers, dosages, or phone numbers.
+3. Output ONLY the translated text string.`;
+
+        const prompt = `Translate this consultation message from ${sourceName} to ${targetName}:\n"${originalText}"`;
+        const res = await geminiService.generateText(prompt, systemInstruction, 10000);
+        if (res && res.trim()) {
+          translatedText = res.trim().replace(/^["']|["']$/g, '');
+        } else {
+          translationStatus = 'UNAVAILABLE';
+        }
+      } catch (err: any) {
+        logger.warn({ tag: '[DOCTOR_CHAT_TRANSLATE]', message: `Translation failed: ${err.message}` });
+        translationStatus = 'UNAVAILABLE';
+      }
+    }
+
     const msgId = `msg-${Date.now()}`;
     const createdAt = new Date();
+    const roleString = isDoctor ? 'DOCTOR' : 'CITIZEN';
 
-    const roleString = senderRole === 'ROLE_DOCTOR' ? 'DOCTOR' : 'CITIZEN';
+    const translationsMap: Record<string, string> = {
+      [sourceLang]: originalText,
+    };
+    if (translatedText && targetLang !== sourceLang) {
+      translationsMap[targetLang] = translatedText;
+    }
 
     await pool.query(
-      `INSERT INTO emergency_chat_messages (id, emergency_id, conversation_id, sender_user_id, sender_role, message, created_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [msgId, request.emergency_id, requestId, senderId, roleString, message.trim(), createdAt]
+      `INSERT INTO emergency_chat_messages (
+        id, emergency_id, conversation_id, sender_user_id, sender_role, message, 
+        original_text, original_language, translated_text, translated_language, translations_json, translation_status, created_at
+       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+      [
+        msgId, request.emergency_id, requestId, senderId, roleString, translatedText,
+        originalText, sourceLang, translatedText, targetLang, JSON.stringify(translationsMap), translationStatus, createdAt
+      ]
     );
 
-    const result = {
+    const result: ChatMessageEntity = {
       id: msgId,
       emergencyId: request.emergency_id,
       conversationId: requestId,
       senderUserId: senderId,
       senderRole: roleString,
-      message: message.trim(),
+      message: translatedText,
+      originalText,
+      originalLanguage: sourceLang,
+      translatedText,
+      translatedLanguage: targetLang,
+      translations: translationsMap,
+      translationStatus,
       createdAt,
     };
 
-    // Emit chat message event
+    // Emit chat message event via Socket.IO
     emitChatMessage(request.emergency_id, result);
 
     return result;
@@ -416,14 +489,12 @@ export class EmergencyDoctorChatService {
 
     // Access check
     if (userRole === 'ROLE_DOCTOR') {
-      // Only the assigned doctor can read messages
       if (request.doctor_id !== userId) {
         const err: any = new Error('Forbidden: You are not the assigned doctor for this conversation');
         err.status = 403;
         throw err;
       }
     } else {
-      // Citizen: must own the request
       if (request.citizen_user_id !== userId) {
         const err: any = new Error('Forbidden: You do not own this conversation');
         err.status = 403;
@@ -436,15 +507,117 @@ export class EmergencyDoctorChatService {
       [requestId]
     );
 
-    return res.rows.map((r) => ({
-      id: r.id,
-      emergencyId: r.emergency_id,
-      conversationId: r.conversation_id,
-      senderUserId: r.sender_user_id,
-      senderRole: r.sender_role,
-      message: r.message,
-      createdAt: r.created_at,
-    }));
+    return res.rows.map((r) => {
+      let translationsMap: Record<string, string> = {};
+      try {
+        if (r.translations_json) translationsMap = JSON.parse(r.translations_json);
+      } catch {
+        translationsMap = {};
+      }
+      const origText = r.original_text || r.message;
+      const origLang = r.original_language || 'en';
+      translationsMap[origLang] = origText;
+      if (r.translated_text && r.translated_language) {
+        translationsMap[r.translated_language] = r.translated_text;
+      }
+
+      return {
+        id: r.id,
+        emergencyId: r.emergency_id,
+        conversationId: r.conversation_id,
+        senderUserId: r.sender_user_id,
+        senderRole: r.sender_role,
+        message: r.translated_text || r.message,
+        originalText: origText,
+        originalLanguage: origLang,
+        translatedText: r.translated_text || r.message,
+        translatedLanguage: r.translated_language || 'en',
+        translations: translationsMap,
+        translationStatus: r.translation_status || 'COMPLETED',
+        createdAt: r.created_at,
+      };
+    });
+  }
+
+  async translateMessageForUser(params: {
+    requestId: string;
+    userId: string;
+    userRole: string;
+    messageId: string;
+    targetLanguage: string;
+  }): Promise<{ messageId: string; targetLanguage: string; translatedText: string; translations: Record<string, string> }> {
+    const { requestId, userId, userRole, messageId, targetLanguage } = params;
+
+    // 1. Verify access to request
+    await this.getMessages(requestId, userId, userRole);
+
+    // 2. Fetch specific message
+    const msgRes = await pool.query('SELECT * FROM emergency_chat_messages WHERE id = $1 AND conversation_id = $2', [messageId, requestId]);
+    if (msgRes.rows.length === 0) {
+      const err: any = new Error('Message not found');
+      err.status = 404;
+      throw err;
+    }
+
+    const row = msgRes.rows[0];
+    const origText = row.original_text || row.message;
+    const origLang = row.original_language || 'en';
+    const targetLang = targetLanguage.toLowerCase().trim().substring(0, 2);
+
+    let translationsMap: Record<string, string> = {};
+    try {
+      if (row.translations_json) translationsMap = JSON.parse(row.translations_json);
+    } catch {
+      translationsMap = {};
+    }
+    translationsMap[origLang] = origText;
+
+    // Check if target language already matches original
+    if (targetLang === origLang) {
+      return { messageId, targetLanguage: origLang, translatedText: origText, translations: translationsMap };
+    }
+
+    // Check if stored translation exists in cache map
+    if (translationsMap[targetLang]) {
+      return { messageId, targetLanguage: targetLang, translatedText: translationsMap[targetLang], translations: translationsMap };
+    }
+
+    // Translate from AUTHORITATIVE ORIGINAL text into targetLanguage
+    const sourceName = origLang === 'ta' ? 'Tamil' : origLang === 'hi' ? 'Hindi' : origLang === 'mr' ? 'Marathi' : 'English';
+    const targetName = targetLang === 'ta' ? 'Tamil' : targetLang === 'hi' ? 'Hindi' : targetLang === 'mr' ? 'Marathi' : 'English';
+
+    const systemInstruction = `You are a real-time clinical translator between a medical practitioner and a patient.
+Translate directly from ${sourceName} to ${targetName}.
+RULES:
+1. Translate faithfully without summarizing, altering medical urgency, or adding commentary.
+2. DO NOT change medical terms, drug names (e.g. Dolo-650, Paracetamol), medical abbreviations (ABHA, HbA1c, CBC, ECG, SpO2, BP, ICMR, WHO), clinical numbers, dosages, or phone numbers.
+3. Output ONLY the translated text string.`;
+
+    const prompt = `Translate this consultation message from ${sourceName} to ${targetName}:\n"${origText}"`;
+    let translatedText = origText;
+
+    try {
+      const res = await geminiService.generateText(prompt, systemInstruction, 10000);
+      if (res && res.trim()) {
+        translatedText = res.trim().replace(/^["']|["']$/g, '');
+      }
+    } catch (err: any) {
+      logger.warn({ tag: '[ON_DEMAND_TRANSLATE]', message: `On-demand translation failed: ${err.message}` });
+    }
+
+    // Save newly translated target text into translationsMap & DB
+    translationsMap[targetLang] = translatedText;
+    await pool.query(
+      'UPDATE emergency_chat_messages SET translations_json = $1 WHERE id = $2',
+      [JSON.stringify(translationsMap), messageId]
+    );
+
+    return {
+      messageId,
+      targetLanguage: targetLang,
+      translatedText,
+      translations: translationsMap,
+    };
   }
 
   // ── List Queues ──────────────────────────────────────────────

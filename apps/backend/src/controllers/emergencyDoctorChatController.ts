@@ -147,6 +147,29 @@ export const declineDoctorRequest = safeHandler(async (req, res) => {
   });
 });
 
+// POST /api/v1/emergency-network/doctor/requests/:requestId/translate
+export const translateChatMessage = safeHandler(async (req, res) => {
+  const user = getVerifiedUser(req);
+  const { requestId } = req.params;
+  const { messageId, targetLanguage } = req.body;
+
+  if (!messageId || !targetLanguage) {
+    return res.status(400).json({ success: false, message: 'messageId and targetLanguage are required.' });
+  }
+
+  const resolvedId = (user.role === 'ROLE_DOCTOR' && user.id.startsWith('usr-')) ? 'doc-demo' : user.id;
+
+  const result = await emergencyDoctorChatService.translateMessageForUser({
+    requestId,
+    userId: resolvedId,
+    userRole: user.role,
+    messageId: String(messageId),
+    targetLanguage: String(targetLanguage),
+  });
+
+  return res.status(200).json({ success: true, data: result });
+});
+
 // GET /api/v1/emergency-network/doctor/requests/:requestId/messages
 export const getChatMessages = safeHandler(async (req, res) => {
   const user = getVerifiedUser(req);
@@ -162,7 +185,7 @@ export const getChatMessages = safeHandler(async (req, res) => {
 export const sendChatMessage = safeHandler(async (req, res) => {
   const user = getVerifiedUser(req);
   const { requestId } = req.params;
-  const { message } = req.body;
+  const { message, patientLanguage, doctorLanguage } = req.body;
 
   if (!message || !message.trim()) {
     return res.status(400).json({ success: false, message: 'Message content is required.' });
@@ -175,6 +198,8 @@ export const sendChatMessage = safeHandler(async (req, res) => {
     senderId: resolvedId,
     senderRole: user.role,
     message: String(message),
+    patientLanguage: patientLanguage ? String(patientLanguage) : undefined,
+    doctorLanguage: doctorLanguage ? String(doctorLanguage) : undefined,
   });
 
   return res.status(201).json({ success: true, data: result });

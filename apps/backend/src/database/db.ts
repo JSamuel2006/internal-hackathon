@@ -544,11 +544,21 @@ export async function initializeDatabase(): Promise<void> {
         doctor_id VARCHAR(255) REFERENCES doctors(id) ON DELETE SET NULL,
         priority VARCHAR(50) NOT NULL,
         status VARCHAR(50) DEFAULT 'REQUESTED',
+        patient_language VARCHAR(50) DEFAULT 'ta',
+        doctor_language VARCHAR(50) DEFAULT 'en',
         requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         accepted_at TIMESTAMP,
         closed_at TIMESTAMP
       );
     `);
+
+    // Safe column migrations for existing emergency_doctor_requests
+    for (const col of [
+      ['patient_language', "VARCHAR(50) DEFAULT 'ta'"],
+      ['doctor_language', "VARCHAR(50) DEFAULT 'en'"],
+    ]) {
+      await client.query(`ALTER TABLE emergency_doctor_requests ADD COLUMN IF NOT EXISTS ${col[0]} ${col[1]}`);
+    }
 
     await client.query(`
       CREATE TABLE IF NOT EXISTS emergency_chat_messages (
@@ -558,10 +568,28 @@ export async function initializeDatabase(): Promise<void> {
         sender_user_id VARCHAR(255) NOT NULL,
         sender_role VARCHAR(50) NOT NULL,
         message TEXT NOT NULL,
+        original_text TEXT,
+        original_language VARCHAR(50),
+        translated_text TEXT,
+        translated_language VARCHAR(50),
+        translations_json TEXT,
+        translation_status VARCHAR(50) DEFAULT 'COMPLETED',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         read_at TIMESTAMP
       );
     `);
+
+    // Safe column migrations for existing emergency_chat_messages
+    for (const col of [
+      ['original_text', 'TEXT'],
+      ['original_language', 'VARCHAR(50)'],
+      ['translated_text', 'TEXT'],
+      ['translated_language', 'VARCHAR(50)'],
+      ['translations_json', 'TEXT'],
+      ['translation_status', "VARCHAR(50) DEFAULT 'COMPLETED'"],
+    ]) {
+      await client.query(`ALTER TABLE emergency_chat_messages ADD COLUMN IF NOT EXISTS ${col[0]} ${col[1]}`);
+    }
 
     await client.query(`
       CREATE TABLE IF NOT EXISTS screening_records (

@@ -228,8 +228,19 @@ export const emergencyNetworkService = {
     const response = await api.get(`/emergency-network/doctor/requests/${requestId}/messages`);
     return response.data;
   },
-  sendChatMessage: async (requestId: string, message: string) => {
-    const response = await api.post(`/emergency-network/doctor/requests/${requestId}/messages`, { message });
+  sendChatMessage: async (requestId: string, message: string, options?: { patientLanguage?: string; doctorLanguage?: string }) => {
+    const response = await api.post(`/emergency-network/doctor/requests/${requestId}/messages`, {
+      message,
+      patientLanguage: options?.patientLanguage,
+      doctorLanguage: options?.doctorLanguage,
+    });
+    return response.data;
+  },
+  translateChatMessage: async (requestId: string, messageId: string, targetLanguage: string) => {
+    const response = await api.post(`/emergency-network/doctor/requests/${requestId}/translate`, {
+      messageId,
+      targetLanguage,
+    });
     return response.data;
   },
   closeRequest: async (requestId: string) => {

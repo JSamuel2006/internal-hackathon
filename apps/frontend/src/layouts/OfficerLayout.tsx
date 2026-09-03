@@ -22,7 +22,7 @@ export default function OfficerLayout() {
 
   const { lang, t } = useI18n();
 
-  const navGroups = [
+  const navGroups = React.useMemo(() => [
     {
       group: 'MAIN',
       items: [
@@ -46,7 +46,7 @@ export default function OfficerLayout() {
         { name: t('preventive_health_simulator'), path: '/officer/simulator', icon: Cpu }
       ]
     }
-  ];
+  ], [lang]);
 
   return (
     <div className="h-screen bg-[#F5FAFC] text-slate-800 flex flex-col md:flex-row overflow-hidden font-sans">

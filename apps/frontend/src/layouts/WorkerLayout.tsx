@@ -21,11 +21,11 @@ export default function WorkerLayout() {
     navigate('/login');
   };
 
-  const navItems = [
+  const navItems = React.useMemo(() => [
     { name: t('asha_dashboard'), path: '/worker/dashboard', icon: Activity },
     { name: t('my_patients'), path: '/worker/patients', icon: Users },
     { name: t('field_screening'), path: '/worker/screening', icon: ClipboardList },
-  ];
+  ], [lang]);
 
   return (
     <div className="h-screen bg-[#F5FAFC] text-slate-800 flex flex-col md:flex-row overflow-hidden font-sans">

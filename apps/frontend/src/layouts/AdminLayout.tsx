@@ -5,7 +5,7 @@ import {
   Menu, X, LogOut, ChevronRight
 } from 'lucide-react';
 import { authService } from '../services/api';
-import { I18nService } from '../i18n';
+import { useI18n } from '../i18n';
 import { LanguageSelector } from '../components/voice/LanguageSelector';
 
 export default function AdminLayout() {
@@ -20,21 +20,14 @@ export default function AdminLayout() {
     navigate('/login');
   };
 
-  const [currentLang, setCurrentLang] = React.useState(I18nService.getLanguage());
+  const { lang, t } = useI18n();
 
-  React.useEffect(() => {
-    const unsub = I18nService.subscribe((lang) => {
-      setCurrentLang(lang);
-    });
-    return unsub;
-  }, []);
-
-  const navItems = [
-    { name: 'System Infrastructure', path: '/admin/dashboard', icon: Lock },
-    { name: 'Platform Monitoring', path: '/admin/monitoring', icon: Cpu },
-    { name: 'Audit Logs', path: '/admin/logs', icon: FileText },
-    { name: 'User RBAC Management', path: '/admin/users', icon: Users },
-  ];
+  const navItems = React.useMemo(() => [
+    { name: t('system_infrastructure'), path: '/admin/dashboard', icon: Lock },
+    { name: t('platform_monitoring'), path: '/admin/monitoring', icon: Cpu },
+    { name: t('audit_logs'), path: '/admin/logs', icon: FileText },
+    { name: t('user_rbac_management'), path: '/admin/users', icon: Users },
+  ], [lang]);
 
   return (
     <div className="h-screen bg-[#F5FAFC] text-slate-800 flex flex-col md:flex-row overflow-hidden font-sans">
@@ -111,7 +104,7 @@ export default function AdminLayout() {
         </header>
 
         <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#F5FAFC]">
-          <Outlet key={currentLang} />
+          <Outlet key={lang} />
         </main>
       </div>
     </div>

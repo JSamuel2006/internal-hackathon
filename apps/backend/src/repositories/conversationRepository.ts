@@ -11,7 +11,7 @@ export class ConversationRepository {
 
     await pool.query(
       `INSERT INTO assistant_sessions (id, user_id, title, language, created_at, updated_at) 
-       VALUES ($1, $2, $3, $4, $5, $6)`,
+       VALUES ($1::text, $2::text, $3::text, $4::text, $5::timestamp, $6::timestamp)`,
       [id, userId, title, language, createdAt, updatedAt]
     );
 
@@ -89,17 +89,17 @@ export class ConversationRepository {
     const sender = message.role === 'user' ? 'USER' : 'AI';
     await pool.query(
       `INSERT INTO assistant_messages (id, session_id, sender, message, confidence, language, created_at) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [id, sessionId, sender, message.content, message.confidence || null, message.language, timestamp]
+       VALUES ($1::text, $2::text, $3::text, $4::text, $5::numeric, $6::text, $7::timestamp)`,
+      [id, sessionId, sender, message.content, message.confidence ?? 0.95, message.language || 'en', timestamp]
     );
 
     // Auto-update session title if this is the first message
-    const msgCountRes = await pool.query('SELECT COUNT(*) FROM assistant_messages WHERE session_id = $1', [sessionId]);
+    const msgCountRes = await pool.query('SELECT COUNT(*) FROM assistant_messages WHERE session_id = $1::text', [sessionId]);
     if (parseInt(msgCountRes.rows[0].count) === 1 && message.role === 'user') {
       const cleanTitle = message.content.slice(0, 40) + (message.content.length > 40 ? '...' : '');
-      await pool.query('UPDATE assistant_sessions SET title = $1, updated_at = NOW() WHERE id = $2', [cleanTitle, sessionId]);
+      await pool.query('UPDATE assistant_sessions SET title = $1::text, updated_at = NOW() WHERE id = $2::text', [cleanTitle, sessionId]);
     } else {
-      await pool.query('UPDATE assistant_sessions SET updated_at = NOW() WHERE id = $2', [sessionId]);
+      await pool.query('UPDATE assistant_sessions SET updated_at = NOW() WHERE id = $1::text', [sessionId]);
     }
 
     return {

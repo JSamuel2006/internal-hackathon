@@ -187,16 +187,15 @@ export class OCRPreprocessor {
     // Note: Tesseract's PSM 3 handles rotation automatically via OSD (Orientation & Script Detection).
 
     // === PARALLEL PREPROCESSING ===
-    // Generate all variants simultaneously
+    // Generate all variants simultaneously (Preserve color contrast for foil strips)
     const [enhanced, thresholdImage, sharpened, highContrast, denoised, rotate90, rotate270] = await Promise.all([
-      // 1. Enhanced: grayscale + contrast boost + brightness lift
+      // 1. Enhanced: mild contrast boost + mild brightness lift (keep color data)
       Promise.resolve(
         workingImage.clone()
-          .greyscale()
-          .contrast(0.25)
-          .brightness(0.12)
+          .contrast(0.20)
+          .brightness(0.05)
       ),
-      // 2. Threshold/Binarized: adaptive local threshold
+      // 2. Threshold/Binarized: adaptive local threshold on grayscale
       Promise.resolve((() => {
         const img = workingImage.clone().greyscale();
         this.applyAdaptiveThreshold(img as any);
@@ -204,7 +203,7 @@ export class OCRPreprocessor {
       })()),
       // 3. Sharpened: convolution sharpen kernel
       Promise.resolve((() => {
-        const img = workingImage.clone().greyscale();
+        const img = workingImage.clone();
         try {
           (img as any).convolute([
             [0, -1, 0],
@@ -212,20 +211,18 @@ export class OCRPreprocessor {
             [0, -1, 0]
           ]);
         } catch {
-          // fallback: just sharpen by re-contrasting
-          img.contrast(0.4);
+          img.contrast(0.3);
         }
         return img;
       })()),
-      // 4. High Contrast: aggressive contrast for faded labels
+      // 4. High Contrast Grayscale: for metallic/faded reflective foil labels
       Promise.resolve(
         workingImage.clone()
           .greyscale()
-          .contrast(0.65)
-          .brightness(-0.05)
+          .contrast(0.60)
       ),
       // 5. Denoised: noise reduction pass
-      Promise.resolve(this.denoiseImage(workingImage.clone().greyscale())),
+      Promise.resolve(this.denoiseImage(workingImage.clone())),
       // 6. Rotate 90
       Promise.resolve(workingImage.clone().rotate(90)),
       // 7. Rotate 270 (-90)

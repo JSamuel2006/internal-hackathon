@@ -10,7 +10,7 @@ import { firstAidArticles } from '../../services/firstAidData';
 import { workerService, emergencyNetworkService } from '../../services/api';
 import { EMERGENCY_CONTACTS } from '../../config/emergencyContacts';
 import { CONFIGURED_PHC } from '../../config/phcContacts';
-import { I18nService } from '../../i18n';
+import { useI18n } from '../../i18n';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -55,12 +55,13 @@ function CallButton({
   disabled?: boolean;
   disabledReason?: string;
 }) {
+  const { t } = useI18n();
   const [feedback, setFeedback] = useState('');
 
   const handleCall = () => {
     if (!phone || disabled) return;
     window.location.href = `tel:${phone.replace(/[^+\d]/g, '')}`;
-    setFeedback("Opening your phone\u2019s calling app\u2026");
+    setFeedback(t('opening_calling_app' as any));
 
     setTimeout(() => setFeedback(''), 3500);
   };
@@ -240,9 +241,7 @@ export default function OfflineHealthPage() {
   const userId = user?.id || 'default_citizen';
 
   const [online, setOnline] = useState(navigator.onLine);
-  const [, forceUpdate] = useState(0);
-  const t = (key: string, _params?: Record<string, string>, fallback?: string) =>
-    I18nService.translate(key as any, _params) || fallback || key;
+  const { lang, t } = useI18n();
   const [syncing, setSyncing] = useState(false);
   const [syncMsg, setSyncMsg] = useState('');
 
@@ -257,12 +256,6 @@ export default function OfflineHealthPage() {
   const [selectedArticle, setSelectedArticle] = useState<any>(null);
   const [showEmergencyCard, setShowEmergencyCard] = useState(false);
   const [callFeedback, setCallFeedback] = useState('');
-
-  // Re-render when language changes
-  useEffect(() => {
-    const unsub = I18nService.subscribe(() => forceUpdate(n => n + 1));
-    return () => unsub();
-  }, []);
 
   // ── Load from IndexedDB Cache ────────────────────────────────────────────
   const loadCache = useCallback(async () => {
@@ -447,17 +440,17 @@ export default function OfflineHealthPage() {
           </div>
           <div>
             <h2 className="text-lg font-bold tracking-tight">
-              {online ? '🟢 Online Mode' : '🔴 Offline Mode'}
+              {online ? `🟢 ${t('online_mode')}` : `🔴 ${t('offline_mode')}`}
             </h2>
             <p className="text-xs opacity-80 mt-0.5">
               {online
-                ? 'Internet available — Emergency network, SOS, and doctor assistance are active.'
-                : 'Internet unavailable — Emergency calls, cached health data, and first-aid guidance are available.'}
+                ? t('online_mode_desc')
+                : t('offline_mode_desc')}
             </p>
           </div>
         </div>
         <div className="text-right text-[10px] font-mono opacity-70 shrink-0 ml-3">
-          Last Synced:<br />
+          {t('last_synced_label')}<br />
           <span className="font-bold">{lastSynced}</span>
         </div>
       </div>
@@ -470,8 +463,8 @@ export default function OfflineHealthPage() {
             <ShieldAlert className="w-7 h-7" />
           </div>
           <div>
-            <h2 className="text-xl font-black text-white uppercase tracking-wide">🚨 Emergency Help</h2>
-            <p className="text-rose-300 text-xs mt-0.5">Need immediate help? Tap below to call.</p>
+            <h2 className="text-xl font-black text-white uppercase tracking-wide">{t('emergency_help_heading')}</h2>
+            <p className="text-rose-300 text-xs mt-0.5">{t('need_immediate_help_tap')}</p>
           </div>
         </div>
 
@@ -479,15 +472,15 @@ export default function OfflineHealthPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <CallButton
             icon="🚑"
-            label="Call Ambulance"
-            subLabel={amb.description}
+            label={t('call_ambulance_btn')}
+            subLabel={t('free_national_ambulance')}
             phone={amb.phone}
             colorClass="bg-rose-600 hover:bg-rose-500"
           />
           <CallButton
             icon="🆘"
-            label="National Emergency"
-            subLabel={nat.description}
+            label={t('national_emergency_btn')}
+            subLabel={t('national_emergency_desc_sub')}
             phone={nat.phone}
             colorClass="bg-red-700 hover:bg-red-600"
           />
@@ -496,12 +489,12 @@ export default function OfflineHealthPage() {
         {/* Emergency Contact */}
         <div>
           <span className="text-[10px] text-rose-400/70 uppercase font-bold tracking-wider block mb-2">
-            My Emergency Contact
+            {t('my_emergency_contact_heading')}
           </span>
           {profile?.emergencyContact && profile.emergencyContact !== 'Not recorded' ? (
             <CallButton
               icon="📞"
-              label={profile.emergencyContactName || 'Emergency Contact'}
+              label={profile.emergencyContactName || t('my_emergency_contact' as any)}
               subLabel={profile.emergencyContact}
               phone={profile.emergencyContact}
               colorClass="bg-emerald-700 hover:bg-emerald-600"
@@ -510,11 +503,9 @@ export default function OfflineHealthPage() {
             <div className="flex items-center gap-3 px-4 py-4 rounded-2xl border-2 border-dashed border-slate-700 text-slate-500">
               <Phone className="w-7 h-7 opacity-40" />
               <div>
-                <span className="block text-sm font-bold">No emergency contact saved</span>
+                <span className="block text-sm font-bold">{t('no_emergency_contact_saved')}</span>
                 <span className="text-xs mt-0.5 block">
-                  {online
-                    ? 'Visit your profile to add an emergency contact.'
-                    : 'Connect to Internet, then update your profile to add a contact.'}
+                  {t('visit_profile_add_contact')}
                 </span>
               </div>
             </div>
@@ -524,7 +515,7 @@ export default function OfflineHealthPage() {
         {/* PHC / Nearby Facility */}
         <div>
           <span className="text-[10px] text-rose-400/70 uppercase font-bold tracking-wider block mb-2">
-            Nearest Public Health Facility
+            {t('nearest_public_health_facility')}
           </span>
           {cachedPHC ? (
             <div className="space-y-2">
@@ -538,7 +529,7 @@ export default function OfflineHealthPage() {
               {cachedPHC.phone ? (
                 <CallButton
                   icon="🏥"
-                  label="Call PHC"
+                  label={t('call_phc_btn')}
                   subLabel={cachedPHC.name}
                   phone={cachedPHC.phone}
                   colorClass="bg-teal-700 hover:bg-teal-600"
@@ -547,8 +538,8 @@ export default function OfflineHealthPage() {
                 <div className="flex items-center gap-3 px-4 py-3 rounded-2xl border border-slate-700 text-slate-500 bg-white">
                   <Hospital className="w-6 h-6 opacity-40" />
                   <div>
-                    <span className="block text-sm font-semibold">PHC phone number not configured</span>
-                    <span className="text-xs mt-0.5 block">Contact your ASHA worker or visit in person.</span>
+                    <span className="block text-sm font-semibold">{t('phc_phone_not_configured')}</span>
+                    <span className="text-xs mt-0.5 block">{t('contact_asha_visit_in_person')}</span>
                   </div>
                 </div>
               )}
@@ -557,11 +548,11 @@ export default function OfflineHealthPage() {
             <div className="flex items-center gap-3 px-4 py-4 rounded-2xl border-2 border-dashed border-slate-700 text-slate-500">
               <Hospital className="w-7 h-7 opacity-40" />
               <div>
-                <span className="block text-sm font-bold">Nearby facility information not available</span>
+                <span className="block text-sm font-bold">{t('no_hospitals_found')}</span>
                 <span className="text-xs mt-0.5 block">
                   {online
-                    ? 'Loading facility data…'
-                    : 'Not cached. Connect to Internet to load facility information.'}
+                    ? t('loading')
+                    : t('no_data')}
                 </span>
               </div>
             </div>
@@ -572,9 +563,9 @@ export default function OfflineHealthPage() {
         <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-3 flex gap-2.5 items-start">
           <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
           <div className="text-[11px] text-amber-300/80 leading-relaxed space-y-1">
-            <p><strong>Calls use your phone's cellular network — not the Internet.</strong></p>
-            <p>Calls may fail if your phone has no mobile signal. If calling fails, move to an area with mobile coverage.</p>
-            <p>Tapping a call button opens your phone's calling app. It does not guarantee the call is connected.</p>
+            <p><strong>{t('calls_cellular_network_warning')}</strong></p>
+            <p>{t('calls_may_fail_signal')}</p>
+            <p>{t('tapping_call_opens_app')}</p>
           </div>
         </div>
 
@@ -584,7 +575,7 @@ export default function OfflineHealthPage() {
             <div className="flex items-center gap-2">
               <Wifi className="w-4 h-4 text-emerald-400 shrink-0" />
               <span className="text-xs text-emerald-300">
-                <strong>Internet available.</strong> Full Emergency Response with SOS and Doctor Connect is online.
+                {t('internet_available_full_sos')}
               </span>
             </div>
             <a
@@ -592,7 +583,7 @@ export default function OfflineHealthPage() {
               className="shrink-0 flex items-center gap-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold uppercase tracking-wide transition-colors"
             >
               <ShieldAlert className="w-3.5 h-3.5" />
-              <span>SOS</span>
+              <span>{t('sos_trigger')}</span>
               <ChevronRight className="w-3 h-3" />
             </a>
           </div>
@@ -604,29 +595,29 @@ export default function OfflineHealthPage() {
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div className="flex items-center gap-2">
             <Stethoscope className="w-5 h-5 text-indigo-400" />
-            <h3 className="font-bold text-sm text-slate-900 uppercase tracking-wider">🩺 My Emergency Information</h3>
+            <h3 className="font-bold text-sm text-slate-900 uppercase tracking-wider">{t('my_emergency_info_title')}</h3>
           </div>
           {/* Show Full-Screen Card Button */}
           <button
             onClick={() => setShowEmergencyCard(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/25 text-rose-400 text-xs font-bold rounded-lg transition-all uppercase tracking-wide"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/25 text-rose-400 text-xs font-bold rounded-lg transition-all uppercase tracking-wide cursor-pointer"
             aria-label="Show full-screen emergency health card for first responders"
           >
             <Maximize2 className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Full-Screen Card</span>
-            <span className="sm:hidden">Card</span>
+            <span className="hidden sm:inline">{t('fullscreen_card_btn')}</span>
+            <span className="sm:hidden">{t('card')}</span>
           </button>
         </div>
 
         {profile ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
             {[
-              { icon: <User className="w-3.5 h-3.5" />, label: 'Name', value: profile.name, color: 'text-slate-900' },
-              { icon: <Activity className="w-3.5 h-3.5" />, label: 'ABHA ID', value: profile.abhaId, color: 'text-slate-700' },
-              { icon: <Droplets className="w-3.5 h-3.5 text-rose-400" />, label: 'Blood Group', value: profile.bloodGroup, color: 'text-rose-400 font-extrabold text-sm' },
-              { icon: <AlertCircle className="w-3.5 h-3.5 text-amber-400" />, label: 'Allergies', value: profile.allergies, color: 'text-amber-300 font-bold' },
-              { icon: <Heart className="w-3.5 h-3.5 text-indigo-400" />, label: 'Known Conditions', value: profile.conditions, color: 'text-indigo-300' },
-              { icon: <Pill className="w-3.5 h-3.5 text-teal-400" />, label: 'Current Medicines', value: profile.medicines, color: 'text-teal-300' },
+              { icon: <User className="w-3.5 h-3.5" />, label: t('full_name' as any), value: profile.name, color: 'text-slate-900' },
+              { icon: <Activity className="w-3.5 h-3.5" />, label: t('dashboard_abha_id'), value: profile.abhaId, color: 'text-slate-700' },
+              { icon: <Droplets className="w-3.5 h-3.5 text-rose-400" />, label: t('blood_group' as any), value: profile.bloodGroup, color: 'text-rose-400 font-extrabold text-sm' },
+              { icon: <AlertCircle className="w-3.5 h-3.5 text-amber-400" />, label: t('allergies' as any), value: profile.allergies, color: 'text-amber-300 font-bold' },
+              { icon: <Heart className="w-3.5 h-3.5 text-indigo-400" />, label: t('known_conditions'), value: profile.conditions, color: 'text-indigo-300' },
+              { icon: <Pill className="w-3.5 h-3.5 text-teal-400" />, label: t('current_medications'), value: profile.medicines, color: 'text-teal-300' },
             ].map(({ icon, label, value, color }) => (
               <div key={label} className="p-3 bg-white rounded-xl border border-slate-200 flex items-start gap-2.5">
                 <span className="text-slate-500 mt-0.5 shrink-0">{icon}</span>
@@ -642,7 +633,7 @@ export default function OfflineHealthPage() {
               <div className="flex items-start gap-2.5">
                 <Phone className="w-3.5 h-3.5 text-emerald-400 mt-0.5 shrink-0" />
                 <div>
-                  <span className="text-slate-500 uppercase text-[10px] block font-bold">Emergency Contact</span>
+                  <span className="text-slate-500 uppercase text-[10px] block font-bold">{t('my_emergency_contact')}</span>
                   {profile.emergencyContactName && (
                     <span className="text-slate-700 font-bold block mt-0.5">{profile.emergencyContactName}</span>
                   )}
@@ -677,9 +668,9 @@ export default function OfflineHealthPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
                 { label: 'Date', value: new Date(recentScreening.screening_date || recentScreening.createdAt).toLocaleDateString(), color: 'text-slate-700' },
-                { label: 'Blood Pressure', value: `${recentScreening.systolic}/${recentScreening.diastolic} mmHg`, color: 'text-slate-800 font-bold' },
+                { label: t('blood_pressure'), value: `${recentScreening.systolic}/${recentScreening.diastolic} mmHg`, color: 'text-slate-800 font-bold' },
                 { label: 'SpO₂ (Oxygen)', value: `${recentScreening.spo2}%`, color: 'text-emerald-400 font-bold' },
-                { label: 'Pulse', value: `${recentScreening.pulse} bpm`, color: 'text-slate-800' },
+                { label: t('pulse'), value: `${recentScreening.pulse} bpm`, color: 'text-slate-800' },
               ].map(({ label, value, color }) => (
                 <div key={label} className="p-2.5 bg-white rounded-xl border border-slate-200 text-center font-mono">
                   <span className="text-slate-500 text-[9px] uppercase block">{label}</span>
@@ -701,7 +692,7 @@ export default function OfflineHealthPage() {
           <div>
             <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
               <RefreshCw className="w-5 h-5 text-amber-400" />
-              <h3 className="font-bold text-sm text-slate-800 uppercase tracking-wider">🔄 Offline Sync Manager</h3>
+              <h3 className="font-bold text-sm text-slate-800 uppercase tracking-wider">{t('offline_sync_manager')}</h3>
             </div>
             <p className="text-xs text-slate-600 mt-2">
               ASHA screening records created during network outages are queued locally. They will transfer automatically once a network connection is restored.
@@ -723,10 +714,10 @@ export default function OfflineHealthPage() {
           <button
             onClick={handleSyncNow}
             disabled={syncing || pendingCount === 0}
-            className="w-full py-3.5 bg-indigo-650 hover:bg-indigo-600 disabled:bg-white disabled:text-slate-600 text-slate-950 font-bold uppercase text-xs rounded-xl tracking-widest transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3.5 bg-indigo-650 hover:bg-indigo-600 disabled:bg-white disabled:text-slate-600 text-slate-950 font-bold uppercase text-xs rounded-xl tracking-widest transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
             <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
-            <span>{syncing ? 'SYNCING...' : 'SYNC NOW'}</span>
+            <span>{syncing ? t('syncing_btn') : t('sync_now_btn')}</span>
           </button>
         </div>
 
@@ -734,7 +725,7 @@ export default function OfflineHealthPage() {
         <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-3">
           <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
             <Info className="w-5 h-5 text-slate-600" />
-            <h3 className="font-bold text-sm text-slate-800 uppercase tracking-wider">ℹ️ What Works Offline</h3>
+            <h3 className="font-bold text-sm text-slate-800 uppercase tracking-wider">{t('what_works_offline_title')}</h3>
           </div>
           <div className="space-y-2 text-xs font-mono">
             {[
@@ -765,7 +756,7 @@ export default function OfflineHealthPage() {
       <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
         <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
           <BookOpen className="w-5 h-5 text-teal-400" />
-          <h3 className="font-bold text-sm text-slate-800 uppercase tracking-wider">🩹 {t('first_aid_title', {}, 'First-Aid Guidance')}</h3>
+          <h3 className="font-bold text-sm text-slate-800 uppercase tracking-wider">🩹 {t('first_aid_title')}</h3>
           <span className="ml-auto text-[10px] text-teal-500 bg-teal-500/10 border border-teal-500/20 px-2 py-0.5 rounded font-mono uppercase">Works Offline</span>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -775,9 +766,9 @@ export default function OfflineHealthPage() {
               onClick={() => setSelectedArticle(art)}
               className="p-3.5 bg-white hover:bg-white text-left border border-slate-200 hover:border-teal-500/30 rounded-xl transition-all space-y-1.5 group cursor-pointer"
             >
-              <span className="text-[10px] text-teal-400 font-bold block">{t(art.category)}</span>
+              <span className="text-[10px] text-teal-400 font-bold block">{t(art.category as any)}</span>
               <span className="text-xs text-slate-800 font-bold block group-hover:text-teal-200 transition-colors">
-                {t(art.title)}
+                {t(art.title as any)}
               </span>
             </button>
           ))}
@@ -790,8 +781,8 @@ export default function OfflineHealthPage() {
           <div className="bg-white border border-slate-200 shadow-sm max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 rounded-2xl border border-slate-200 space-y-6">
             <div className="flex justify-between items-start border-b border-slate-200 pb-3">
               <div>
-                <span className="text-[10px] text-teal-400 font-bold block uppercase tracking-wider">{t(selectedArticle.category)}</span>
-                <h4 className="text-lg font-bold text-slate-900">{t(selectedArticle.title)}</h4>
+                <span className="text-[10px] text-teal-400 font-bold block uppercase tracking-wider">{t(selectedArticle.category as any)}</span>
+                <h4 className="text-lg font-bold text-slate-900">{t(selectedArticle.title as any)}</h4>
               </div>
               <button
                 onClick={() => setSelectedArticle(null)}
@@ -801,12 +792,12 @@ export default function OfflineHealthPage() {
                 Close
               </button>
             </div>
-            <p className="text-xs text-slate-350 leading-relaxed">{t(selectedArticle.description)}</p>
+            <p className="text-xs text-slate-350 leading-relaxed">{t(selectedArticle.description as any)}</p>
             <div className="space-y-2">
               <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block">Recommended Steps</span>
               <ol className="list-decimal list-inside text-xs text-slate-700 space-y-2 leading-relaxed">
                 {selectedArticle.steps.map((st: string, i: number) => (
-                  <li key={i}>{t(st)}</li>
+                  <li key={i}>{t(st as any)}</li>
                 ))}
               </ol>
             </div>
@@ -817,7 +808,7 @@ export default function OfflineHealthPage() {
               </div>
               <ul className="list-disc list-inside text-[10px] space-y-1 leading-relaxed text-amber-300/90">
                 {selectedArticle.warnings.map((w: string, i: number) => (
-                  <li key={i}>{t(w)}</li>
+                  <li key={i}>{t(w as any)}</li>
                 ))}
               </ul>
             </div>

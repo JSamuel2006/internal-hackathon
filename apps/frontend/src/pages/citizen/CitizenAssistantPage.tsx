@@ -26,9 +26,26 @@ export default function CitizenAssistantPage() {
   const [currentSessionId, setCurrentSessionId] = useState<string>('');
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState('');
-  const [languageCode, setLanguageCode] = useState('en');
+  
+  // Persist & restore response language from localStorage or global i18n
+  const [languageCode, setLanguageCode] = useState<string>(() => {
+    const saved = localStorage.getItem('arogya_ai_response_language');
+    if (saved) return saved;
+    const globalLang = localStorage.getItem('arogya_language') || 'en';
+    if (globalLang.startsWith('ta')) return 'ta-IN';
+    if (globalLang.startsWith('hi')) return 'hi-IN';
+    if (globalLang.startsWith('mr')) return 'mr-IN';
+    return 'en';
+  });
+
   const [loading, setLoading] = useState(false);
   const [listening, setListening] = useState(false);
+
+  // Sync language selection changes to localStorage
+  const handleLanguageChange = (newLang: string) => {
+    setLanguageCode(newLang);
+    localStorage.setItem('arogya_ai_response_language', newLang);
+  };
 
   // Search and Context states
   const [searchQuery, setSearchQuery] = useState('');
@@ -79,6 +96,13 @@ export default function CitizenAssistantPage() {
       const res = await assistantService.getSession(id);
       if (res.success && res.data.session) {
         setMessages(res.data.session.messages || []);
+        if (res.data.session.language) {
+          const sLang = res.data.session.language;
+          if (sLang === 'ta' || sLang === 'ta-IN') setLanguageCode('ta-IN');
+          else if (sLang === 'hi' || sLang === 'hi-IN') setLanguageCode('hi-IN');
+          else if (sLang === 'mr' || sLang === 'mr-IN') setLanguageCode('mr-IN');
+          else if (sLang === 'en') setLanguageCode('en');
+        }
       }
     } catch (err) {
       console.error(err);
@@ -277,8 +301,8 @@ export default function CitizenAssistantPage() {
           <label className="block text-[10px] font-mono text-slate-500 uppercase mb-1">Response Language</label>
           <select
             value={languageCode}
-            onChange={(e) => setLanguageCode(e.target.value)}
-            className="w-full bg-white border border-slate-200 rounded-lg py-2 px-3 text-xs outline-none text-slate-800 focus:border-rose-500/35"
+            onChange={(e) => handleLanguageChange(e.target.value)}
+            className="w-full bg-white border border-slate-200 rounded-lg py-2 px-3 text-xs outline-none text-slate-800 focus:border-rose-500/35 cursor-pointer"
           >
             {LANGUAGES.map((lang) => (
               <option key={lang.code} value={lang.code}>

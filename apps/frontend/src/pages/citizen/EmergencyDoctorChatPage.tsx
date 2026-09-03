@@ -24,6 +24,12 @@ export default function EmergencyDoctorChatPage() {
   const [doctorName, setDoctorName] = useState<string>('Connecting to nearest doctor...');
   const [errorMsg, setErrorMsg] = useState('');
   const [aiSummary, setAiSummary] = useState<string>('');
+  const [participantLang, setParticipantLang] = useState<string>('ta');
+  const [showOriginalMap, setShowOriginalMap] = useState<Record<string, boolean>>({});
+
+  const toggleShowOriginal = (msgId: string) => {
+    setShowOriginalMap((prev) => ({ ...prev, [msgId]: !prev[msgId] }));
+  };
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -208,10 +214,60 @@ export default function EmergencyDoctorChatPage() {
     };
   }, [sessionId]); // Stable — depends only on sessionId, NOT requestId
 
-  // Scroll to bottom on new messages
+  // Dynamic Translation Resolver: fetches or returns stored translation based on participantLang & authoritative originalText
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+    if (!requestId || messages.length === 0) return;
+
+    messages.forEach(async (m) => {
+      if (m.senderRole === 'SYSTEM') return;
+      const origLang = (m.originalLanguage || 'en').toLowerCase().substring(0, 2);
+      const targetLang = participantLang.toLowerCase().substring(0, 2);
+
+      if (origLang === targetLang) return; // Original language matches target
+      if (m.translations && m.translations[targetLang]) return; // Already cached locally
+
+      // Fetch on-demand translation from backend REST API
+      try {
+        const res = await emergencyNetworkService.translateChatMessage(requestId, m.id, targetLang);
+        if (res && res.success && res.data) {
+          setMessages((prev) =>
+            prev.map((msg) => {
+              if (msg.id !== m.id) return msg;
+              const updatedTranslations = { ...(msg.translations || {}), [targetLang]: res.data.translatedText };
+              return {
+                ...msg,
+                translations: updatedTranslations,
+              };
+            })
+          );
+        }
+      } catch (err) {
+        console.warn(`Translation fetch failed for message ${m.id}:`, err);
+      }
+    });
+  }, [participantLang, requestId, messages.length]);
+
+  // Helper to determine exact text to render for a message
+  const getDisplayText = (m: any) => {
+    if (m.senderRole === 'SYSTEM') return m.message;
+    const showOriginal = showOriginalMap[m.id];
+    const origText = m.originalText || m.message;
+    const origLang = (m.originalLanguage || 'en').toLowerCase().substring(0, 2);
+    const targetLang = participantLang.toLowerCase().substring(0, 2);
+
+    if (showOriginal) return { text: origText, isOriginal: true, label: `Original • ${origLang.toUpperCase()}` };
+    if (origLang === targetLang) return { text: origText, isOriginal: true, label: `Original • ${origLang.toUpperCase()}` };
+
+    if (m.translations && m.translations[targetLang]) {
+      return { text: m.translations[targetLang], isOriginal: false, label: `Translated from ${origLang.toUpperCase()}` };
+    }
+
+    if (m.translatedLanguage && m.translatedLanguage.toLowerCase().substring(0, 2) === targetLang) {
+      return { text: m.translatedText || m.message, isOriginal: false, label: `Translated from ${origLang.toUpperCase()}` };
+    }
+
+    return { text: origText, isOriginal: true, label: `Original • ${origLang.toUpperCase()}` };
+  };
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -219,7 +275,7 @@ export default function EmergencyDoctorChatPage() {
 
     setSending(true);
     try {
-      const res = await emergencyNetworkService.sendChatMessage(requestId, inputMessage);
+      const res = await emergencyNetworkService.sendChatMessage(requestId, inputMessage, { patientLanguage: participantLang });
       if (res.success) {
         setMessages((prev) => [...prev, res.data]);
         setInputMessage('');
@@ -420,13 +476,30 @@ export default function EmergencyDoctorChatPage() {
         <div className="md:col-span-8 flex flex-col h-[500px] bg-white border border-slate-200 shadow-sm rounded-2xl border border-slate-200 overflow-hidden">
           
           {/* Chat Header */}
-          <div className="p-4 bg-white border-b border-slate-200 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-slate-200 text-rose-455 font-bold">
-              Doc
+          <div className="p-4 bg-white border-b border-slate-200 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-slate-200 text-rose-455 font-bold">
+                Doc
+              </div>
+              <div>
+                <strong className="text-slate-205 text-xs block">{doctorName}</strong>
+                <span className="text-[9px] text-slate-500">Secure real-time bilingual chat</span>
+              </div>
             </div>
-            <div>
-              <strong className="text-slate-205 text-xs block">{doctorName}</strong>
-              <span className="text-[9px] text-slate-500">Secure human-in-the-loop chat channel</span>
+            
+            {/* Participant Chat Language Selector */}
+            <div className="flex items-center gap-1.5 text-[10px]">
+              <span className="text-slate-400 font-bold hidden sm:inline">My Chat Language:</span>
+              <select
+                value={participantLang}
+                onChange={(e) => setParticipantLang(e.target.value)}
+                className="bg-white border border-slate-200 text-slate-700 font-bold px-2 py-1 rounded-lg text-[10px] focus:outline-none focus:border-teal-500 cursor-pointer"
+              >
+                <option value="ta">தமிழ் (Tamil)</option>
+                <option value="hi">हिंदी (Hindi)</option>
+                <option value="mr">मराठी (Marathi)</option>
+                <option value="en">English</option>
+              </select>
             </div>
           </div>
 
@@ -453,17 +526,33 @@ export default function EmergencyDoctorChatPage() {
                   );
                 }
 
+                const displayInfo = getDisplayText(m);
+                const showOriginal = showOriginalMap[m.id];
+                const canToggle = !displayInfo.isOriginal || showOriginal;
+
                 return (
                   <div key={m.id} className={`flex ${isCitizen ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[75%] p-3.5 rounded-2xl space-y-1.5 leading-relaxed text-xs border ${
+                    <div className={`max-w-[80%] p-3.5 rounded-2xl text-xs leading-relaxed ${
                       isCitizen 
-                        ? 'bg-rose-500/10 border-rose-500/20 text-slate-800' 
-                        : 'bg-white border-slate-200 text-slate-800'
+                        ? 'bg-rose-500/20 text-rose-100 border border-rose-500/30' 
+                        : 'bg-white border border-slate-200 text-slate-800'
                     }`}>
-                      <p>{m.message}</p>
-                      <span className="text-[8px] text-slate-500 block text-right font-mono">
-                        {new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
+                      <div className="flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-1 gap-3">
+                        <span>{isCitizen ? 'You (Patient)' : 'Attending Doctor'}</span>
+                        <span className="text-[8px] text-teal-400 font-mono">
+                          {displayInfo.label}
+                        </span>
+                      </div>
+                      
+                      <p className="text-xs">{displayInfo.text}</p>
+
+                      <button
+                        type="button"
+                        onClick={() => toggleShowOriginal(m.id)}
+                        className="mt-2 text-[9px] text-teal-400 hover:text-teal-300 font-bold underline cursor-pointer block"
+                      >
+                        {showOriginal ? 'Hide Original' : 'View Original'}
+                      </button>
                     </div>
                   </div>
                 );

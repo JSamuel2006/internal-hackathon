@@ -5,6 +5,19 @@ import { bhashiniService } from '../services/ai-services/bhashiniService.js';
 import { piiRedactor } from '../services/ai-services/piiRedactor.js';
 import { geminiService } from '../services/ai-services/geminiService.js';
 import { patientContextService } from '../services/patientContextService.js';
+import { pool } from '../database/db.js';
+
+function normalizeLanguageCode(lang: string): string {
+  if (!lang) return 'en';
+  const clean = String(lang).toLowerCase().trim();
+  if (clean.startsWith('ta')) return 'ta';
+  if (clean.startsWith('hi')) return 'hi';
+  if (clean.startsWith('mr')) return 'mr';
+  if (clean.startsWith('te')) return 'te';
+  if (clean.startsWith('bn')) return 'bn';
+  if (clean.startsWith('en')) return 'en';
+  return clean.split('-')[0] || 'en';
+}
 
 // POST /api/v1/assistant/sessions — Create a new conversation session
 export async function createSession(req: Request, res: Response, next: NextFunction) {
@@ -70,14 +83,25 @@ export async function sendMessage(req: Request, res: Response, next: NextFunctio
     // 2. Sanitize PII from user input
     const sanitizedContent = piiRedactor.stripPII(content.trim());
 
-    // 3. Translate to English if needed for knowledge lookup
-    const langCode = typeof language === 'object' ? (language as any).code : language;
-    const langName = typeof language === 'object' ? (language as any).name : 'English';
+    // 3. Normalize language code and determine target language name
+    const rawLang = typeof language === 'object' ? (language as any).code : language;
+    const langCode = normalizeLanguageCode(rawLang);
+    
+    const langNames: Record<string, string> = {
+      ta: 'Tamil',
+      hi: 'Hindi',
+      mr: 'Marathi',
+      te: 'Telugu',
+      bn: 'Bengali',
+      en: 'English'
+    };
+    const langName = langNames[langCode] || 'English';
 
-    const englishQuery =
-      langCode !== 'en' && langCode !== 'en-US'
-        ? await bhashiniService.translateText(sanitizedContent, langCode, 'en')
-        : sanitizedContent;
+    // Update session language in DB if changed
+    if (session.language !== langCode) {
+      await pool.query('UPDATE assistant_sessions SET language = $1, updated_at = NOW() WHERE id = $2', [langCode, session.id]);
+      session.language = langCode;
+    }
 
     // 4. Store user message
     const userMessage = await conversationRepository.addMessage(session.id, {
@@ -91,30 +115,20 @@ export async function sendMessage(req: Request, res: Response, next: NextFunctio
     // 5. Gather Patient Context
     const patientContext = await patientContextService.getContextForUser(userId);
 
-    // 6. Build the custom context-aware system prompt
-    const systemPrompt = `You are ArogyaMitra AI.
-Use ONLY the patient's medical history provided below.
-Use ONLY the selected language.
-Selected Language: ${langName}
-Language Code: ${langCode}
+    // 6. Build the custom context-aware system prompt explicitly specifying output language
+    const systemPrompt = `You are ArogyaMitra AI, a compassionate clinical decision support system.
+CRITICAL LANGUAGE MANDATE: You MUST write your entire response in ${langName} (${langCode}).
+Selected Response Language: ${langName} (${langCode})
 
 Patient Context:
 ${JSON.stringify(patientContext, null, 2)}
 
 Rules:
-Never answer in English unless English is selected.
-Translate headings, bullet points, warnings, medicine instructions, recovery advice, and lifestyle guidance.
-Keep medicine names, laboratory names, medical terminology, and drug names in English.
-Never invent medical history.
-Never hallucinate diseases.
-If allergy information exists, always consider it.
-If Digital Twin risk exists, consider it.
-If laboratory abnormalities exist, explain them.
-If kidney or liver function is abnormal, warn before recommending medicines.
-Never prescribe medicines.
-Never discontinue medicines.
-Always remind the user that this is AI guidance and not a confirmed medical diagnosis.
-Escalate emergency symptoms immediately.`;
+1. ALWAYS write your answer in ${langName}. Never answer in English unless English is explicitly requested.
+2. Translate all headings, explanations, preventive steps, precautions, and disclaimers into fluent ${langName}.
+3. Keep medicine names, laboratory test names (e.g. HbA1c, CBC, ECG), drug names (e.g. Paracetamol, Amoxicillin), hospital names, and numeric lab values in standard medical English terms.
+4. If allergy or digital twin warnings apply, highlight them clearly in ${langName}.
+5. Remind the user that this guidance is AI-generated and not a confirmed medical diagnosis.`;
 
     let responseText: string;
     let aiCategory = 'GENERAL';
@@ -124,36 +138,46 @@ Escalate emergency symptoms immediately.`;
     let usedGemini = false;
 
     try {
-      responseText = await geminiService.generateText(englishQuery, systemPrompt);
+      // Send user query directly to Gemini with target language instruction
+      responseText = await geminiService.generateText(sanitizedContent, systemPrompt);
       usedGemini = true;
 
-      // Detect emergency keywords in Gemini response for escalation flag
-      const emergencyKeywords = ['call 108', 'emergency', 'immediately', 'urgent', 'hospital'];
+      // Force-translate if Gemini returned English for non-English target language
+      if (langCode !== 'en' && langCode !== 'en-US') {
+        responseText = await bhashiniService.translateText(responseText, 'en', langCode);
+      }
+
+      // Detect emergency keywords for escalation flag
+      const emergencyKeywords = ['call 108', 'emergency', 'immediately', 'urgent', 'hospital', 'ஆபத்து', 'அவசரம்', 'आपातकाल'];
       isEmergency = emergencyKeywords.some(k => responseText.toLowerCase().includes(k));
     } catch (geminiError) {
-      // Fallback
-      const fallbackResponse = buildAIResponse(englishQuery);
-      responseText = formatResponseText(fallbackResponse);
+      // Fallback: Generate structured response and translate to target language
+      const fallbackResponse = buildAIResponse(sanitizedContent);
+      const englishText = formatResponseText(fallbackResponse, 'en');
+      responseText = await bhashiniService.translateText(englishText, 'en', langCode);
       isEmergency = fallbackResponse.isEmergency;
     }
 
-    // 7. Translate response back if needed
-    const localizedResponse =
-      langCode !== 'en' && langCode !== 'en-US'
-        ? await bhashiniService.translateText(responseText, 'en', langCode)
-        : responseText;
+    // Localize disclaimer for non-English outputs
+    const disclaimers: Record<string, string> = {
+      ta: 'இந்த வழிகாட்டல் AI-ஆல் உருவாக்கப்பட்டது, இது உறுதிப்படுத்தப்பட்ட மருத்துவ அறிக்கை அல்ல.',
+      hi: 'यह मार्गदर्शन AI द्वारा उत्पन्न किया गया है और यह कोई नैदानिक चिकित्सा पुष्टि नहीं है।',
+      mr: 'हे मार्गदर्शन AI द्वारे तयार केले गेले आहे आणि हे निश्चित वैद्यकीय निदान नाही.',
+      en: 'This guidance is AI-generated and is not a confirmed medical diagnosis.'
+    };
+    const localizedDisclaimer = disclaimers[langCode] || disclaimers.en;
 
     // 8. Store assistant message
     const assistantMessage = await conversationRepository.addMessage(session.id, {
       role: 'assistant',
-      content: localizedResponse,
+      content: responseText,
       language: langCode,
       category: aiCategory as any,
       isFavorite: false,
       sources: aiSources,
       confidence,
       isEmergency,
-      disclaimer: 'This guidance is AI-generated and is not a confirmed medical diagnosis.',
+      disclaimer: localizedDisclaimer,
     });
 
     return res.status(200).json({
@@ -203,10 +227,54 @@ export async function renameSession(req: Request, res: Response, next: NextFunct
   }
 }
 
-// Helper: Format AI response as readable markdown text
-function formatResponseText(resp: import('../services/ai-services/medicalKnowledgeBase.js').StructuredAIResponse): string {
+// Helper: Format AI response as readable markdown text with localized headings
+function formatResponseText(
+  resp: import('../services/ai-services/medicalKnowledgeBase.js').StructuredAIResponse,
+  langCode: string = 'en'
+): string {
+  const headings: Record<string, any> = {
+    ta: {
+      immediate: 'உடனடி நடவடிக்கைகள்:',
+      preventive: '🛡️ தடுப்பு நடவடிக்கைகள்',
+      precautions: '⚠️ பரிந்துரைக்கப்பட்ட முன்னெச்சரிக்கைகள்',
+      govt: '🏛️ அரசாங்க வளங்கள்',
+      nextAction: '✅ அடுத்த பரிந்துரைக்கப்பட்ட நடவடிக்கை',
+      confidence: 'நம்பகத்தன்மை',
+      sources: 'ஆதாரங்கள்'
+    },
+    hi: {
+      immediate: 'तत्काल कार्रवाई:',
+      preventive: '🛡️ निवारक उपाय',
+      precautions: '⚠️ अनुशंसित सावधानियां',
+      govt: '🏛️ सरकारी संसाधन',
+      nextAction: '✅ अगली अनुशंसित कार्रवाई',
+      confidence: 'विश्वसनीयता',
+      sources: 'स्रोत'
+    },
+    mr: {
+      immediate: 'तात्काळ कृती:',
+      preventive: '🛡️ प्रतिबंधात्मक उपाय',
+      precautions: '⚠️ शिफारस केलेल्या खबरदारी',
+      govt: '🏛️ शासकीय संसाधने',
+      nextAction: '✅ पुढील शिफारस केलेली कृती',
+      confidence: 'विश्वासार्हता',
+      sources: 'स्त्रोत'
+    },
+    en: {
+      immediate: 'Immediate Actions:',
+      preventive: '🛡️ Preventive Measures',
+      precautions: '⚠️ Recommended Precautions',
+      govt: '🏛️ Government Resources',
+      nextAction: '✅ Next Recommended Action',
+      confidence: 'Confidence',
+      sources: 'Sources'
+    }
+  };
+
+  const h = headings[langCode] || headings.en;
+
   if (resp.isEmergency && resp.emergencyMessage) {
-    return `## 🚨 ${resp.summary}\n\n${resp.detailedExplanation}\n\n### Immediate Actions:\n${resp.recommendedPrecautions.map((p) => `- ${p}`).join('\n')}\n\n---\n*${resp.disclaimer}*`;
+    return `## 🚨 ${resp.summary}\n\n${resp.detailedExplanation}\n\n### ${h.immediate}\n${resp.recommendedPrecautions.map((p) => `- ${p}`).join('\n')}\n\n---\n*${resp.disclaimer}*`;
   }
 
   const parts: string[] = [
@@ -215,19 +283,19 @@ function formatResponseText(resp: import('../services/ai-services/medicalKnowled
   ];
 
   if (resp.preventiveMeasures.length > 0) {
-    parts.push(`\n### 🛡️ Preventive Measures\n${resp.preventiveMeasures.map((p) => `- ${p}`).join('\n')}`);
+    parts.push(`\n### ${h.preventive}\n${resp.preventiveMeasures.map((p) => `- ${p}`).join('\n')}`);
   }
 
   if (resp.recommendedPrecautions.length > 0) {
-    parts.push(`\n### ⚠️ Recommended Precautions\n${resp.recommendedPrecautions.map((p) => `- ${p}`).join('\n')}`);
+    parts.push(`\n### ${h.precautions}\n${resp.recommendedPrecautions.map((p) => `- ${p}`).join('\n')}`);
   }
 
   if (resp.govtResources.length > 0) {
-    parts.push(`\n### 🏛️ Government Resources\n${resp.govtResources.map((r) => `- ${r}`).join('\n')}`);
+    parts.push(`\n### ${h.govt}\n${resp.govtResources.map((r) => `- ${r}`).join('\n')}`);
   }
 
-  parts.push(`\n### ✅ Next Recommended Action\n${resp.nextRecommendedAction}`);
-  parts.push(`\n---\n*Confidence: ${Math.round(resp.confidence * 100)}% | Sources: ${resp.sources.slice(0, 2).join(', ')}*`);
+  parts.push(`\n### ${h.nextAction}\n${resp.nextRecommendedAction}`);
+  parts.push(`\n---\n*${h.confidence}: ${Math.round(resp.confidence * 100)}% | ${h.sources}: ${resp.sources.slice(0, 2).join(', ')}*`);
   parts.push(`\n> ⚕️ **${resp.disclaimer}**`);
 
   return parts.join('\n');

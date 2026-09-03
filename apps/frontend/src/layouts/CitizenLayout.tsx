@@ -22,7 +22,7 @@ export default function CitizenLayout() {
 
   const { lang, t } = useI18n();
 
-  const navGroups = [
+  const navGroups = React.useMemo(() => [
     {
       group: 'MAIN',
       items: [
@@ -62,7 +62,7 @@ export default function CitizenLayout() {
         { name: t('health_exchange'), path: '/citizen/interoperability', icon: Globe }
       ]
     }
-  ];
+  ], [lang]);
 
   return (
     <div className="h-screen bg-[#F5FAFC] text-slate-800 flex flex-col md:flex-row overflow-hidden font-sans selection:bg-teal-500 selection:text-white">

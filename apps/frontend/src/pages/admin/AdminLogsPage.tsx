@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScrollText, ShieldAlert, Clock, Terminal } from 'lucide-react';
+import { useI18n } from '../../i18n';
 
 const AUDIT_LOGS = [
   { timestamp: '2026-08-06 12:02:14', event: 'USER_LOGIN', user: 'officer.pune@mohfw.gov.in', ip: '192.168.1.45', status: 'SUCCESS' },
@@ -9,6 +10,8 @@ const AUDIT_LOGS = [
 ];
 
 export default function AdminLogsPage() {
+  const { t } = useI18n();
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       <div className="flex items-center justify-between border-b border-slate-200 pb-4">
@@ -17,8 +20,8 @@ export default function AdminLogsPage() {
             <ScrollText className="w-5 h-5 glow-pill" />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-900">Audit Logs Console</h2>
-            <p className="text-xs text-slate-455 mt-0.5">Immutable audit trail of user sessions, AI computations, and OCR runs</p>
+            <h2 className="text-xl font-bold tracking-tight text-slate-900">{t("audit_logs_console")}</h2>
+            <p className="text-xs text-slate-455 mt-0.5">{t("system_audit_trail_desc")}</p>
           </div>
         </div>
       </div>
@@ -26,7 +29,7 @@ export default function AdminLogsPage() {
       <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
         <div className="flex items-center gap-2 text-xs text-slate-500 font-mono">
           <Terminal className="w-4 h-4 text-indigo-400" />
-          <span>Real-time System Audit Stream</span>
+          <span>{t("realtime_system_audit_stream")}</span>
         </div>
 
         <div className="space-y-3.5">
@@ -52,3 +55,4 @@ export default function AdminLogsPage() {
     </div>
   );
 }
+

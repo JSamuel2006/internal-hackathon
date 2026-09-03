@@ -129,34 +129,31 @@ export default function LandingPage() {
     <div className="flex-1 bg-white text-slate-800 font-sans selection:bg-teal-500 selection:text-white">
       
       {/* ── 1. HERO SECTION ──────────────────────────────────────────────── */}
-      <section className="relative bg-gradient-to-b from-[#F5FAFC] via-[#EEF7FA]/60 to-white pt-10 pb-20 px-4 md:px-8 overflow-hidden">
+      <section className="relative bg-[#F5FAFC] pt-12 pb-20 px-4 md:px-8 overflow-hidden border-b border-slate-100">
         
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-teal-200/30 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-        <div className="absolute top-40 left-0 w-[400px] h-[400px] bg-cyan-100/40 rounded-full blur-2xl -z-10 pointer-events-none"></div>
-
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           <div className="lg:col-span-6 space-y-6 text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200/80 text-teal-700 text-xs font-bold font-sans tracking-wide">
-              <Sparkles className="w-3.5 h-3.5 text-teal-600" />
+              <HeartPulse className="w-3.5 h-3.5 text-teal-600" />
               <span>{t('hero_eyebrow')}</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+            <h1 className="text-[36px] sm:text-[48px] lg:text-[56px] font-bold text-slate-900 tracking-[-0.02em] leading-[1.12]">
               {t('hero_title_1')}{' '}
-              <span className="bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 bg-clip-text text-transparent block sm:inline">
+              <span className="text-teal-600 block sm:inline">
                 {t('hero_title_2')}
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-slate-600 leading-[1.65] font-normal max-w-xl">
               {t('hero_desc')}
             </p>
 
             <div className="pt-2 flex flex-wrap gap-4 items-center">
               <Link
                 to="/signup"
-                className="flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white shadow-lg shadow-teal-500/25 transition-all transform hover:-translate-y-0.5 cursor-pointer uppercase tracking-wider"
+                className="flex items-center gap-2 px-6 py-3 rounded-2xl font-bold text-sm bg-teal-600 hover:bg-teal-700 text-white shadow-sm transition-all cursor-pointer"
               >
                 <UserCheck className="w-4 h-4" />
                 <span>{t('btn_get_started')}</span>
@@ -164,7 +161,7 @@ export default function LandingPage() {
 
               <Link
                 to="/login"
-                className="flex items-center gap-2 px-6 py-3.5 rounded-full font-bold text-sm bg-white hover:bg-slate-50 text-slate-700 hover:text-teal-700 border border-slate-200 shadow-sm transition-all cursor-pointer"
+                className="flex items-center gap-2 px-6 py-3 rounded-2xl font-semibold text-sm bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-2xs transition-all cursor-pointer"
               >
                 <LogIn className="w-4 h-4 text-slate-500" />
                 <span>{t('btn_sign_in')}</span>
@@ -172,7 +169,7 @@ export default function LandingPage() {
 
               <Link
                 to="/citizen/offline-health"
-                className="flex items-center gap-2 px-6 py-3.5 rounded-full font-bold text-sm bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-all cursor-pointer"
+                className="flex items-center gap-2 px-6 py-3 rounded-2xl font-semibold text-sm bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-all cursor-pointer"
               >
                 <ShieldAlert className="w-4 h-4 text-rose-600" />
                 <span>{t('btn_emergency_sos')}</span>
@@ -181,32 +178,21 @@ export default function LandingPage() {
           </div>
 
           <div className="lg:col-span-6 relative flex justify-center items-center">
-            <div className="relative w-full max-w-lg aspect-square sm:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-gradient-to-br from-teal-100 to-cyan-50 group">
+            <div className="relative w-full max-w-lg aspect-square sm:aspect-[4/3] rounded-3xl overflow-hidden shadow-sm border border-slate-200 bg-white">
               <img 
                 src={heroImage} 
-                alt="ArogyaMitra Healthcare Consultation" 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                alt="ArogyaMitra Healthcare Platform" 
+                className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent"></div>
             </div>
 
-            <div className="absolute -top-4 -left-2 sm:left-4 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl border border-teal-100 flex items-center gap-2.5 text-xs font-bold text-slate-800">
-              <span className="p-1.5 bg-teal-100 text-teal-700 rounded-xl">🩺</span>
-              <span>{t('pill_ai_assistance')}</span>
-            </div>
-
-            <div className="absolute top-8 -right-2 sm:right-2 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl border border-cyan-100 flex items-center gap-2.5 text-xs font-bold text-slate-800">
-              <span className="p-1.5 bg-cyan-100 text-cyan-700 rounded-xl">🌐</span>
+            <div className="absolute top-4 -left-2 sm:left-4 bg-white px-3.5 py-2 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-2 text-xs font-semibold text-slate-800">
+              <span className="w-2 h-2 rounded-full bg-teal-500"></span>
               <span>{t('pill_regional_languages')}</span>
             </div>
 
-            <div className="absolute bottom-10 -left-4 sm:left-0 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl border border-blue-100 flex items-center gap-2.5 text-xs font-bold text-slate-800">
-              <span className="p-1.5 bg-blue-100 text-blue-700 rounded-xl">📱</span>
-              <span>{t('pill_offline_care')}</span>
-            </div>
-
-            <div className="absolute -bottom-4 -right-2 sm:right-6 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl border border-rose-100 flex items-center gap-2.5 text-xs font-bold text-slate-800">
-              <span className="p-1.5 bg-rose-100 text-rose-700 rounded-xl">🚑</span>
+            <div className="absolute bottom-4 -right-2 sm:right-4 bg-white px-3.5 py-2 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-2 text-xs font-semibold text-slate-800">
+              <span className="w-2 h-2 rounded-full bg-rose-500"></span>
               <span>{t('pill_emergency_support')}</span>
             </div>
           </div>
@@ -296,20 +282,20 @@ export default function LandingPage() {
       </section>
 
       {/* ── 4. TELEMEDICINE HANDOFF SECTION ───────────────────────────────── */}
-      <section className="py-16 px-4 md:px-8 bg-gradient-to-r from-teal-700 via-cyan-700 to-blue-800 text-white relative overflow-hidden">
+      <section className="py-16 px-4 md:px-8 bg-teal-800 text-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
           
           <div className="lg:col-span-8 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-teal-100 text-xs font-bold border border-white/20">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-teal-100 text-xs font-semibold border border-white/20">
               <ExternalLink className="w-3.5 h-3.5 text-teal-300" />
               <span>{t('telemedicine_badge')}</span>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
               {t('telemedicine_section_title')}
             </h2>
 
-            <p className="text-sm sm:text-base text-teal-50 leading-relaxed max-w-3xl">
+            <p className="text-sm sm:text-base text-teal-100 leading-relaxed max-w-3xl">
               {t('telemedicine_section_desc')}
             </p>
 
@@ -334,7 +320,7 @@ export default function LandingPage() {
               href="https://www.esanjeevani.in/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-teal-800 hover:bg-teal-50 font-extrabold text-sm uppercase tracking-wider shadow-2xl transition-all transform hover:scale-105 cursor-pointer"
+              className="inline-flex items-center gap-3 px-7 py-3.5 rounded-2xl bg-white text-teal-900 hover:bg-teal-50 font-bold text-xs uppercase tracking-wider shadow-2xs transition-all cursor-pointer"
             >
               <span>{t('telemedicine_cta')}</span>
               <ExternalLink className="w-4 h-4 text-teal-700" />
@@ -416,7 +402,7 @@ export default function LandingPage() {
 
                   <Link
                     to={p.link}
-                    className="w-full text-center py-3 rounded-full bg-white hover:bg-teal-600 text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full text-center py-3 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs uppercase tracking-wider shadow-2xs transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <span>{t('portal_enter')}</span>
                     <ArrowRight className="w-4 h-4" />
@@ -431,23 +417,23 @@ export default function LandingPage() {
 
       {/* ── 7. FINAL CTA ─────────────────────────────────────────────────── */}
       <section className="py-20 px-4 md:px-8 bg-white border-t border-slate-100">
-        <div className="max-w-4xl mx-auto bg-gradient-to-r from-teal-600 to-cyan-600 rounded-3xl p-10 md:p-14 text-white text-center space-y-6 shadow-2xl">
+        <div className="max-w-4xl mx-auto bg-teal-700 rounded-3xl p-10 md:p-14 text-white text-center space-y-6 shadow-sm border border-teal-800">
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
             {t('cta_title')}
           </h2>
-          <p className="text-base text-teal-50 max-w-2xl mx-auto">
+          <p className="text-base text-teal-100 max-w-2xl mx-auto leading-relaxed">
             {t('cta_desc')}
           </p>
           <div className="flex flex-wrap gap-4 justify-center pt-2">
             <Link
               to="/signup"
-              className="px-8 py-4 rounded-full bg-white text-teal-900 font-extrabold text-xs uppercase tracking-wider shadow-lg hover:bg-teal-50 transition-all"
+              className="px-8 py-3.5 rounded-2xl bg-white text-teal-900 font-bold text-xs uppercase tracking-wider shadow-2xs hover:bg-teal-50 transition-all"
             >
               {t('cta_create_account')}
             </Link>
             <Link
               to="/login"
-              className="px-8 py-4 rounded-full bg-teal-800/60 hover:bg-teal-800 text-white font-extrabold text-xs uppercase tracking-wider border border-white/20 transition-all"
+              className="px-8 py-3.5 rounded-2xl bg-teal-800/80 hover:bg-teal-800 text-white font-bold text-xs uppercase tracking-wider border border-white/20 transition-all"
             >
               {t('cta_sign_in')}
             </Link>

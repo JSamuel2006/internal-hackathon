@@ -24,6 +24,7 @@ import {
   getEmergencyContext,
   getChatSummary,
   getDoctorAssistanceStatus,
+  translateChatMessage,
 } from '../controllers/emergencyDoctorChatController.js';
 import {
   getNearbyEmergencyPharmacies,
@@ -156,6 +157,9 @@ router.get('/doctor/requests/:requestId/messages', authenticateJWT, getChatMessa
 
 // Send message to chat
 router.post('/doctor/requests/:requestId/messages', authenticateJWT, sendChatMessage);
+
+// On-demand dynamic translation endpoint
+router.post('/doctor/requests/:requestId/translate', authenticateJWT, translateChatMessage);
 
 // Get clinical emergency session context (Doctor)
 router.get('/doctor/requests/:requestId/context', authenticateJWT, getEmergencyContext);
