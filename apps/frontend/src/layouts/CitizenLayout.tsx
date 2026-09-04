@@ -7,6 +7,7 @@ import {
 import { authService } from '../services/api';
 import { useI18n } from '../i18n';
 import { LanguageSelector } from '../components/voice/LanguageSelector';
+import { ArogyaMitraBrand } from '../components/ArogyaMitraLogo';
 
 export default function CitizenLayout() {
   const navigate = useNavigate();
@@ -72,18 +73,8 @@ export default function CitizenLayout() {
         <div className="flex flex-col gap-4 overflow-y-auto flex-1 pr-1">
           
           {/* Logo Branding */}
-          <Link to="/citizen/dashboard" className="flex items-center gap-3 group px-2 py-1">
-            <div className="p-2.5 bg-gradient-to-tr from-teal-500 to-cyan-500 rounded-xl text-white shadow-md shadow-teal-500/20 group-hover:scale-105 transition-transform">
-              <HeartPulse className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="font-extrabold text-xl tracking-tight text-slate-900 group-hover:text-teal-600 transition-colors">
-                Arogya<span className="text-teal-600">Mitra</span>
-              </span>
-              <span className="text-[10px] block text-slate-500 font-bold uppercase tracking-wider font-sans -mt-1">
-                Citizen Care Portal
-              </span>
-            </div>
+          <Link to="/citizen/dashboard" className="px-2 py-1">
+            <ArogyaMitraBrand size={38} portalTag="Citizen Care Portal" />
           </Link>
 
           {/* Secure ABHA Card Badge */}
@@ -160,9 +151,9 @@ export default function CitizenLayout() {
             >
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
-            <h1 className="font-extrabold text-lg text-slate-900 tracking-tight font-sans">
-              ArogyaMitra Healthcare Portal
-            </h1>
+            <Link to="/citizen/dashboard">
+              <ArogyaMitraBrand size={32} portalTag="Citizen Care Portal" />
+            </Link>
           </div>
 
           <div className="flex items-center gap-3">

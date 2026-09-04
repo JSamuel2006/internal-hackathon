@@ -1,7 +1,5 @@
-const CACHE_NAME = 'arogyamitra-shell-v1';
+const CACHE_NAME = 'arogyamitra-shell-v2';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
   '/favicon.svg',
   '/icons.svg'
 ];
@@ -41,6 +39,27 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Network-First strategy for Document navigation (prevents stale HTML shell)
+  if (event.request.mode === 'navigate' || url.pathname === '/' || url.pathname === '/index.html') {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          return caches.match('/index.html') || new Response('Offline content unavailable');
+        })
+    );
+    return;
+  }
+
+  // Cache-First strategy for hashed static assets (/assets/*.js, *.css)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
@@ -48,8 +67,7 @@ self.addEventListener('fetch', (event) => {
       }
       
       return fetch(event.request).then((response) => {
-        // Only cache valid GET responses for assets/documents
-        if (!response || response.status !== 200 || response.type !== 'basic' || event.request.method !== 'GET') {
+        if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
 

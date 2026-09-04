@@ -7,6 +7,7 @@ import {
 import { authService } from '../services/api';
 import { useI18n } from '../i18n';
 import { LanguageSelector } from '../components/voice/LanguageSelector';
+import { ArogyaMitraBrand } from '../components/ArogyaMitraLogo';
 
 export default function WorkerLayout() {
   const { lang, t } = useI18n();
@@ -31,18 +32,8 @@ export default function WorkerLayout() {
     <div className="h-screen bg-[#F5FAFC] text-slate-800 flex flex-col md:flex-row overflow-hidden font-sans">
       <aside className="hidden md:flex flex-col w-72 h-full border-r border-slate-200 bg-white p-5 justify-between shrink-0 shadow-xs">
         <div className="flex flex-col gap-5 overflow-y-auto flex-1 pr-1">
-          <Link to="/worker/dashboard" className="flex items-center gap-3 px-2 py-1">
-            <div className="p-2.5 bg-cyan-600 rounded-xl text-white shadow-md shadow-cyan-600/20">
-              <Users className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="font-extrabold text-xl tracking-tight text-slate-900">
-                Arogya<span className="text-cyan-600">Mitra</span>
-              </span>
-              <span className="text-[10px] block text-slate-500 font-bold uppercase tracking-wider font-sans -mt-1">
-                ASHA Worker Portal
-              </span>
-            </div>
+          <Link to="/worker/dashboard" className="px-2 py-1">
+            <ArogyaMitraBrand size={38} portalTag="ASHA Worker Portal" />
           </Link>
 
           <div className="p-3.5 rounded-2xl bg-[#EEF7FA] border border-cyan-100 shadow-2xs">

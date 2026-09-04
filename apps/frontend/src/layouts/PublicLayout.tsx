@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { HeartPulse, Menu, X, ShieldCheck, LogIn, UserCheck, PhoneCall, ExternalLink } from 'lucide-react';
 import { LanguageSelector } from '../components/voice/LanguageSelector';
+import { ArogyaMitraBrand } from '../components/ArogyaMitraLogo';
 import { I18nService, t } from '../i18n';
 
 export default function PublicLayout() {
@@ -62,18 +63,8 @@ export default function PublicLayout() {
       <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm px-4 md:px-8 py-3.5 flex items-center justify-between">
         
         {/* Brand Logo & Name */}
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="p-2.5 bg-gradient-to-tr from-teal-500 to-cyan-500 rounded-xl text-white shadow-md shadow-teal-500/20 group-hover:scale-105 transition-transform">
-            <HeartPulse className="w-6 h-6" />
-          </div>
-          <div>
-            <span className="font-extrabold text-2xl tracking-tight text-slate-900 group-hover:text-teal-600 transition-colors">
-              Arogya<span className="text-teal-600">Mitra</span>
-            </span>
-            <span className="text-[10px] block text-slate-500 font-semibold tracking-wider uppercase font-sans -mt-1">
-              Digital Healthcare Platform
-            </span>
-          </div>
+        <Link to="/">
+          <ArogyaMitraBrand size={42} subtitle="Digital Healthcare Platform" />
         </Link>
 
         {/* Desktop Navigation Links */}
@@ -183,12 +174,9 @@ export default function PublicLayout() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-10 pb-10 border-b border-slate-200">
           
           <div className="space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 bg-teal-500 rounded-lg text-white">
-                <HeartPulse className="w-5 h-5" />
-              </div>
-              <span className="font-extrabold text-xl text-slate-900">Arogya<span className="text-teal-600">Mitra</span></span>
-            </div>
+            <Link to="/">
+              <ArogyaMitraBrand size={36} subtitle="Universal Healthcare AI Platform" />
+            </Link>
             <p className="text-xs text-slate-600 leading-relaxed font-sans">
               Universal digital healthcare platform empowering citizens, community health workers, doctors, and public health authorities across India.
             </p>

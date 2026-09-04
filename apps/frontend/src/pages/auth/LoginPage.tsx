@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { authService } from '../../services/api';
 import { I18nService, t } from '../../i18n';
+import { ArogyaMitraIcon } from '../../components/ArogyaMitraLogo';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -210,8 +211,8 @@ export default function LoginPage() {
         
         {/* Header Branding */}
         <div className="text-center mb-6">
-          <div className="inline-flex p-3 bg-teal-50 rounded-2xl text-teal-600 border border-teal-100 mb-3 shadow-2xs">
-            <Activity className="w-8 h-8 text-teal-600" />
+          <div className="inline-flex justify-center mb-3">
+            <ArogyaMitraIcon size={56} />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-slate-900">
             {mode === 'login' ? t('auth_signin_heading') : t('auth_signup_heading')}

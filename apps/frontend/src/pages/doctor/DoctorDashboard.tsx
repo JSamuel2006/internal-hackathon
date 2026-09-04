@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   HeartPulse, ShieldAlert, CheckCircle2, AlertCircle, RefreshCw, Send, ShieldCheck, Stethoscope, Star, Check, Plus,
-  LayoutDashboard, MessageSquare, History, User, LogOut, Clock, Activity, ClipboardList, ChevronRight
+  LayoutDashboard, MessageSquare, History, User, LogOut, Clock, Activity, ClipboardList, ChevronRight, Menu, X
 } from 'lucide-react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { emergencyNetworkService, doctorApiService, authService, workerService } from '../../services/api';
 import { socketService } from '../../services/socketService';
 import { LanguageSelector } from '../../components/voice/LanguageSelector';
+import { ArogyaMitraBrand } from '../../components/ArogyaMitraLogo';
 
 interface DoctorProfile {
   id: string;
@@ -22,6 +23,9 @@ export default function DoctorDashboard() {
   
   // Tab state derived from query params: dashboard, emergency, chats, history, profile
   const activeTab = searchParams.get('tab') || 'dashboard';
+
+  // Mobile Drawer Navigation State
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -425,19 +429,9 @@ export default function DoctorDashboard() {
         <div className="flex flex-col gap-4 overflow-y-auto flex-1 pr-1">
           
           {/* Logo Branding */}
-          <div className="flex items-center gap-3 px-2 py-1">
-            <div className="p-2.5 bg-gradient-to-tr from-teal-500 to-cyan-500 rounded-xl text-white shadow-md shadow-teal-500/20">
-              <Stethoscope className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="font-extrabold text-xl tracking-tight text-slate-900">
-                Arogya<span className="text-teal-600">Mitra</span>
-              </span>
-              <span className="text-[10px] block text-teal-700 font-bold uppercase tracking-wider font-sans -mt-1">
-                Doctor Care Portal
-              </span>
-            </div>
-          </div>
+          <Link to="/doctor/dashboard" className="px-2 py-1">
+            <ArogyaMitraBrand size={38} portalTag="Doctor Care Portal" />
+          </Link>
 
           {/* Practitioner Identity Card */}
           {doctor && (
@@ -655,29 +649,35 @@ export default function DoctorDashboard() {
       <main className="flex-1 overflow-y-auto flex flex-col min-w-0 bg-[#F5FAFC]">
         
         {/* Header Bar */}
-        <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shrink-0 shadow-2xs sticky top-0 z-10">
+        <header className="bg-white border-b border-slate-200 px-4 md:px-6 py-3.5 flex items-center justify-between shrink-0 shadow-2xs sticky top-0 z-30">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-teal-500/10 rounded-xl text-teal-600 border border-teal-500/20 md:hidden">
-              <Stethoscope className="w-5 h-5" />
-            </div>
+            {/* Mobile Navigation Drawer Toggle */}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden flex items-center justify-center min-w-[44px] min-h-[44px] p-2.5 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-teal-600 border border-slate-200 bg-white transition-colors cursor-pointer shrink-0"
+              aria-label="Toggle Navigation Menu"
+            >
+              {mobileOpen ? <X className="w-6 h-6 text-slate-800" /> : <Menu className="w-6 h-6 text-slate-800" />}
+            </button>
+
             <div>
               {doctor ? (
-                <h1 className="text-base font-bold text-slate-900 flex items-center gap-2 font-sans">
-                  <span>{doctor.name}</span>
-                  <span className="text-[10px] bg-teal-50 text-teal-700 border border-teal-200/80 px-2 py-0.5 rounded-full font-bold uppercase">
+                <h1 className="text-sm sm:text-base font-bold text-slate-900 flex flex-wrap items-center gap-1.5 sm:gap-2 font-sans">
+                  <span className="truncate max-w-[140px] sm:max-w-xs">{doctor.name}</span>
+                  <span className="text-[10px] bg-teal-50 text-teal-700 border border-teal-200/80 px-2 py-0.5 rounded-full font-bold uppercase shrink-0">
                     Primary Practitioner
                   </span>
                 </h1>
               ) : (
                 <h1 className="text-base font-bold text-slate-900 font-sans">Doctor Portal</h1>
               )}
-              <p className="text-xs text-slate-500 mt-0.5 font-sans">
+              <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5 font-sans truncate">
                 {doctor ? `${doctor.specialty} • Government General Hospital` : 'Healthcare Assistance Dashboard'}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <div className="hidden sm:block text-right">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-sans">Active Patient Session</span>
               <span className="text-xs font-mono font-bold text-slate-800">
@@ -687,13 +687,157 @@ export default function DoctorDashboard() {
             <button
               onClick={syncDashboardData}
               disabled={loading}
-              className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer border border-slate-200 font-sans shadow-2xs"
+              className="min-h-[44px] px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer border border-slate-200 font-sans shadow-2xs shrink-0"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-              <span>Refresh Queue</span>
+              <span className="hidden xs:inline sm:inline">Refresh Queue</span>
             </button>
           </div>
         </header>
+
+        {/* Mobile Navigation Drawer Overlay */}
+        {mobileOpen && (
+          <div className="md:hidden fixed inset-0 top-16 z-50 bg-white p-5 overflow-y-auto flex flex-col justify-between font-sans border-b border-slate-200 shadow-xl animate-in slide-in-from-top duration-200">
+            <div className="space-y-6">
+              {/* Doctor Profile Banner */}
+              {doctor && (
+                <div className="p-4 rounded-2xl bg-[#EEF7FA] border border-teal-100 shadow-2xs">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] font-bold tracking-wider text-teal-700 uppercase font-sans">Medical Practitioner</span>
+                    <ShieldCheck className="w-4 h-4 text-teal-600" />
+                  </div>
+                  <p className="text-sm font-bold text-slate-900 font-sans">{doctor.name}</p>
+                  <p className="text-xs font-sans font-semibold text-slate-500 mt-0.5">{doctor.specialty}</p>
+                </div>
+              )}
+
+              {/* Main Navigation Links */}
+              <div className="space-y-1">
+                <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase font-sans px-3 block">
+                  MAIN NAVIGATION
+                </span>
+                
+                <button
+                  onClick={() => { setSearchParams({ tab: 'dashboard' }); setMobileOpen(false); }}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all font-sans ${
+                    activeTab === 'dashboard'
+                      ? 'bg-teal-50 text-teal-700 font-bold border border-teal-200 shadow-2xs'
+                      : 'text-slate-700 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <LayoutDashboard className={`w-5 h-5 ${activeTab === 'dashboard' ? 'text-teal-600' : 'text-slate-400'}`} />
+                    <span>Dashboard</span>
+                  </div>
+                  {activeTab === 'dashboard' && <ChevronRight className="w-4 h-4 text-teal-600" />}
+                </button>
+
+                <button
+                  onClick={() => { setSearchParams({ tab: 'emergency' }); setMobileOpen(false); }}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all font-sans ${
+                    activeTab === 'emergency'
+                      ? 'bg-teal-50 text-teal-700 font-bold border border-teal-200 shadow-2xs'
+                      : 'text-slate-700 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <ShieldAlert className={`w-5 h-5 ${activeTab === 'emergency' ? 'text-rose-600' : 'text-slate-400'}`} />
+                    <span>Emergency Queue</span>
+                  </div>
+                  {emergencyRequests.filter((r) => r.status === 'PENDING').length > 0 && (
+                    <span className="px-2 py-0.5 rounded-full text-xs bg-rose-500 text-white font-bold animate-pulse">
+                      {emergencyRequests.filter((r) => r.status === 'PENDING').length}
+                    </span>
+                  )}
+                </button>
+
+                <button
+                  onClick={() => { setSearchParams({ tab: 'chats' }); setMobileOpen(false); }}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all font-sans ${
+                    activeTab === 'chats'
+                      ? 'bg-teal-50 text-teal-700 font-bold border border-teal-200 shadow-2xs'
+                      : 'text-slate-700 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <MessageSquare className={`w-5 h-5 ${activeTab === 'chats' ? 'text-teal-600' : 'text-slate-400'}`} />
+                    <span>Live Consultations</span>
+                  </div>
+                  {activeTab === 'chats' && <ChevronRight className="w-4 h-4 text-teal-600" />}
+                </button>
+
+                <button
+                  onClick={() => { setSearchParams({ tab: 'history' }); setMobileOpen(false); }}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all font-sans ${
+                    activeTab === 'history'
+                      ? 'bg-teal-50 text-teal-700 font-bold border border-teal-200 shadow-2xs'
+                      : 'text-slate-700 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <History className={`w-5 h-5 ${activeTab === 'history' ? 'text-teal-600' : 'text-slate-400'}`} />
+                    <span>Consultation Archive</span>
+                  </div>
+                  {activeTab === 'history' && <ChevronRight className="w-4 h-4 text-teal-600" />}
+                </button>
+
+                <button
+                  onClick={() => { setSearchParams({ tab: 'profile' }); setMobileOpen(false); }}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all font-sans ${
+                    activeTab === 'profile'
+                      ? 'bg-teal-50 text-teal-700 font-bold border border-teal-200 shadow-2xs'
+                      : 'text-slate-700 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <User className={`w-5 h-5 ${activeTab === 'profile' ? 'text-teal-600' : 'text-slate-400'}`} />
+                    <span>Practitioner Profile</span>
+                  </div>
+                  {activeTab === 'profile' && <ChevronRight className="w-4 h-4 text-teal-600" />}
+                </button>
+              </div>
+
+              {/* Doctor Availability Toggles */}
+              <div className="space-y-2 pt-3 border-t border-slate-100">
+                <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase font-sans px-3 block">
+                  MY AVAILABILITY STATUS
+                </span>
+                <div className="grid grid-cols-3 gap-2">
+                  {(['AVAILABLE', 'BUSY', 'OFFLINE'] as const).map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => { handleUpdateAvailability(status); setMobileOpen(false); }}
+                      disabled={availability === 'IN_CONSULTATION'}
+                      className={`px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-center font-sans border ${
+                        availability === status 
+                          ? 'bg-teal-50 text-teal-800 border-teal-200 shadow-2xs' 
+                          : 'bg-slate-50 text-slate-600 border-slate-200 disabled:opacity-40'
+                      }`}
+                    >
+                      {status}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Sign Out */}
+            <div className="pt-6 border-t border-slate-100 space-y-3">
+              <div className="flex items-center justify-between px-1">
+                <span className="text-xs font-bold text-slate-600 font-sans">Language</span>
+                <LanguageSelector />
+              </div>
+
+              <button
+                onClick={handleLogout}
+                className="w-full py-3 rounded-xl bg-rose-50 text-rose-700 font-bold text-sm flex items-center justify-center gap-2 border border-rose-200"
+              >
+                <LogOut className="w-4 h-4 text-rose-600" />
+                <span>Sign Out Doctor Portal</span>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Inner Scrollable Workspace */}
         <div className="p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full flex-1">
